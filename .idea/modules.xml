@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Sisheng.iml" filepath="$PROJECT_DIR$/Sisheng.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sishen.iml" filepath="$PROJECT_DIR$/Sishen.iml" />
+      <module fileurl="file://C:\Users\tera\Documents\Sishen\Sisheng.iml" filepath="C:\Users\tera\Documents\Sishen\Sisheng.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\tera\Documents\Sishen\app\app.iml" filepath="C:\Users\tera\Documents\Sishen\app\app.iml" />
     </modules>
   </component>
 </project>
