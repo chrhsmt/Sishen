@@ -6,4 +6,7 @@
     <string name="screen1_3">英訳</string>
     <string name="screen1_4">ランダム</string>
     <string name="screen1_5">任意</string>
+    <string name="screen3_1">選択</string>
+    <string name="screen3_2">お手本再生</string>
+    <string name="screen3_3">録音</string>
 </resources>
