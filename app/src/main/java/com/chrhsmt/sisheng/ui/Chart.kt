@@ -19,7 +19,7 @@ import java.math.BigDecimal
  */
 class Chart {
 
-    private val AXIS_MAXIMUM = 2000f // Maximum Hz
+    private val AXIS_MAXIMUM = 500f // Maximum Hz
     private val AXIS_MINIMUM = 0f
     private val activity: MainActivity
     private var mChart: LineChart? = null

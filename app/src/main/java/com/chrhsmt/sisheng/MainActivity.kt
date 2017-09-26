@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         this.chart = Chart(this)
         this.chart!!.initChartView(this.findViewById<LineChart>(R.id.chart))
-        this.service = AudioService(this.chart!!)
+        this.service = AudioService(this.chart!!, this)
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -52,6 +52,14 @@ class MainActivity : AppCompatActivity() {
                 this.service!!.startAudioRecord()
             }
         }
+
+
+        test_play.setOnClickListener({ view ->
+            val openRawResource = this.resources.openRawResource(R.raw.di22)
+            val data: ByteArray = kotlin.ByteArray(openRawResource.available())
+            openRawResource.read(data)
+            this.service!!.testPlay(data)
+        })
 
     }
 

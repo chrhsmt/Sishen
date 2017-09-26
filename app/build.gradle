@@ -34,6 +34,8 @@ dependencies {
     implementation 'com.github.wendykierp:JTransforms:3.1'
     // Graph
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    // TarsosDSP
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.0'
