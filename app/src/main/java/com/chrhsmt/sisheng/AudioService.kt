@@ -102,7 +102,7 @@ class AudioService {
                 chart.addEntry(pitch)
             }
         }
-        val processor: AudioProcessor = PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, SAMPLING_RATE.toFloat(), this.bufSize, pdh)
+        val processor: AudioProcessor = PitchProcessor(Settings.algorithm, SAMPLING_RATE.toFloat(), this.bufSize, pdh)
         dispatcher.addAudioProcessor(processor)
 
         if (playback) {

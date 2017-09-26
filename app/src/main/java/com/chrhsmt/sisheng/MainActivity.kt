@@ -10,6 +10,11 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityCompat.requestPermissions
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import be.tarsos.dsp.pitch.PitchProcessor
 import com.github.mikephil.charting.charts.LineChart
 import com.chrhsmt.sisheng.ui.Chart
 import kotlinx.android.synthetic.main.content_main.*
@@ -61,6 +66,19 @@ class MainActivity : AppCompatActivity() {
             this.service!!.testPlay(data)
         })
 
+
+        algorithm.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, PitchProcessor.PitchEstimationAlgorithm.values())
+        algorithm.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val item: PitchProcessor.PitchEstimationAlgorithm = parent!!.getItemAtPosition(position) as PitchProcessor.PitchEstimationAlgorithm
+                Settings.algorithm = item
+            }
+
+        }
     }
 
 
