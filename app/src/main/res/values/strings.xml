@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Sisheng</string>
     <string name="action_settings">Settings</string>
+    <string name="screen1_1">例文を選択する</string>
+    <string name="screen1_2">日本語訳</string>
+    <string name="screen1_3">英訳</string>
+    <string name="screen1_4">ランダム</string>
+    <string name="screen1_5">任意</string>
 </resources>
