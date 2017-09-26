@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import be.tarsos.dsp.pitch.PitchProcessor
 import com.github.mikephil.charting.charts.LineChart
 import com.chrhsmt.sisheng.ui.Chart
@@ -72,10 +73,23 @@ class MainActivity : AppCompatActivity() {
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
-
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val item: PitchProcessor.PitchEstimationAlgorithm = parent!!.getItemAtPosition(position) as PitchProcessor.PitchEstimationAlgorithm
                 Settings.algorithm = item
+                Toast.makeText(this@MainActivity, String.format("%sが選択されました", item.toString()), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        sampling_rate.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, this.resources.getIntArray(R.array.sampling_rates).toList())
+        sampling_rate.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val samplingRate = resources.getIntArray(R.array.sampling_rates)[position]
+                Settings.samplingRate = samplingRate
+                Toast.makeText(this@MainActivity, String.format("%dが選択されました", samplingRate), Toast.LENGTH_SHORT).show()
             }
 
         }

@@ -7,4 +7,5 @@ import be.tarsos.dsp.pitch.PitchProcessor
  */
 object Settings {
     var algorithm: PitchProcessor.PitchEstimationAlgorithm = PitchProcessor.PitchEstimationAlgorithm.YIN
+    var samplingRate: Int? = null
 }

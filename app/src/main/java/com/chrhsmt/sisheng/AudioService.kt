@@ -26,7 +26,7 @@ import be.tarsos.dsp.io.android.AndroidAudioPlayer
 class AudioService {
 
     companion object {
-        val SAMPLING_RATE: Int = 22050 // 44100
+//        val SAMPLING_RATE: Int = 22050 // 44100
         val AUDIO_FILE_SAMPLING_RATE: Int = 44100
     }
 
@@ -37,20 +37,19 @@ class AudioService {
     private val chart: Chart
     private var audioDispatcher: AudioDispatcher? = null
     private var analyzeThread: Thread? = null
-    private val microphoneBufferSize: Int
 
     constructor(chart: Chart, activity: MainActivity) {
         this.activity = activity
         this.chart = chart
-        // マイクロフォンバッファサイズの計算
-        this.microphoneBufferSize = AudioRecord.getMinBufferSize(
-                SAMPLING_RATE,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT) / 2
     }
 
     fun startAudioRecord() {
-        this.startAnalyze(AudioDispatcherFactory.fromDefaultMicrophone(SAMPLING_RATE, this.microphoneBufferSize, 0))
+        // マイクロフォンバッファサイズの計算
+        val microphoneBufferSize = AudioRecord.getMinBufferSize(
+                Settings.samplingRate!!,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT) / 2
+        this.startAnalyze(AudioDispatcherFactory.fromDefaultMicrophone(Settings.samplingRate!!, microphoneBufferSize, 0))
     }
 
     @SuppressLint("WrongConstant")
@@ -102,7 +101,7 @@ class AudioService {
                 chart.addEntry(pitch)
             }
         }
-        val processor: AudioProcessor = PitchProcessor(Settings.algorithm, SAMPLING_RATE.toFloat(), this.bufSize, pdh)
+        val processor: AudioProcessor = PitchProcessor(Settings.algorithm, Settings.samplingRate!!.toFloat(), this.bufSize, pdh)
         dispatcher.addAudioProcessor(processor)
 
         if (playback) {
