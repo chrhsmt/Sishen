@@ -33,6 +33,8 @@ class AudioService {
         val AUDIO_FILE_SAMPLING_RATE: Int = 44100
         // 録音時に指定秒数の空白時間後に録音停止
         val STOP_RECORDING_AFTER_SECOND: Int = 1
+        // 性別での周波数差
+        val HELZT_DEGREE_OF_SEX_DEFERENCE: Int = 60
     }
 
     private val TAG: String = "AudioService"
@@ -105,6 +107,14 @@ class AudioService {
     }
 
     fun analyze() : TimeWarpInfo {
+        if (Settings.sex == "Male") {
+            this.frequencies.forEachIndexed { index, fl ->
+                if (fl > 0) {
+                    this.frequencies[index] = fl + HELZT_DEGREE_OF_SEX_DEFERENCE
+                }
+            }
+        }
+
         // chronix.fastdtw
         val ts0 = MultivariateTimeSeries(1)
         this.frequencies.forEachIndexed { index, fl -> ts0.add(index.toLong(), kotlin.DoubleArray(1){ fl.toDouble() }) }

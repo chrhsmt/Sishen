@@ -55,6 +55,13 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:text="@string/clear_button_title"/>
+        <Spinner
+            android:id="@+id/sex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:prompt="@string/sex_prompt"
+            android:entries="@array/sexes"
+            android:spinnerMode="dialog" />
 
     </LinearLayout>
     <Spinner

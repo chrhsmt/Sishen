@@ -1,6 +1,7 @@
 package com.chrhsmt.sisheng
 
 import android.Manifest.permission.*
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -91,7 +92,19 @@ class MainActivity : AppCompatActivity() {
                 Settings.samplingRate = samplingRate
                 Toast.makeText(this@MainActivity, String.format("%dが選択されました", samplingRate), Toast.LENGTH_SHORT).show()
             }
+        }
 
+//        sex.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, this.resources.getIntArray(R.array.sampling_rates).toList())
+        sex.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val sex = resources.getStringArray(R.array.sexes)[position]
+                Settings.sex = sex
+                Toast.makeText(this@MainActivity, String.format("%sが選択されました", sex), Toast.LENGTH_SHORT).show()
+            }
         }
 
         analyze_button.setOnClickListener({ view ->

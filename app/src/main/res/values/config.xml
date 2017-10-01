@@ -6,4 +6,8 @@
         <item>22050</item>
         <item>8000</item>
     </integer-array>
+    <string-array name="sexes">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 </resources>
