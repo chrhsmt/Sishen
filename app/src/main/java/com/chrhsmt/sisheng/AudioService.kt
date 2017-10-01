@@ -13,8 +13,6 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler
 import be.tarsos.dsp.pitch.PitchDetectionResult
 import be.tarsos.dsp.pitch.PitchProcessor
 import com.chrhsmt.sisheng.ui.Chart
-import org.jtransforms.fft.DoubleFFT_1D
-import java.util.logging.Handler
 import android.media.AudioManager
 import be.tarsos.dsp.io.android.AndroidAudioPlayer
 
@@ -28,6 +26,8 @@ class AudioService {
     companion object {
 //        val SAMPLING_RATE: Int = 22050 // 44100
         val AUDIO_FILE_SAMPLING_RATE: Int = 44100
+        // 録音時に指定秒数の空白時間後に録音停止
+        val STOP_RECORDING_AFTER_SECOND: Int = 1
     }
 
     private val TAG: String = "AudioService"
@@ -38,6 +38,9 @@ class AudioService {
     private var audioDispatcher: AudioDispatcher? = null
     private var analyzeThread: Thread? = null
     private var isRunning: Boolean = false
+
+    private var frequencies: MutableList<Float> = ArrayList<Float>()
+    private var testFrequencies: MutableList<Float> = ArrayList<Float>()
 
     constructor(chart: Chart, activity: MainActivity) {
         this.activity = activity
@@ -50,7 +53,7 @@ class AudioService {
                 Settings.samplingRate!!,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT) / 2
-        this.startAnalyze(AudioDispatcherFactory.fromDefaultMicrophone(Settings.samplingRate!!, microphoneBufferSize, 0))
+        this.startRecord(AudioDispatcherFactory.fromDefaultMicrophone(Settings.samplingRate!!, microphoneBufferSize, 0), targetList = this.frequencies)
     }
 
     @SuppressLint("WrongConstant")
@@ -76,7 +79,7 @@ class AudioService {
             output.close()
             input.close()
 
-            this.startAnalyze(
+            this.startRecord(
                     AudioDispatcherFactory.fromPipe(
                             path,
                             AUDIO_FILE_SAMPLING_RATE,
@@ -85,18 +88,26 @@ class AudioService {
                     ),
                     false,
                     playback = true,
-                    samplingRate = AUDIO_FILE_SAMPLING_RATE
+                    samplingRate = AUDIO_FILE_SAMPLING_RATE,
+                    targetList = this.testFrequencies
             )
         }).start()
 
     }
 
     fun stop() {
-        this.stopAnalyze()
+        this.stopRecord()
     }
 
-    private fun startAnalyze(dispatcher: AudioDispatcher, onAnotherThread: Boolean = true, playback: Boolean = false, samplingRate: Int = Settings.samplingRate!!) {
+    private fun startRecord(dispatcher: AudioDispatcher,
+                            onAnotherThread: Boolean = true,
+                            playback: Boolean = false,
+                            samplingRate: Int = Settings.samplingRate!!,
+                            targetList: MutableList<Float>) {
         val pdh: PitchDetectionHandler = object: PitchDetectionHandler {
+
+            private var silinceBegin: Long = -1
+
             override fun handlePitch(result: PitchDetectionResult?, event: AudioEvent?) {
                 val pitch:Float = result!!.pitch
                 Log.d(TAG, String.format("pitch is %f, probability: %f", pitch, result!!.probability))
@@ -104,10 +115,24 @@ class AudioService {
                     // 音声検出し始め
                     this@AudioService.isRunning = true
                 }
-                // N秒以上無音なら停止
 //                this@AudioService.isRunning = false
                 if (this@AudioService.isRunning) {
                     // 稼働中はピッチを保存
+                    targetList.add(pitch)
+
+                    if (pitch < 0) {
+                        // 無音の場合無音開始時間をセット
+                        if (this.silinceBegin == -1L) {
+                            this.silinceBegin = System.currentTimeMillis()
+                        }
+                        // N秒以上無音なら停止
+                        if ((System.currentTimeMillis() - this.silinceBegin) >= STOP_RECORDING_AFTER_SECOND * 1000) {
+                            this@AudioService.stopRecord()
+                        }
+                    } else {
+                        // 無音開始時間をクリア
+                        this.silinceBegin = -1
+                    }
                 }
                 chart.addEntry(pitch)
             }
@@ -131,7 +156,7 @@ class AudioService {
 
     }
 
-    private fun stopAnalyze() {
+    private fun stopRecord() {
         this.audioDispatcher!!.stop()
         this.analyzeThread!!.interrupt()
     }
