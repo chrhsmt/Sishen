@@ -93,6 +93,19 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+
+        analyze_button.setOnClickListener({ view ->
+            val info = this@MainActivity.service!!.analyze()
+            Toast.makeText(
+                    this@MainActivity,
+                    String.format("distance: %f, normalizedDistance: %f", info.distance, info.normalizedDistance),
+                    Toast.LENGTH_LONG).show()
+        })
+
+        clear_button.setOnClickListener({ view ->
+            this@MainActivity.service!!.clear()
+            this@MainActivity.chart!!.clear()
+        })
     }
 
 

@@ -42,6 +42,21 @@
             android:prompt="@string/algorithm_prompt"
             android:spinnerMode="dialog" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/analyze_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/analyze_button_title"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/clear_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/clear_button_title"/>
+
+    </LinearLayout>
     <Spinner
         android:id="@+id/sampling_rate"
         android:layout_width="match_parent"

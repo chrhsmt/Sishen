@@ -15,7 +15,12 @@ import be.tarsos.dsp.pitch.PitchProcessor
 import com.chrhsmt.sisheng.ui.Chart
 import android.media.AudioManager
 import be.tarsos.dsp.io.android.AndroidAudioPlayer
-
+import de.qaware.chronix.distance.DistanceFunctionEnum
+import de.qaware.chronix.distance.DistanceFunctionFactory
+import de.qaware.chronix.dtw.FastDTW
+import de.qaware.chronix.dtw.TimeWarpInfo
+import de.qaware.chronix.timeseries.MultivariateTimeSeries
+import kotlinx.android.synthetic.main.content_main.*
 
 
 /**
@@ -99,6 +104,27 @@ class AudioService {
         this.stopRecord()
     }
 
+    fun analyze() : TimeWarpInfo {
+        // chronix.fastdtw
+        val ts0 = MultivariateTimeSeries(1)
+        this.frequencies.forEachIndexed { index, fl -> ts0.add(index.toLong(), kotlin.DoubleArray(1){ fl.toDouble() }) }
+        val ts1 = MultivariateTimeSeries(1)
+        this.testFrequencies.forEachIndexed { index, fl -> ts1.add(index.toLong(), kotlin.DoubleArray(1){ fl.toDouble() }) }
+        return FastDTW.getWarpInfoBetween(ts0, ts1, 1, DistanceFunctionFactory.getDistanceFunction(DistanceFunctionEnum.EUCLIDEAN))
+
+//        var items = this.frequencies.mapIndexed { index, fl -> TimeSeriesItem(index.toDouble(), TimeSeriesPoint(kotlin.DoubleArray(1){ fl.toDouble() })) }
+//        val ts0 = TimeSeriesBase(items)
+//
+//        items = this.testFrequencies.mapIndexed { index, fl -> TimeSeriesItem(index.toDouble(), TimeSeriesPoint(kotlin.DoubleArray(1){ fl.toDouble() })) }
+//        val ts1 = TimeSeriesBase(items)
+//        return FastDTW.compare(ts0, ts1, Distances.EUCLIDEAN_DISTANCE)
+    }
+
+    fun clear() {
+        this.frequencies.clear()
+        this.testFrequencies.clear()
+    }
+
     private fun startRecord(dispatcher: AudioDispatcher,
                             onAnotherThread: Boolean = true,
                             playback: Boolean = false,
@@ -134,7 +160,9 @@ class AudioService {
                         this.silinceBegin = -1
                     }
                 }
-                chart.addEntry(pitch)
+                this@AudioService.activity.runOnUiThread {
+                    chart.addEntry(pitch)
+                }
             }
         }
         val processor: AudioProcessor = PitchProcessor(Settings.algorithm, samplingRate.toFloat(), this.bufSize, pdh)
@@ -159,6 +187,9 @@ class AudioService {
     private fun stopRecord() {
         this.audioDispatcher!!.stop()
         this.analyzeThread!!.interrupt()
+        this@AudioService.activity.runOnUiThread {
+            this.activity.button.text = "開始"
+        }
     }
 
 }

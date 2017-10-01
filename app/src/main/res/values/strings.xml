@@ -3,4 +3,6 @@
     <string name="action_settings">Settings</string>
     <string name="algorithm_prompt">アルゴリズムを選択してください</string>
     <string name="sampling_rate_prompt">サンプリングレートを選択してください</string>
+    <string name="analyze_button_title">解析</string>
+    <string name="clear_button_title">クリア</string>
 </resources>

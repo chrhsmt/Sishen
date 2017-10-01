@@ -99,6 +99,11 @@ class Chart {
         }
     }
 
+    fun clear() {
+        this.mChart!!.clearValues()
+        this.mChart!!.notifyDataSetChanged()
+    }
+
     private fun createSet(): LineDataSet {
 
         val set = LineDataSet(null, "Dynamic Data")
