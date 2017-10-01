@@ -37,6 +37,7 @@ class AudioService {
     private val chart: Chart
     private var audioDispatcher: AudioDispatcher? = null
     private var analyzeThread: Thread? = null
+    private var isRunning: Boolean = false
 
     constructor(chart: Chart, activity: MainActivity) {
         this.activity = activity
@@ -83,7 +84,8 @@ class AudioService {
                             0
                     ),
                     false,
-                    playback = true
+                    playback = true,
+                    samplingRate = AUDIO_FILE_SAMPLING_RATE
             )
         }).start()
 
@@ -93,15 +95,24 @@ class AudioService {
         this.stopAnalyze()
     }
 
-    private fun startAnalyze(dispatcher: AudioDispatcher, onAnotherThread: Boolean = true, playback: Boolean = false) {
+    private fun startAnalyze(dispatcher: AudioDispatcher, onAnotherThread: Boolean = true, playback: Boolean = false, samplingRate: Int = Settings.samplingRate!!) {
         val pdh: PitchDetectionHandler = object: PitchDetectionHandler {
             override fun handlePitch(result: PitchDetectionResult?, event: AudioEvent?) {
                 val pitch:Float = result!!.pitch
                 Log.d(TAG, String.format("pitch is %f, probability: %f", pitch, result!!.probability))
+                if (!this@AudioService.isRunning && pitch > 0) {
+                    // 音声検出し始め
+                    this@AudioService.isRunning = true
+                }
+                // N秒以上無音なら停止
+//                this@AudioService.isRunning = false
+                if (this@AudioService.isRunning) {
+                    // 稼働中はピッチを保存
+                }
                 chart.addEntry(pitch)
             }
         }
-        val processor: AudioProcessor = PitchProcessor(Settings.algorithm, Settings.samplingRate!!.toFloat(), this.bufSize, pdh)
+        val processor: AudioProcessor = PitchProcessor(Settings.algorithm, samplingRate.toFloat(), this.bufSize, pdh)
         dispatcher.addAudioProcessor(processor)
 
         if (playback) {
