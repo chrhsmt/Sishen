@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             val openRawResource = this.resources.openRawResource(R.raw.di22)
             val data: ByteArray = kotlin.ByteArray(openRawResource.available())
             openRawResource.read(data)
-            this.service!!.testPlay(data)
+            this.service!!.testPlay("di22.wav")
         })
 
 

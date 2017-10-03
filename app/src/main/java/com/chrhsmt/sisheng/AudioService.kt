@@ -64,16 +64,16 @@ class AudioService {
     }
 
     @SuppressLint("WrongConstant")
-    fun testPlay(data: ByteArray) {
+    fun testPlay(fileName: String) {
 
         AndroidFFMPEGLocator(this.activity)
 
         // TODO: Handlerにすべき？
         Thread(Runnable {
             // ファイル移動
-            val path = "/data/data/" + this.activity.packageName + "/files/di22.wav"
-            val input = this.activity.assets.open("di22.wav")
-            val output = this.activity.openFileOutput("di22.wav", Context.MODE_ENABLE_WRITE_AHEAD_LOGGING)
+            val path = String.format("/data/data/%s/files/%s", this.activity.packageName, fileName)
+            val input = this.activity.assets.open(fileName)
+            val output = this.activity.openFileOutput(fileName, Context.MODE_ENABLE_WRITE_AHEAD_LOGGING)
             val DEFAULT_BUFFER_SIZE = 1024 * 4
 
             val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
