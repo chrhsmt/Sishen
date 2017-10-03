@@ -1,9 +1,7 @@
 package com.chrhsmt.sisheng.ui
 
 import android.graphics.Color
-import com.chrhsmt.sisheng.AudioService
 import com.chrhsmt.sisheng.MainActivity
-import com.chrhsmt.sisheng.R
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.YAxis
@@ -11,8 +9,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
-import kotlinx.android.synthetic.main.content_main.*
-import java.math.BigDecimal
 
 /**
  * Created by chihiro on 2017/08/22.
@@ -76,13 +72,13 @@ class Chart {
         }
     }
 
-    fun addEntry(value: Float) {
+    fun addEntry(value: Float, name: String = "Default Data", color: Int = ColorTemplate.getHoloBlue()) {
 
         val data = this.mChart!!.data
         if (data != null) {
-            var set = data.getDataSetByIndex(0)
+            var set = data.getDataSetByLabel(name, false)
             if (set == null) {
-                set = this.createSet()
+                set = this.createDefaultSet(name = name, color = color)
                 data.addDataSet(set)
             }
 
@@ -90,7 +86,7 @@ class Chart {
             if (checkedValue > AXIS_MAXIMUM) {
                 checkedValue = 0f;
             }
-            data.addEntry(Entry(set.entryCount.toFloat(), checkedValue), 0);
+            data.addEntry(Entry(set.entryCount.toFloat(), checkedValue), data.getIndexOfDataSet(set));
             data.notifyDataChanged()
 
             this.mChart!!.notifyDataSetChanged()
@@ -104,16 +100,16 @@ class Chart {
         this.mChart!!.notifyDataSetChanged()
     }
 
-    private fun createSet(): LineDataSet {
+    private fun createDefaultSet(name: String = "Default Data", color: Int = ColorTemplate.getHoloBlue()): LineDataSet {
 
-        val set = LineDataSet(null, "Dynamic Data")
+        val set = LineDataSet(null, name)
         set.axisDependency = YAxis.AxisDependency.LEFT
-        set.color = ColorTemplate.getHoloBlue()
+        set.color = color
         set.setCircleColor(Color.WHITE)
         set.lineWidth = 2f
         set.circleRadius = 4f
         set.fillAlpha = 65
-        set.fillColor = ColorTemplate.getHoloBlue()
+        set.fillColor = color
         set.highLightColor = Color.rgb(244, 117, 117)
         set.valueTextColor = Color.WHITE
         set.valueTextSize = 9f

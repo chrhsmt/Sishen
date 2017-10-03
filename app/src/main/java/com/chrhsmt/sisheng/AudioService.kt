@@ -2,6 +2,7 @@ package com.chrhsmt.sisheng
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.media.*
 import android.util.Log
 import be.tarsos.dsp.AudioDispatcher
@@ -15,6 +16,7 @@ import be.tarsos.dsp.pitch.PitchProcessor
 import com.chrhsmt.sisheng.ui.Chart
 import android.media.AudioManager
 import be.tarsos.dsp.io.android.AndroidAudioPlayer
+import com.github.mikephil.charting.utils.ColorTemplate
 import de.qaware.chronix.distance.DistanceFunctionEnum
 import de.qaware.chronix.distance.DistanceFunctionFactory
 import de.qaware.chronix.dtw.FastDTW
@@ -60,7 +62,12 @@ class AudioService {
                 Settings.samplingRate!!,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT) / 2
-        this.startRecord(AudioDispatcherFactory.fromDefaultMicrophone(Settings.samplingRate!!, microphoneBufferSize, 0), targetList = this.frequencies)
+        this.startRecord(
+                AudioDispatcherFactory.fromDefaultMicrophone(Settings.samplingRate!!, microphoneBufferSize, 0),
+                targetList = this.frequencies,
+                labelName = "Microphone",
+                color = Color.rgb(10, 240, 10)
+        )
     }
 
     @SuppressLint("WrongConstant")
@@ -96,7 +103,8 @@ class AudioService {
                     false,
                     playback = true,
                     samplingRate = AUDIO_FILE_SAMPLING_RATE,
-                    targetList = this.testFrequencies
+                    targetList = this.testFrequencies,
+                    labelName = "SampleAudio"
             )
         }).start()
 
@@ -139,7 +147,9 @@ class AudioService {
                             onAnotherThread: Boolean = true,
                             playback: Boolean = false,
                             samplingRate: Int = Settings.samplingRate!!,
-                            targetList: MutableList<Float>) {
+                            targetList: MutableList<Float>,
+                            labelName: String = "Default",
+                            color: Int = ColorTemplate.getHoloBlue()) {
         val pdh: PitchDetectionHandler = object: PitchDetectionHandler {
 
             private var silinceBegin: Long = -1
@@ -171,7 +181,7 @@ class AudioService {
                     }
                 }
                 this@AudioService.activity.runOnUiThread {
-                    chart.addEntry(pitch)
+                    chart.addEntry(pitch, name = labelName, color = color)
                 }
             }
         }
