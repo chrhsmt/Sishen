@@ -9,4 +9,5 @@ object Settings {
     var algorithm: PitchProcessor.PitchEstimationAlgorithm = PitchProcessor.PitchEstimationAlgorithm.YIN
     var samplingRate: Int? = null
     var sex: String? = null
+    var sampleAudioFileName: String? = null
 }

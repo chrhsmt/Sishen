@@ -62,7 +62,13 @@
             android:prompt="@string/sex_prompt"
             android:entries="@array/sexes"
             android:spinnerMode="dialog" />
-
+        <Spinner
+            android:id="@+id/sample_audios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:prompt="@string/audio_prompt"
+            android:entries="@array/sample_audios"
+            android:spinnerMode="dialog" />
     </LinearLayout>
     <Spinner
         android:id="@+id/sampling_rate"

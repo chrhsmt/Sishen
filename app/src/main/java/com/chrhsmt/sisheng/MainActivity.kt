@@ -62,10 +62,7 @@ class MainActivity : AppCompatActivity() {
 
 
         test_play.setOnClickListener({ view ->
-            val openRawResource = this.resources.openRawResource(R.raw.di22)
-            val data: ByteArray = kotlin.ByteArray(openRawResource.available())
-            openRawResource.read(data)
-            this.service!!.testPlay("di22.wav")
+            this.service!!.testPlay(Settings.sampleAudioFileName!!)
         })
 
 
@@ -104,6 +101,19 @@ class MainActivity : AppCompatActivity() {
                 val sex = resources.getStringArray(R.array.sexes)[position]
                 Settings.sex = sex
                 Toast.makeText(this@MainActivity, String.format("%sが選択されました", sex), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        sample_audios.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, this.resources.getStringArray(R.array.sample_audios).toList())
+        sample_audios.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val audioName = resources.getStringArray(R.array.sample_audios)[position]
+                Settings.sampleAudioFileName = audioName
+                Toast.makeText(this@MainActivity, String.format("%sが選択されました", audioName), Toast.LENGTH_SHORT).show()
             }
         }
 

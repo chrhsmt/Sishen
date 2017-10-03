@@ -10,4 +10,10 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    <string-array name="sample_audios">
+        <item>di22.wav</item>
+        <item>ni3qu4na3erle.wav</item>
+        <item>na3li3na3li3.wav</item>
+        <item>ni3zhen1bu4jian3dan1.wav</item>
+    </string-array>
 </resources>
