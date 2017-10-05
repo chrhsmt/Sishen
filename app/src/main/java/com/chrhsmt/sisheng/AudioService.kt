@@ -34,7 +34,7 @@ class AudioService {
 //        val SAMPLING_RATE: Int = 22050 // 44100
         val AUDIO_FILE_SAMPLING_RATE: Int = 44100
         // 録音時に指定秒数の空白時間後に録音停止
-        val STOP_RECORDING_AFTER_SECOND: Int = 1
+        val STOP_RECORDING_AFTER_SECOND: Int = 2
         // 性別での周波数差
         val HELZT_DEGREE_OF_SEX_DEFERENCE: Int = 60
     }
@@ -105,6 +105,48 @@ class AudioService {
                     samplingRate = AUDIO_FILE_SAMPLING_RATE,
                     targetList = this.testFrequencies,
                     labelName = "SampleAudio"
+            )
+        }).start()
+
+    }
+
+    @SuppressLint("WrongConstant")
+    fun attemptPlay(fileName: String) {
+
+        AndroidFFMPEGLocator(this.activity)
+
+        // TODO: Handlerにすべき？
+        Thread(Runnable {
+            // ファイル移動
+            val dataName = fileName.replace("/", "_")
+            val path = String.format("/data/data/%s/files/%s", this.activity.packageName, dataName)
+            val input = this.activity.assets.open(fileName)
+            val output = this.activity.openFileOutput(dataName, Context.MODE_ENABLE_WRITE_AHEAD_LOGGING)
+            val DEFAULT_BUFFER_SIZE = 1024 * 4
+
+            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+            var n = 0
+            while (true) {
+                n = input.read(buffer)
+                if (n == -1) break
+                output.write(buffer, 0, n)
+            }
+            output.close()
+            input.close()
+
+            this.startRecord(
+                    AudioDispatcherFactory.fromPipe(
+                            path,
+                            AUDIO_FILE_SAMPLING_RATE,
+                            this.bufSize,
+                            0
+                    ),
+                    false,
+                    playback = true,
+                    samplingRate = AUDIO_FILE_SAMPLING_RATE,
+                    targetList = this.frequencies,
+                    labelName = "RecordedSampleAudio",
+                    color = Color.rgb(255, 10, 10)
             )
         }).start()
 

@@ -19,6 +19,7 @@ import android.widget.Toast
 import be.tarsos.dsp.pitch.PitchProcessor
 import com.github.mikephil.charting.charts.LineChart
 import com.chrhsmt.sisheng.ui.Chart
+import de.qaware.chronix.dtw.TimeWarpInfo
 import kotlinx.android.synthetic.main.content_main.*
 
 
@@ -119,15 +120,38 @@ class MainActivity : AppCompatActivity() {
 
         analyze_button.setOnClickListener({ view ->
             val info = this@MainActivity.service!!.analyze()
+//            TimeWarpInfo::class.members.find { p -> p.name == "base" }
+            val field = TimeWarpInfo::class.java.getDeclaredField("base")
+            field.isAccessible = true
+            val base = field.getInt(info)
             Toast.makeText(
                     this@MainActivity,
-                    String.format("distance: %f, normalizedDistance: %f", info.distance, info.normalizedDistance),
+                    String.format("distance: %f, normalizedDistance: %f, base: %d", info.distance, info.normalizedDistance, base),
                     Toast.LENGTH_LONG).show()
         })
 
         clear_button.setOnClickListener({ view ->
             this@MainActivity.service!!.clear()
             this@MainActivity.chart!!.clear()
+        })
+
+        val dirName: String = "gene"
+        val list = this.assets.list(dirName)
+        recorded_sample.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, list)
+        recorded_sample.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val audioName = list[position]
+                Settings.recordedSampleAudioFileName = dirName + "/" + audioName
+                Toast.makeText(this@MainActivity, String.format("%sが選択されました", audioName), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        attempt_play.setOnClickListener({ view ->
+            this@MainActivity.service!!.attemptPlay(Settings.recordedSampleAudioFileName!!)
         })
     }
 
