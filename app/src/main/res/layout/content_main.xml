@@ -32,11 +32,21 @@
             android:text="録音サンプル再生" />
     </LinearLayout>
 
-    <Spinner
-        android:id="@+id/recorded_sample"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dialog" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+        <Spinner
+            android:id="@+id/recorded_sample_dir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog" />
+        <Spinner
+            android:id="@+id/recorded_sample"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

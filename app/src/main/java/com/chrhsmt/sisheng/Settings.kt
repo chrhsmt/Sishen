@@ -10,5 +10,6 @@ object Settings {
     var samplingRate: Int? = null
     var sex: String? = null
     var sampleAudioFileName: String? = null
+    var recordedSampleAudioDir: String? = null
     var recordedSampleAudioFileName: String? = null
 }

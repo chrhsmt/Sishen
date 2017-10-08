@@ -1,7 +1,6 @@
 package com.chrhsmt.sisheng
 
 import android.Manifest.permission.*
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -11,7 +10,6 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityCompat.requestPermissions
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -135,8 +133,33 @@ class MainActivity : AppCompatActivity() {
             this@MainActivity.chart!!.clear()
         })
 
-        val dirName: String = "gene"
-        val list = this.assets.list(dirName)
+        val dirs = this.resources.getStringArray(R.array.asset_dirs)
+        recorded_sample_dir.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, dirs)
+        recorded_sample_dir.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val dirName = dirs[position]
+                Settings.recordedSampleAudioDir = dirName
+                Toast.makeText(this@MainActivity, String.format("%sが選択されました", dirName), Toast.LENGTH_SHORT).show()
+                setRecordedSampleSpinner()
+            }
+        }
+
+        this.setRecordedSampleSpinner()
+
+        attempt_play.setOnClickListener({ view ->
+            this@MainActivity.service!!.attemptPlay(Settings.recordedSampleAudioFileName!!)
+        })
+    }
+
+    private fun setRecordedSampleSpinner() {
+        if (Settings.recordedSampleAudioDir.isNullOrBlank()) {
+            return
+        }
+        val list = this.assets.list(Settings.recordedSampleAudioDir!!).map { asset -> String.format("%s/%s", Settings.recordedSampleAudioDir!!, asset) }
         recorded_sample.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, list)
         recorded_sample.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -145,16 +168,11 @@ class MainActivity : AppCompatActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val audioName = list[position]
-                Settings.recordedSampleAudioFileName = dirName + "/" + audioName
+                Settings.recordedSampleAudioFileName = audioName
                 Toast.makeText(this@MainActivity, String.format("%sが選択されました", audioName), Toast.LENGTH_SHORT).show()
             }
         }
-
-        attempt_play.setOnClickListener({ view ->
-            this@MainActivity.service!!.attemptPlay(Settings.recordedSampleAudioFileName!!)
-        })
     }
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {

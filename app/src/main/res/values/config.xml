@@ -16,5 +16,12 @@
         <item>na3li3na3li3.wav</item>
         <item>ni3zhen1bu4jian3dan1.wav</item>
         <item>gene_sample.wav</item>
+        <item>我今天是.wav</item>
+    </string-array>
+    <string-array name="asset_dirs">
+        <item>你真不简单</item>
+        <item>哪里哪里</item>
+        <item>歌呢</item>
+        <item>我今天真是</item>
     </string-array>
 </resources>

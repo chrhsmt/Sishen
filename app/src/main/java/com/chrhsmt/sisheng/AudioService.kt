@@ -165,6 +165,9 @@ class AudioService {
             }
         }
 
+        this.frequencies = this.frequencies.subList(0, this.frequencies.indexOfLast { fl -> fl > 0 } + 1)
+        this.testFrequencies = this.testFrequencies.subList(0, this.testFrequencies.indexOfLast { fl -> fl > 0 } + 1)
+
         // chronix.fastdtw
         val ts0 = MultivariateTimeSeries(1)
         this.frequencies.forEachIndexed { index, fl -> ts0.add(index.toLong(), kotlin.DoubleArray(1){ fl.toDouble() }) }
