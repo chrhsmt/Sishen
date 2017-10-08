@@ -11,12 +11,12 @@
         <item>Female</item>
     </string-array>
     <string-array name="sample_audios">
-        <item>di22.wav</item>
-        <item>ni3qu4na3erle.wav</item>
-        <item>na3li3na3li3.wav</item>
-        <item>ni3zhen1bu4jian3dan1.wav</item>
-        <item>gene_sample.wav</item>
-        <item>我今天是.wav</item>
+        <item>di22_f.wav</item>
+        <item>ni3qu4na3erle_f.wav</item>
+        <item>na3li3na3li3_m.wav</item>
+        <item>ni3zhen1bu4jian3dan1_m.wav</item>
+        <item>gene_sample_m.wav</item>
+        <item>我今天是_f.wav</item>
     </string-array>
     <string-array name="asset_dirs">
         <item>你真不简单</item>

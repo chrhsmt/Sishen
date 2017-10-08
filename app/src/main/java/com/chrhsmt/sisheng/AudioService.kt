@@ -157,20 +157,41 @@ class AudioService {
     }
 
     fun analyze() : TimeWarpInfo {
-        if (Settings.sex == "Male") {
-            this.frequencies.forEachIndexed { index, fl ->
-                if (fl > 0) {
-                    this.frequencies[index] = fl + HELZT_DEGREE_OF_SEX_DEFERENCE
+        val regex = Regex("^.*_(f|m).wav$")
+        val result = regex.find(Settings.sampleAudioFileName!!)
+        val fileSexType = result!!.groups[1]!!.value
+        val selectedSexType = Settings.sex!!.first().toLowerCase().toString()
+
+        var analyzedFreqList: MutableList<Float> = ArrayList<Float>()
+        analyzedFreqList.addAll(this.frequencies)
+
+        if (!selectedSexType.equals(fileSexType)) {
+            if (selectedSexType.equals("f")) {
+                // female
+                analyzedFreqList.forEachIndexed { index, fl ->
+                    if (fl > 0) {
+                        analyzedFreqList[index] = fl - HELZT_DEGREE_OF_SEX_DEFERENCE
+                        if (analyzedFreqList[index] < 0) {
+                            analyzedFreqList[index] = 0F
+                        }
+                    }
+                }
+            } else {
+                // male
+                analyzedFreqList.forEachIndexed { index, fl ->
+                    if (fl > 0) {
+                        analyzedFreqList[index] = fl + HELZT_DEGREE_OF_SEX_DEFERENCE
+                    }
                 }
             }
         }
 
-        this.frequencies = this.frequencies.subList(0, this.frequencies.indexOfLast { fl -> fl > 0 } + 1)
+        analyzedFreqList = analyzedFreqList.subList(0, analyzedFreqList.indexOfLast { fl -> fl > 0 } + 1)
         this.testFrequencies = this.testFrequencies.subList(0, this.testFrequencies.indexOfLast { fl -> fl > 0 } + 1)
 
         // chronix.fastdtw
         val ts0 = MultivariateTimeSeries(1)
-        this.frequencies.forEachIndexed { index, fl -> ts0.add(index.toLong(), kotlin.DoubleArray(1){ fl.toDouble() }) }
+        analyzedFreqList.forEachIndexed { index, fl -> ts0.add(index.toLong(), kotlin.DoubleArray(1){ fl.toDouble() }) }
         val ts1 = MultivariateTimeSeries(1)
         this.testFrequencies.forEachIndexed { index, fl -> ts1.add(index.toLong(), kotlin.DoubleArray(1){ fl.toDouble() }) }
         return FastDTW.getWarpInfoBetween(ts0, ts1, 1, DistanceFunctionFactory.getDistanceFunction(DistanceFunctionEnum.EUCLIDEAN))
