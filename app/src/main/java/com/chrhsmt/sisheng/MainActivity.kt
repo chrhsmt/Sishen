@@ -118,13 +118,14 @@ class MainActivity : AppCompatActivity() {
 
         analyze_button.setOnClickListener({ view ->
             val info = this@MainActivity.service!!.analyze()
-//            TimeWarpInfo::class.members.find { p -> p.name == "base" }
-            val field = TimeWarpInfo::class.java.getDeclaredField("base")
-            field.isAccessible = true
-            val base = field.getInt(info)
             Toast.makeText(
                     this@MainActivity,
-                    String.format("distance: %f, normalizedDistance: %f, base: %d", info.distance, info.normalizedDistance, base),
+                    String.format(
+                            "point: %d\ndistance: %f, normalizedDistance: %f, base: %d",
+                            info.point,
+                            info.distance,
+                            info.normalizedDistance,
+                            info.base),
                     Toast.LENGTH_LONG).show()
         })
 

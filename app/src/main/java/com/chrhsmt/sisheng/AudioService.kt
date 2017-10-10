@@ -16,6 +16,9 @@ import be.tarsos.dsp.pitch.PitchProcessor
 import com.chrhsmt.sisheng.ui.Chart
 import android.media.AudioManager
 import be.tarsos.dsp.io.android.AndroidAudioPlayer
+import com.chrhsmt.sisheng.point.Point
+import com.chrhsmt.sisheng.point.PointCalculator
+import com.chrhsmt.sisheng.point.SimplePointCalculator
 import com.github.mikephil.charting.utils.ColorTemplate
 import de.qaware.chronix.distance.DistanceFunctionEnum
 import de.qaware.chronix.distance.DistanceFunctionFactory
@@ -35,8 +38,6 @@ class AudioService {
         val AUDIO_FILE_SAMPLING_RATE: Int = 44100
         // 録音時に指定秒数の空白時間後に録音停止
         val STOP_RECORDING_AFTER_SECOND: Int = 2
-        // 性別での周波数差
-        val HELZT_DEGREE_OF_SEX_DEFERENCE: Int = 60
     }
 
     private val TAG: String = "AudioService"
@@ -156,52 +157,9 @@ class AudioService {
         this.stopRecord()
     }
 
-    fun analyze() : TimeWarpInfo {
-        val regex = Regex("^.*_(f|m).wav$")
-        val result = regex.find(Settings.sampleAudioFileName!!)
-        val fileSexType = result!!.groups[1]!!.value
-        val selectedSexType = Settings.sex!!.first().toLowerCase().toString()
-
-        var analyzedFreqList: MutableList<Float> = ArrayList<Float>()
-        analyzedFreqList.addAll(this.frequencies)
-
-        if (!selectedSexType.equals(fileSexType)) {
-            if (selectedSexType.equals("f")) {
-                // female
-                analyzedFreqList.forEachIndexed { index, fl ->
-                    if (fl > 0) {
-                        analyzedFreqList[index] = fl - HELZT_DEGREE_OF_SEX_DEFERENCE
-                        if (analyzedFreqList[index] < 0) {
-                            analyzedFreqList[index] = 0F
-                        }
-                    }
-                }
-            } else {
-                // male
-                analyzedFreqList.forEachIndexed { index, fl ->
-                    if (fl > 0) {
-                        analyzedFreqList[index] = fl + HELZT_DEGREE_OF_SEX_DEFERENCE
-                    }
-                }
-            }
-        }
-
-        analyzedFreqList = analyzedFreqList.subList(0, analyzedFreqList.indexOfLast { fl -> fl > 0 } + 1)
-        this.testFrequencies = this.testFrequencies.subList(0, this.testFrequencies.indexOfLast { fl -> fl > 0 } + 1)
-
-        // chronix.fastdtw
-        val ts0 = MultivariateTimeSeries(1)
-        analyzedFreqList.forEachIndexed { index, fl -> ts0.add(index.toLong(), kotlin.DoubleArray(1){ fl.toDouble() }) }
-        val ts1 = MultivariateTimeSeries(1)
-        this.testFrequencies.forEachIndexed { index, fl -> ts1.add(index.toLong(), kotlin.DoubleArray(1){ fl.toDouble() }) }
-        return FastDTW.getWarpInfoBetween(ts0, ts1, 1, DistanceFunctionFactory.getDistanceFunction(DistanceFunctionEnum.EUCLIDEAN))
-
-//        var items = this.frequencies.mapIndexed { index, fl -> TimeSeriesItem(index.toDouble(), TimeSeriesPoint(kotlin.DoubleArray(1){ fl.toDouble() })) }
-//        val ts0 = TimeSeriesBase(items)
-//
-//        items = this.testFrequencies.mapIndexed { index, fl -> TimeSeriesItem(index.toDouble(), TimeSeriesPoint(kotlin.DoubleArray(1){ fl.toDouble() })) }
-//        val ts1 = TimeSeriesBase(items)
-//        return FastDTW.compare(ts0, ts1, Distances.EUCLIDEAN_DISTANCE)
+    fun analyze() : Point {
+        val calculator: PointCalculator = SimplePointCalculator()
+        return calculator.calc(this.frequencies, this.testFrequencies)
     }
 
     fun clear() {
