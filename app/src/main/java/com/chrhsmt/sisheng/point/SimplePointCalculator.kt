@@ -50,7 +50,7 @@ class SimplePointCalculator : PointCalculator {
         exampleFrequencies.forEachIndexed { index, fl -> ts1.add(index.toLong(), kotlin.DoubleArray(1) { fl.toDouble() }) }
         val info: TimeWarpInfo = FastDTW.getWarpInfoBetween(ts0, ts1, 1, DistanceFunctionFactory.getDistanceFunction(DistanceFunctionEnum.EUCLIDEAN))
 
-        return Point(0, info.distance, info.normalizedDistance, this.getBase(info))
+        return Point(this.getScore(info.normalizedDistance), info.distance, info.normalizedDistance, this.getBase(info))
 
 //        var items = this.frequencies.mapIndexed { index, fl -> TimeSeriesItem(index.toDouble(), TimeSeriesPoint(kotlin.DoubleArray(1){ fl.toDouble() })) }
 //        val ts0 = TimeSeriesBase(items)
@@ -59,6 +59,10 @@ class SimplePointCalculator : PointCalculator {
 //        val ts1 = TimeSeriesBase(items)
 //        return FastDTW.compare(ts0, ts1, Distances.EUCLIDEAN_DISTANCE)
 //    }
+    }
+
+    private fun getScore(nomalizedDistance: Double): Int {
+        return 100 - Math.max(nomalizedDistance.toInt() - 10, 0)
     }
 
     private fun getBase(info: TimeWarpInfo) : Int {

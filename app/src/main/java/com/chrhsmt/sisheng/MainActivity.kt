@@ -17,7 +17,6 @@ import android.widget.Toast
 import be.tarsos.dsp.pitch.PitchProcessor
 import com.github.mikephil.charting.charts.LineChart
 import com.chrhsmt.sisheng.ui.Chart
-import de.qaware.chronix.dtw.TimeWarpInfo
 import kotlinx.android.synthetic.main.content_main.*
 
 
@@ -121,8 +120,8 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(
                     this@MainActivity,
                     String.format(
-                            "point: %d\ndistance: %f, normalizedDistance: %f, base: %d",
-                            info.point,
+                            "score: %d\ndistance: %f, normalizedDistance: %f, base: %d",
+                            info.score,
                             info.distance,
                             info.normalizedDistance,
                             info.base),
