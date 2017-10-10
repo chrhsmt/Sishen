@@ -16,4 +16,8 @@ object Settings {
     var sampleAudioFileName: String? = null
     var recordedSampleAudioDir: String? = null
     var recordedSampleAudioFileName: String? = null
+
+    // Raspberry pi
+    var raspberrypiHost: String = ""
+    var raspberrypiPath: String = ""
 }

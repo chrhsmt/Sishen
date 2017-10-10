@@ -10,14 +10,22 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityCompat.requestPermissions
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import be.tarsos.dsp.pitch.PitchProcessor
+import com.chrhsmt.sisheng.network.RaspberryPi
 import com.github.mikephil.charting.charts.LineChart
 import com.chrhsmt.sisheng.ui.Chart
 import kotlinx.android.synthetic.main.content_main.*
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Response
+import java.io.IOException
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +41,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        Settings.raspberrypiHost = this.getString(R.string.default_pi_host)
+        Settings.raspberrypiPath = this.getString(R.string.default_pi_path)
 
         this.chart = Chart(this)
         this.chart!!.initChartView(this.findViewById<LineChart>(R.id.chart))
@@ -59,11 +70,21 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        /*
+         * --------------------------------------------------------------------------------------
+         * Play Example
+         * --------------------------------------------------------------------------------------
+         */
         test_play.setOnClickListener({ view ->
             this.service!!.testPlay(Settings.sampleAudioFileName!!)
         })
 
 
+        /*
+         * --------------------------------------------------------------------------------------
+         * Setting algorithm
+         * --------------------------------------------------------------------------------------
+         */
         algorithm.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, PitchProcessor.PitchEstimationAlgorithm.values())
         algorithm.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -76,6 +97,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /*
+         * --------------------------------------------------------------------------------------
+         * Setting sampling rate
+         * --------------------------------------------------------------------------------------
+         */
         sampling_rate.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, this.resources.getIntArray(R.array.sampling_rates).toList())
         sampling_rate.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -89,6 +115,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /*
+         * --------------------------------------------------------------------------------------
+         * Setting sex
+         * --------------------------------------------------------------------------------------
+         */
 //        sex.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, this.resources.getIntArray(R.array.sampling_rates).toList())
         sex.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -102,6 +133,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /*
+         * --------------------------------------------------------------------------------------
+         * Setting sample audio for debug
+         * --------------------------------------------------------------------------------------
+         */
         sample_audios.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, this.resources.getStringArray(R.array.sample_audios).toList())
         sample_audios.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -115,24 +151,56 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /*
+         * --------------------------------------------------------------------------------------
+         * Analyze button
+         * --------------------------------------------------------------------------------------
+         */
         analyze_button.setOnClickListener({ view ->
             val info = this@MainActivity.service!!.analyze()
+            if (info.success()) {
+                RaspberryPi().send(object: Callback {
+                    override fun onFailure(call: Call?, e: IOException?) {
+                        runOnUiThread {
+                            Toast.makeText(this@MainActivity, e!!.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+                    override fun onResponse(call: Call?, response: Response?) {
+                        runOnUiThread {
+                            Toast.makeText(this@MainActivity, response!!.body()!!.string(), Toast.LENGTH_LONG).show()
+                        }
+                    }
+                })
+            }
+
             Toast.makeText(
                     this@MainActivity,
                     String.format(
-                            "score: %d\ndistance: %f, normalizedDistance: %f, base: %d",
+                            "score: %d\ndistance: %f, normalizedDistance: %f, base: %d, success: %s",
                             info.score,
                             info.distance,
                             info.normalizedDistance,
-                            info.base),
+                            info.base,
+                            info.success().toString()),
                     Toast.LENGTH_LONG).show()
         })
 
+        /*
+         * --------------------------------------------------------------------------------------
+         * Clear button
+         * --------------------------------------------------------------------------------------
+         */
         clear_button.setOnClickListener({ view ->
             this@MainActivity.service!!.clear()
             this@MainActivity.chart!!.clear()
         })
 
+        /*
+         * --------------------------------------------------------------------------------------
+         * Loading sample audio for debug
+         * --------------------------------------------------------------------------------------
+         */
         val dirs = this.resources.getStringArray(R.array.asset_dirs)
         recorded_sample_dir.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, dirs)
         recorded_sample_dir.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -153,6 +221,53 @@ class MainActivity : AppCompatActivity() {
         attempt_play.setOnClickListener({ view ->
             this@MainActivity.service!!.attemptPlay(Settings.recordedSampleAudioFileName!!)
         })
+
+        /*
+         * --------------------------------------------------------------------------------------
+         * Setting raspberry pi for debug
+         * --------------------------------------------------------------------------------------
+         */
+        test_get.setOnClickListener({ view ->
+            RaspberryPi().send(object: Callback {
+                override fun onFailure(call: Call?, e: IOException?) {
+                    runOnUiThread {
+                        Toast.makeText(this@MainActivity, e!!.message, Toast.LENGTH_LONG).show()
+                    }
+                }
+
+                override fun onResponse(call: Call?, response: Response?) {
+                    runOnUiThread {
+                        Toast.makeText(this@MainActivity, response!!.body()!!.string(), Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
+        })
+
+        pi_host.setText(Settings.raspberrypiHost)
+        pi_path.setText(Settings.raspberrypiPath)
+        pi_host.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(textComponent: Editable?) {
+                Settings.raspberrypiHost = textComponent!!.toString()
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(chars: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
+        pi_path.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(textComponent: Editable?) {
+                Settings.raspberrypiPath = textComponent!!.toString()
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(chars: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
+
     }
 
     private fun setRecordedSampleSpinner() {

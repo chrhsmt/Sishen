@@ -8,5 +8,5 @@ interface PointCalculator {
         // 性別での周波数差
         val HELZT_DEGREE_OF_SEX_DEFERENCE: Int = 60
     }
-    fun calc(frequency: MutableList<Float>, testFrequency: MutableList<Float>): Point
+    fun calc(frequencies: MutableList<Float>, testFrequencies: MutableList<Float>): Point
 }

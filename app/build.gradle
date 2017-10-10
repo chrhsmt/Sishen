@@ -14,6 +14,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        // Enabling multidex support.
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -33,13 +35,15 @@ dependencies {
     // FFT
     implementation 'com.github.wendykierp:JTransforms:3.1'
     // Graph
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     // TarsosDSP
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // FastDTW
-    compile "de.qaware.chronix:chronix.fastdtw:0.3"
+    implementation "de.qaware.chronix:chronix.fastdtw:0.3"
 //    compile "com.github.davidmoten:fastdtw:0.1"
+    // HTTP
+    implementation "com.squareup.okhttp3:okhttp:3.9.0"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.0'
