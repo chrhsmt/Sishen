@@ -7,129 +7,172 @@
     tools:context="com.chrhsmt.sisheng.FirstScreen">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.501"
+        android:weightSum="100">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15" />
 
         <LinearLayout
-            android:layout_width="676dp"
-            android:paddingTop="100dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="49dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/screen1_1"
+                android:gravity="center_vertical"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textSize="30sp"
-                tools:layout_editor_absoluteX="119dp"
-                tools:layout_editor_absoluteY="105dp" />
+                android:textSize="40sp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
 
         </LinearLayout>
 
         <LinearLayout
 
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:orientation="horizontal"
+            android:weightSum="100">
 
             <Space
-                android:layout_width="150dp"
-                android:layout_height="8dp"
-                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="15"
                 tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="159dp" />
+                tools:layout_editor_absoluteY="0dp" />
 
             <Button
-                android:id="@+id/btnJapanese"
-                android:layout_width="150dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_rounded_corners_5dp"
+                android:id="@+id/btnRandom"
+                android:layout_width="0dp"
+                android:layout_weight="30"
+                android:layout_height="match_parent"
+                style="@style/style_btn"
 
-                android:paddingLeft="30dp"
                 android:text="@string/screen1_2"
+                android:textSize="40sp"
                 android:textAlignment="center"
-                tools:layout_editor_absoluteX="185dp"
-                tools:layout_editor_absoluteY="168dp" />
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
 
             <Space
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10" />
 
             <Button
-                android:id="@+id/btnEnglish"
-                android:layout_width="150dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_rounded_corners_5dp"
+                android:id="@+id/btnNini"
+                android:layout_width="0dp"
+                android:layout_weight="30"
+                android:layout_height="match_parent"
+                style="@style/style_btn"
 
                 android:text="@string/screen1_3"
-                tools:layout_editor_absoluteX="313dp"
-                tools:layout_editor_absoluteY="168dp" />
+                android:textSize="40sp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
 
             <Space
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="15" />
 
         </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp" />
+            android:layout_height="0dp"
+            android:layout_weight="7" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/screen1_4"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textSize="40sp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+        </LinearLayout>
 
         <LinearLayout
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:orientation="horizontal"
+            android:weightSum="100">
 
             <Space
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="15"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
 
             <Button
-                android:id="@+id/btnRandom"
-                android:layout_width="180dp"
-                android:layout_height="89dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_rounded_corners_5dp"
-
-                android:onClick="goRandamReibun"
-                android:text="@string/screen1_4"
-                tools:layout_editor_absoluteX="109dp"
-                tools:layout_editor_absoluteY="242dp" />
-
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/btnNini"
-                android:layout_width="180dp"
-                android:layout_height="89dp"
-                android:layout_weight="1"
+                android:id="@+id/btnWoman"
+                android:layout_width="0dp"
+                android:layout_weight="30"
+                android:layout_height="match_parent"
                 android:background="@drawable/shape_rounded_corners_5dp"
 
                 android:text="@string/screen1_5"
-                tools:layout_editor_absoluteX="315dp"
-                tools:layout_editor_absoluteY="242dp" />
+                android:textSize="40sp"
+                android:textAlignment="center"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
 
             <Space
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10" />
+
+            <Button
+                android:id="@+id/btnMan"
+                android:layout_width="0dp"
+                android:layout_weight="30"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_rounded_corners_5dp"
+
+                android:text="@string/screen1_6"
+                android:textSize="40sp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="15" />
+
         </LinearLayout>
 
     </LinearLayout>

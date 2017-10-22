@@ -4,6 +4,10 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Color.parseColor
+import com.chrhsmt.sisheng.R.color.colorActivate
+import com.chrhsmt.sisheng.R.drawable.shape_rounded_corners_5dp
 // 画面用にこれをimport しておく
 import kotlinx.android.synthetic.main.activity_first_screen.*
 
@@ -32,6 +36,17 @@ class FirstScreen : AppCompatActivity() {
             startActivity(intent)
         })
 
+        // お手本の声を女性に設定
+        btnWoman.setOnClickListener(View.OnClickListener {
+            btnMan.setBackgroundResource(shape_rounded_corners_5dp)
+            btnWoman.setBackgroundColor(resources.getColor(colorActivate, null))
+        })
+
+        // お手本の声を男性に設定
+        btnMan.setOnClickListener(View.OnClickListener {
+            btnMan.setBackgroundColor(resources.getColor(colorActivate, null))
+            btnWoman.setBackgroundResource(shape_rounded_corners_5dp)
+        })
     }
 
 
