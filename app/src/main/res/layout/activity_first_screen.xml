@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.chrhsmt.sisheng.FirstScreen">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <LinearLayout
+            android:layout_width="676dp"
+            android:paddingTop="100dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="49dp"
+                android:layout_weight="1"
+                android:text="@string/screen1_1"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textSize="30sp"
+                tools:layout_editor_absoluteX="119dp"
+                tools:layout_editor_absoluteY="105dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="150dp"
+                android:layout_height="8dp"
+                android:layout_weight="1"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="159dp" />
+
+            <Button
+                android:id="@+id/btnJapanese"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_5dp"
+
+                android:paddingLeft="30dp"
+                android:text="@string/screen1_2"
+                android:textAlignment="center"
+                tools:layout_editor_absoluteX="185dp"
+                tools:layout_editor_absoluteY="168dp" />
+
+            <Space
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnEnglish"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_5dp"
+
+                android:text="@string/screen1_3"
+                tools:layout_editor_absoluteX="313dp"
+                tools:layout_editor_absoluteY="168dp" />
+
+            <Space
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <LinearLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnRandom"
+                android:layout_width="180dp"
+                android:layout_height="89dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_5dp"
+
+                android:onClick="goRandamReibun"
+                android:text="@string/screen1_4"
+                tools:layout_editor_absoluteX="109dp"
+                tools:layout_editor_absoluteY="242dp" />
+
+            <Space
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnNini"
+                android:layout_width="180dp"
+                android:layout_height="89dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_5dp"
+
+                android:text="@string/screen1_5"
+                tools:layout_editor_absoluteX="315dp"
+                tools:layout_editor_absoluteY="242dp" />
+
+            <Space
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
