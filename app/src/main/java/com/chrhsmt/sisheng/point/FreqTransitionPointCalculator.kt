@@ -1,25 +1,24 @@
 package com.chrhsmt.sisheng.point
 
-import de.qaware.chronix.distance.DistanceFunctionEnum
-import de.qaware.chronix.distance.DistanceFunctionFactory
-import de.qaware.chronix.dtw.FastDTW
 import de.qaware.chronix.dtw.TimeWarpInfo
-import de.qaware.chronix.timeseries.MultivariateTimeSeries
 
 /**
- * Created by chihiro on 2017/10/10.
+ * Created by chihiro on 2017/10/17.
  */
-class SimplePointCalculator : PointCalculator() {
+class FreqTransitionPointCalculator : PointCalculator() {
 
     override fun calc(frequencies: MutableList<Float>, testFrequencies: MutableList<Float>): Point {
-
         var analyzedFreqList: MutableList<Float> = this.copy(frequencies)
-        this.adjustFrequencies(analyzedFreqList)
+//        this.adjustFrequencies(analyzedFreqList)
 
         analyzedFreqList = this.removeLastSilence(analyzedFreqList)
+        this.minimizeSilence(analyzedFreqList)
         val exampleFrequencies = this.removeLastSilence(testFrequencies)
 
-        val info: TimeWarpInfo = this.calcDistance(analyzedFreqList, exampleFrequencies)
+        val transitionList: List<Float> = this.calcTransitions(analyzedFreqList)
+        val testTransitionList: List<Float> = this.calcTransitions(testFrequencies)
+
+        val info = this.calcDistance(transitionList, testTransitionList)
 
         val score = this.getScore(info.normalizedDistance)
         return Point(
@@ -27,14 +26,21 @@ class SimplePointCalculator : PointCalculator() {
                 info.distance,
                 info.normalizedDistance,
                 this.getBase(info))
+    }
 
-//        var items = this.frequencies.mapIndexed { index, fl -> TimeSeriesItem(index.toDouble(), TimeSeriesPoint(kotlin.DoubleArray(1){ fl.toDouble() })) }
-//        val ts0 = TimeSeriesBase(items)
-//
-//        items = testFrequencies.mapIndexed { index, fl -> TimeSeriesItem(index.toDouble(), TimeSeriesPoint(kotlin.DoubleArray(1){ fl.toDouble() })) }
-//        val ts1 = TimeSeriesBase(items)
-//        return FastDTW.compare(ts0, ts1, Distances.EUCLIDEAN_DISTANCE)
-//    }
+    private fun calcTransitions(frequencies: MutableList<Float>): List<Float> {
+
+        val retList: MutableList<Float> = ArrayList<Float>()
+
+        var before:Float? = null
+        frequencies.forEach { fl: Float ->
+            if ( before != null ) {
+                retList.add(before!! - fl)
+            }
+            before = fl
+        }
+
+        return retList
     }
 
     private fun getScore(nomalizedDistance: Double): Int {
@@ -46,4 +52,5 @@ class SimplePointCalculator : PointCalculator() {
         field.isAccessible = true
         return field.getInt(info)
     }
+
 }
