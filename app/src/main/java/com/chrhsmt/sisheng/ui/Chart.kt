@@ -106,7 +106,7 @@ class Chart {
         val set = LineDataSet(null, name)
         set.axisDependency = YAxis.AxisDependency.LEFT
         set.color = color
-        set.setCircleColor(Color.WHITE)
+        set.setCircleColor(color)
         set.lineWidth = 2f
         set.circleRadius = 4f
         set.fillAlpha = 65
