@@ -17,6 +17,7 @@ class SimplePointCalculator : PointCalculator() {
         this.adjustFrequencies(analyzedFreqList)
 
         analyzedFreqList = this.removeLastSilence(analyzedFreqList)
+        this.minimizeSilence(analyzedFreqList)
         val exampleFrequencies = this.removeLastSilence(testFrequencies)
 
         val info: TimeWarpInfo = this.calcDistance(analyzedFreqList, exampleFrequencies)
