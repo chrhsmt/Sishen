@@ -42,3 +42,7 @@ jobs:
               ORG_GRADLE_PROJECT_TAG_VERSION="${CIRCLE_TAG}" ./gradlew githubRelease
             fi
 deployment:
+  deploy:
+    tag: /.*/
+    command: |
+      echo "CIRCLE_BRANCH: ${CIRCLE_BRANCH}, CIRCLE_TAG: ${CIRCLE_TAG}."
