@@ -3,7 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'co.riiid.gradle'
 
-if (hasProperty('env') == false) { ext.env = 'personal' }
+if (hasProperty("GITHUB_TOKEN")) {
+    ext.github_token = GITHUB_TOKEN
+}
+if (!hasProperty("github_token") && !hasProperty('env')) { ext.env = 'personal' }
 apply from: "env/${env}.gradle"
 
 android {
