@@ -1,8 +1,10 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'co.riiid.gradle'
+
+if (hasProperty('env') == false) { ext.env = 'personal' }
+apply from: "env/${env}.gradle"
 
 android {
     compileSdkVersion 26
@@ -49,4 +51,26 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.0'
+}
+
+if (!hasProperty("TAG_VERSION")) {
+    ext.TAG_VERSION = "0.0.1"
+}
+println("set version '$TAG_VERSION'")
+
+github {
+//    baseUrl = 'https://api.github.com'
+    owner = 'chrhsmt'
+    repo = 'Sishen'
+    token = "$github_token"
+    tagName = TAG_VERSION
+    targetCommitish = 'master'
+    name = TAG_VERSION
+    body = """# 萌神プロジェクト version $TAG_VERSION
+Write `release note` here.
+"""
+    assets = [
+            'app/build/outputs/apk/debug/app-debug.apk',
+            'app/build/outputs/apk/release/app-release-unsigned.apk',
+    ]
 }
