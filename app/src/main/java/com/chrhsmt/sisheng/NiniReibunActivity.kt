@@ -26,7 +26,7 @@ class NiniReibunActivity : AppCompatActivity() {
         val decor = this.window.decorView
         decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
-        val reibunInfo = ReibunInfo()
+        val reibunInfo = ReibunInfo.getInstance(this)
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, reibunInfo.getChineseList())
         listReibun.adapter = adapter as ListAdapter
 
