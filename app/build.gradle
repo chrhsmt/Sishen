@@ -6,8 +6,12 @@ apply plugin: 'co.riiid.gradle'
 if (hasProperty("GITHUB_TOKEN")) {
     ext.github_token = GITHUB_TOKEN
 }
-if (!hasProperty("github_token") && !hasProperty('env')) { ext.env = 'personal' }
-apply from: "env/${env}.gradle"
+if (!hasProperty("github_token") && !hasProperty('env')) {
+    ext.env = 'personal'
+}
+if (hasProperty("env")) {
+    apply from: "env/${env}.gradle"
+}
 
 android {
     compileSdkVersion 26
