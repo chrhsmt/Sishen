@@ -38,7 +38,7 @@ jobs:
       - deploy:
           name: Release Github
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" && -n "${CIRCLE_TAG}" ]; then
+            if [ -n "${CIRCLE_TAG}" ]; then
               ORG_GRADLE_PROJECT_TAG_VERSION="${CIRCLE_TAG}" ./gradlew githubRelease
             fi
 deployment:
