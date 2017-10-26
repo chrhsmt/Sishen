@@ -32,6 +32,12 @@ class ReibunInfo {
         var english : String = ""
     }
 
+    enum class SENTENCE_TYPE(val rawValue: Int) {
+        PINYIN(1),
+        CHINESE(2),
+        JAPANESE(3),
+        ENGLISH(4),
+    }
     private var itemList : ArrayList<ReibunInfoItem> = ArrayList()
 
     private constructor(context: Context) {
@@ -64,6 +70,7 @@ class ReibunInfo {
                 if (xpp.name == "SENTENCE" && item != null) {
                     itemList.add(item)
                 }
+                xppName = ""
             } else if (eventType == XmlPullParser.TEXT) {
                 System.out.println("Name" + xpp.name + " Text " + xpp.text)
                 // 各要素処理
@@ -81,11 +88,39 @@ class ReibunInfo {
         }
     }
 
-    fun getChineseList() : ArrayList<String> {
-        var ret: ArrayList<String> = ArrayList()
+    fun getSentenceList(type : SENTENCE_TYPE) : ArrayList<String> {
+        val ret: ArrayList<String> = ArrayList()
 
         for (item in itemList) {
-            ret.add(item.chinese)
+            when (type) {
+                SENTENCE_TYPE.PINYIN -> ret.add(item.pinyin)
+                SENTENCE_TYPE.CHINESE -> ret.add(item.chinese)
+                SENTENCE_TYPE.JAPANESE -> ret.add(item.japanese)
+                SENTENCE_TYPE.ENGLISH -> ret.add(item.english)
+            }
+        }
+
+        return ret;
+    }
+    fun getSentenceList(type1 : SENTENCE_TYPE, type2 : SENTENCE_TYPE) : ArrayList<String> {
+        val ret: ArrayList<String> = ArrayList()
+
+        for (item in itemList) {
+            var str = ""
+            when (type1) {
+                SENTENCE_TYPE.PINYIN -> str = item.pinyin
+                SENTENCE_TYPE.CHINESE -> str = item.chinese
+                SENTENCE_TYPE.JAPANESE -> str = item.japanese
+                SENTENCE_TYPE.ENGLISH -> str = item.english
+            }
+            when (type2) {
+                SENTENCE_TYPE.PINYIN -> str = str + "\n" + item.pinyin
+                SENTENCE_TYPE.CHINESE -> str = str + "\n" + item.chinese
+                SENTENCE_TYPE.JAPANESE -> str = str + "\n" + item.japanese
+                SENTENCE_TYPE.ENGLISH -> str = str + "\n" + item.english
+            }
+
+            ret.add(str)
         }
 
         return ret;
