@@ -36,6 +36,8 @@ jobs:
       - store_test_results:
           path: app/build/test-results
       - deploy:
+          name: Release Github
+          command: |
           if [ "${CIRCLE_BRANCH}" == "master" && -n "${CIRCLE_TAG}" ]; then
             ORG_GRADLE_PROJECT_TAG_VERSION="${CIRCLE_TAG}" ./gradlew githubRelease
           fi
