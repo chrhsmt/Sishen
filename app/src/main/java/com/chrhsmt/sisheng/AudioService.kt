@@ -1,6 +1,7 @@
 package com.chrhsmt.sisheng
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.media.*
@@ -45,7 +46,7 @@ class AudioService {
 
     private val TAG: String = "AudioService"
 
-    private val activity: MainActivity
+    private val activity: Activity
     private val chart: Chart
     private var audioDispatcher: AudioDispatcher? = null
     private var analyzeThread: Thread? = null
@@ -54,7 +55,7 @@ class AudioService {
     private var frequencies: MutableList<Float> = ArrayList<Float>()
     private var testFrequencies: MutableList<Float> = ArrayList<Float>()
 
-    constructor(chart: Chart, activity: MainActivity) {
+    constructor(chart: Chart, activity: Activity) {
         this.activity = activity
         this.chart = chart
         // Setting ffmpeg
@@ -245,8 +246,11 @@ class AudioService {
         this.analyzeThread!!.interrupt()
         this.isRunning = false
         this@AudioService.activity.runOnUiThread {
-            this.activity.button.text = "開始"
+            this.activity.button?.text = "開始"
         }
     }
 
+    fun isRunning(): Boolean {
+        return this.isRunning
+    }
 }

@@ -7,81 +7,146 @@
     tools:context="com.chrhsmt.sisheng.ReibunActivity">
 
     <LinearLayout
-        android:layout_width="576dp"
-        android:layout_height="368dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        android:background="@drawable/first_screen_bg"
+        android:weightSum="100">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5" />
 
         <TextView
             android:id="@+id/txtReibun"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="中国語の例文"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
             android:textAlignment="center"
+            android:text="@string/screen3_1"
             android:textSize="36sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3" />
+
+        <TextView
+            android:id="@+id/txtPinyin"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:gravity="center_vertical"
+            android:textAlignment="center"
+            android:textSize="24sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txtNihongoyaku"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="日本語訳"
-                android:textSize="24sp" />
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:orientation="horizontal"
+            android:weightSum="100">
 
             <Space
-                android:layout_width="5dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
 
             <Button
                 android:id="@+id/btnOtehon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/screen3_2" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:background="@drawable/play_button"/>
 
             <Space
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
+
+            <TextView
+                android:id="@+id/txtChinese"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="60"
+                android:background="@color/colorActivate"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                android:textSize="30sp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="20" />
 
         </LinearLayout>
 
+
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/txtEnglish"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="図／＼／＼"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:gravity="center_vertical"
             android:textAlignment="center"
-            android:textSize="36sp" />
+            android:textSize="24sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="35"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="55" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="25" />
+
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:orientation="horizontal"
+            android:weightSum="100">
 
             <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="42" />
 
             <Button
                 android:id="@+id/btnRokuon"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/screen3_3" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:background="@drawable/record_button" />
 
             <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="43" />
+
         </LinearLayout>
 
     </LinearLayout>

@@ -6,6 +6,7 @@ import android.view.View
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Color.parseColor
+import android.widget.ImageButton
 import com.chrhsmt.sisheng.R.color.colorActivate
 import com.chrhsmt.sisheng.R.drawable.shape_rounded_corners_5dp
 // 画面用にこれをimport しておく
@@ -38,16 +39,27 @@ class FirstScreen : AppCompatActivity() {
 
         // お手本の声を女性に設定
         btnWoman.setOnClickListener(View.OnClickListener {
-            btnMan.setBackgroundResource(shape_rounded_corners_5dp)
-            btnWoman.setBackgroundColor(resources.getColor(colorActivate, null))
+            selectWoman()
         })
 
         // お手本の声を男性に設定
         btnMan.setOnClickListener(View.OnClickListener {
-            btnMan.setBackgroundColor(resources.getColor(colorActivate, null))
-            btnWoman.setBackgroundResource(shape_rounded_corners_5dp)
+            selectMan()
         })
+
+        selectWoman()
     }
 
+    private fun selectWoman() {
+        btnMan.setBackgroundResource(shape_rounded_corners_5dp)
+        btnWoman.setBackgroundColor(resources.getColor(colorActivate, null))
+        Settings.sex = resources.getStringArray(R.array.sexes)[1]
+    }
 
+    private fun selectMan() {
+        btnMan.setBackgroundColor(resources.getColor(colorActivate, null))
+        btnWoman.setBackgroundResource(shape_rounded_corners_5dp)
+        Settings.sex = resources.getStringArray(R.array.sexes)[0]
+
+    }
 }

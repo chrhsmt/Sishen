@@ -1,5 +1,7 @@
 package com.chrhsmt.sisheng
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -31,11 +33,19 @@ class NiniReibunActivity : AppCompatActivity() {
         listReibun.adapter = adapter as ListAdapter
 
 
-        // ランダム例文に移動
+        // ダイアログ表示
         listReibun.setOnItemClickListener { parent, view, position, id ->
-            val intent = Intent(this@NiniReibunActivity,
-                    ReibunActivity::class.java)
-            startActivity(intent)
+            AlertDialog.Builder(this)
+                    .setMessage(resources.getText(R.string.screen2_2_1))
+                    .setNegativeButton(resources.getText(R.string.screen2_2_3), DialogInterface.OnClickListener { dialog, which ->
+                        dialog.dismiss()
+                    })
+                    .setPositiveButton(resources.getText(R.string.screen2_2_2), DialogInterface.OnClickListener { dialog, which ->
+                        reibunInfo.setSelectedItem(position)
+                        val intent = Intent(this@NiniReibunActivity, ReibunActivity::class.java)
+                        startActivity(intent)
+                    })
+                    .show()
         }
 
 

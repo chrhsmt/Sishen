@@ -1,5 +1,6 @@
 package com.chrhsmt.sisheng.ui
 
+import android.app.Activity
 import android.graphics.Color
 import com.chrhsmt.sisheng.AudioService
 import com.chrhsmt.sisheng.MainActivity
@@ -18,10 +19,10 @@ class Chart {
 
     private val AXIS_MAXIMUM = AudioService.MAX_FREQ_THRESHOLD // Maximum Hz
     private val AXIS_MINIMUM = 0f
-    private val activity: MainActivity
+    private val activity: Activity
     private var mChart: LineChart? = null
 
-    constructor(activity: MainActivity) {
+    constructor(activity: Activity) {
         this.activity = activity
     }
 

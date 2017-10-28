@@ -39,6 +39,7 @@ class ReibunInfo {
         ENGLISH(4),
     }
     private var itemList : ArrayList<ReibunInfoItem> = ArrayList()
+    var selectedItem : ReibunInfoItem? = null
 
     private constructor(context: Context) {
         // assets情報の取得
@@ -124,5 +125,8 @@ class ReibunInfo {
         }
 
         return ret;
+    }
+    fun setSelectedItem(position : Int) {
+        selectedItem = itemList[position]
     }
 }
