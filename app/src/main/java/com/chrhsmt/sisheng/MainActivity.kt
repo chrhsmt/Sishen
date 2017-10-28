@@ -19,6 +19,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import be.tarsos.dsp.pitch.PitchProcessor
 import com.chrhsmt.sisheng.network.RaspberryPi
+import com.chrhsmt.sisheng.point.FreqTransitionPointCalculator
+import com.chrhsmt.sisheng.point.SimplePointCalculator
 import com.github.mikephil.charting.charts.LineChart
 import com.chrhsmt.sisheng.ui.Chart
 import kotlinx.android.synthetic.main.content_main.*
@@ -158,7 +160,8 @@ class MainActivity : AppCompatActivity() {
          */
         analyze_button.setOnClickListener({ view ->
             val info = this@MainActivity.service!!.analyze()
-            if (info.success()) {
+            val info2 = this@MainActivity.service!!.analyze(FreqTransitionPointCalculator::class.qualifiedName!!)
+            if (info.success() && info2.success()) {
                 RaspberryPi().send(object: Callback {
                     override fun onFailure(call: Call?, e: IOException?) {
                         runOnUiThread {
@@ -177,13 +180,22 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(
                     this@MainActivity,
                     String.format(
-                            "score: %d\ndistance: %f, normalizedDistance: %f, base: %d, success: %s",
+                            "score: %d\ndistance: %f, normalizedDistance: %f, base: %d, success: %s" +
+                                    "\n" +
+                                    "score: %d\ndistance: %f, normalizedDistance: %f, base: %d, success: %s",
                             info.score,
                             info.distance,
                             info.normalizedDistance,
                             info.base,
-                            info.success().toString()),
-                    Toast.LENGTH_LONG).show()
+                            info.success().toString(),
+                            info2.score,
+                            info2.distance,
+                            info2.normalizedDistance,
+                            info2.base,
+                            info2.success().toString()
+                    ),
+                    Toast.LENGTH_LONG
+            ).show()
         })
 
         /*

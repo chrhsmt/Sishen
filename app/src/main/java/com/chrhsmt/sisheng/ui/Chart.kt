@@ -1,6 +1,7 @@
 package com.chrhsmt.sisheng.ui
 
 import android.graphics.Color
+import com.chrhsmt.sisheng.AudioService
 import com.chrhsmt.sisheng.MainActivity
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
@@ -15,7 +16,7 @@ import com.github.mikephil.charting.utils.ColorTemplate
  */
 class Chart {
 
-    private val AXIS_MAXIMUM = 500f // Maximum Hz
+    private val AXIS_MAXIMUM = AudioService.MAX_FREQ_THRESHOLD // Maximum Hz
     private val AXIS_MINIMUM = 0f
     private val activity: MainActivity
     private var mChart: LineChart? = null
@@ -105,7 +106,7 @@ class Chart {
         val set = LineDataSet(null, name)
         set.axisDependency = YAxis.AxisDependency.LEFT
         set.color = color
-        set.setCircleColor(Color.WHITE)
+        set.setCircleColor(color)
         set.lineWidth = 2f
         set.circleRadius = 4f
         set.fillAlpha = 65

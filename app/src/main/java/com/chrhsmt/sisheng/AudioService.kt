@@ -26,6 +26,7 @@ import de.qaware.chronix.dtw.FastDTW
 import de.qaware.chronix.dtw.TimeWarpInfo
 import de.qaware.chronix.timeseries.MultivariateTimeSeries
 import kotlinx.android.synthetic.main.content_main.*
+import kotlin.reflect.KClass
 
 
 /**
@@ -38,12 +39,13 @@ class AudioService {
         val AUDIO_FILE_SAMPLING_RATE: Int = 44100
         // 録音時に指定秒数の空白時間後に録音停止
         val STOP_RECORDING_AFTER_SECOND: Int = 2
+        val BUFFER_SIZE: Int = 1024
+        val MAX_FREQ_THRESHOLD = 500f
     }
 
     private val TAG: String = "AudioService"
 
     private val activity: MainActivity
-    private val bufSize: Int = 1024
     private val chart: Chart
     private var audioDispatcher: AudioDispatcher? = null
     private var analyzeThread: Thread? = null
@@ -55,6 +57,8 @@ class AudioService {
     constructor(chart: Chart, activity: MainActivity) {
         this.activity = activity
         this.chart = chart
+        // Setting ffmpeg
+        AndroidFFMPEGLocator(this.activity)
     }
 
     fun startAudioRecord() {
@@ -73,8 +77,6 @@ class AudioService {
 
     @SuppressLint("WrongConstant")
     fun testPlay(fileName: String) {
-
-        AndroidFFMPEGLocator(this.activity)
 
         // TODO: Handlerにすべき？
         Thread(Runnable {
@@ -98,7 +100,7 @@ class AudioService {
                     AudioDispatcherFactory.fromPipe(
                             path,
                             AUDIO_FILE_SAMPLING_RATE,
-                            this.bufSize,
+                            BUFFER_SIZE,
                             0
                     ),
                     false,
@@ -139,7 +141,7 @@ class AudioService {
                     AudioDispatcherFactory.fromPipe(
                             path,
                             AUDIO_FILE_SAMPLING_RATE,
-                            this.bufSize,
+                            BUFFER_SIZE,
                             0
                     ),
                     false,
@@ -157,8 +159,8 @@ class AudioService {
         this.stopRecord()
     }
 
-    fun analyze() : Point {
-        val calculator: PointCalculator = SimplePointCalculator()
+    fun analyze(klassName: String = SimplePointCalculator::class.qualifiedName!!) : Point {
+        val calculator: PointCalculator = Class.forName(klassName).newInstance() as PointCalculator
         return calculator.calc(this.frequencies, this.testFrequencies)
     }
 
@@ -188,7 +190,11 @@ class AudioService {
 //                this@AudioService.isRunning = false
                 if (this@AudioService.isRunning) {
                     // 稼働中はピッチを保存
-                    targetList.add(pitch)
+                    if (pitch > MAX_FREQ_THRESHOLD) {
+//                        targetList.add(targetList.last())
+                    } else {
+                        targetList.add(pitch)
+                    }
 
                     if (pitch < 0) {
                         // 無音の場合無音開始時間をセット
@@ -209,7 +215,13 @@ class AudioService {
                 }
             }
         }
-        val processor: AudioProcessor = PitchProcessor(Settings.algorithm, samplingRate.toFloat(), this.bufSize, pdh)
+        val processor: AudioProcessor = object : PitchProcessor(Settings.algorithm, samplingRate.toFloat(), BUFFER_SIZE, pdh) {
+            override fun processingFinished() {
+                super.processingFinished()
+                this@AudioService.isRunning = false
+            }
+        }
+
         dispatcher.addAudioProcessor(processor)
 
         if (playback) {
@@ -231,6 +243,7 @@ class AudioService {
     private fun stopRecord() {
         this.audioDispatcher!!.stop()
         this.analyzeThread!!.interrupt()
+        this.isRunning = false
         this@AudioService.activity.runOnUiThread {
             this.activity.button.text = "開始"
         }
