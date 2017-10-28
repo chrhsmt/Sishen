@@ -11,6 +11,7 @@ import com.chrhsmt.sisheng.R.color.colorActivate
 import com.chrhsmt.sisheng.R.drawable.shape_rounded_corners_5dp
 // 画面用にこれをimport しておく
 import kotlinx.android.synthetic.main.activity_first_screen.*
+import kotlinx.android.synthetic.main.activity_nini_reibun.*
 
 class FirstScreen : AppCompatActivity() {
 
@@ -47,7 +48,18 @@ class FirstScreen : AppCompatActivity() {
             selectMan()
         })
 
+        // お手本の声を女性にデフォルト設定
         selectWoman()
+
+
+        // タイトル長押下された場合は、デバッグ画面に遷移する。
+        if (Settings.DEBUG_MODE) {
+            textFirstScreen.setOnLongClickListener(View.OnLongClickListener {
+                val intent = Intent(this@FirstScreen, MainActivity::class.java)
+                startActivity(intent)
+                true
+            })
+        }
     }
 
     private fun selectWoman() {

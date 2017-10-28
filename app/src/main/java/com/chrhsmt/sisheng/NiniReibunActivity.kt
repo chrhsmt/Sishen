@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_nini_reibun.*
 import android.widget.AdapterView
 import org.xmlpull.v1.XmlPullParserFactory
 import android.util.Xml.newPullParser
+import kotlinx.android.synthetic.main.activity_reibun.*
 import org.xmlpull.v1.XmlPullParser
 import java.io.InputStream
 import java.io.StringReader
@@ -42,12 +43,22 @@ class NiniReibunActivity : AppCompatActivity() {
                     })
                     .setPositiveButton(resources.getText(R.string.screen2_2_2), DialogInterface.OnClickListener { dialog, which ->
                         reibunInfo.setSelectedItem(position)
+                        val audioName = resources.getStringArray(R.array.sample_audios)[reibunInfo.selectedItem!!.id % 6]
+                        Settings.sampleAudioFileName = audioName
+
                         val intent = Intent(this@NiniReibunActivity, ReibunActivity::class.java)
                         startActivity(intent)
                     })
                     .show()
         }
 
-
+        // タイトル長押下された場合は、デバッグ画面に遷移する。
+        if (Settings.DEBUG_MODE) {
+            textNiniReibun.setOnLongClickListener(View.OnLongClickListener {
+                val intent = Intent(this@NiniReibunActivity, MainActivity::class.java)
+                startActivity(intent)
+                true
+            })
+        }
     }
 }
