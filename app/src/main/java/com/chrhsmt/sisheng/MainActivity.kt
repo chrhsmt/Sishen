@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
         button.setOnClickListener { view ->
             if (button.text == "停止") {
-                button.text = "開始"
+                button.text = "測定開始"
                 this.service!!.stop()
             } else {
                 button.text = "停止"
@@ -150,6 +150,57 @@ class MainActivity : AppCompatActivity() {
                 val audioName = resources.getStringArray(R.array.sample_audios)[position]
                 Settings.sampleAudioFileName = audioName
                 Toast.makeText(this@MainActivity, String.format("%sが選択されました", audioName), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        /*
+         * --------------------------------------------------------------------------------------
+         * Setting mfsz sample audio for debug
+         * --------------------------------------------------------------------------------------
+         */
+        val mfszList = listOf(
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "s1",
+                "s2",
+                "s3",
+                "s4",
+                "s5",
+                "s6",
+                "s7",
+                "s8",
+                "s9",
+                "s10"
+        )
+        mfsz_samples.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, mfszList)
+        mfsz_samples.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val audioNamePrefix = mfszList[position]
+                val audioName = this@MainActivity.assets.list("mfsz").first { asset -> asset.matches(Regex(String.format("%s_(f|m)\\.wav", audioNamePrefix))) }
+                Settings.sampleAudioFileName = "mfsz/" + audioName
+                Toast.makeText(this@MainActivity, String.format("%sが選択されました", audioNamePrefix), Toast.LENGTH_SHORT).show()
             }
         }
 
