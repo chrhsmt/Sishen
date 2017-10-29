@@ -23,25 +23,27 @@ object Settings {
     var raspberrypiPath: String = ""
 
     // Debug Mode
-    var DEBUG_MODE = true
+    val DEBUG_MODE = true
 
-    // Set Default Value if variable is not set.
-    fun setDefaultValueIfNeed(context: Context) {
-        if (Settings.algorithm == null) {
+    // Emulator Mode (音声再生、録音が動作しない)
+    val EMULATOR_MODE = false
+
+    // Set Default Value.
+    fun setDefaultValue(context: Context, force:Boolean) {
+        if (force) {
             Settings.algorithm = PitchProcessor.PitchEstimationAlgorithm.YIN
         }
-        if (Settings.samplingRate == null) {
+        if (force || Settings.samplingRate == null) {
             Settings.samplingRate = context.resources.getIntArray(R.array.sampling_rates)[0]
         }
-        if (Settings.sex == null) {
+        if (force || Settings.sex == null) {
             Settings.sex = context.resources.getStringArray(R.array.sexes)[1]
         }
-        if (Settings.raspberrypiHost == "") {
+        if (force || Settings.raspberrypiHost == "") {
             Settings.raspberrypiHost = context.getString(R.string.default_pi_host)
         }
-        if (Settings.raspberrypiPath == "") {
+        if (force || Settings.raspberrypiPath == "") {
             Settings.raspberrypiPath = context.getString(R.string.default_pi_path)
         }
-
     }
 }

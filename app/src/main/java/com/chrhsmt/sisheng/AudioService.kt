@@ -33,7 +33,7 @@ import kotlin.reflect.KClass
 /**
  * Created by chihiro on 2017/08/22.
  */
-class AudioService {
+class AudioService : AudioServiceInterface {
 
     companion object {
 //        val SAMPLING_RATE: Int = 22050 // 44100
@@ -62,7 +62,7 @@ class AudioService {
         AndroidFFMPEGLocator(this.activity)
     }
 
-    fun startAudioRecord() {
+    override fun startAudioRecord() {
         // マイクロフォンバッファサイズの計算
         val microphoneBufferSize = AudioRecord.getMinBufferSize(
                 Settings.samplingRate!!,
@@ -77,7 +77,7 @@ class AudioService {
     }
 
     @SuppressLint("WrongConstant")
-    fun testPlay(fileName: String) {
+    override fun testPlay(fileName: String) {
 
         Thread(Runnable {
             // ファイル移動
@@ -118,7 +118,7 @@ class AudioService {
     }
 
     @SuppressLint("WrongConstant")
-    fun attemptPlay(fileName: String) {
+    override fun attemptPlay(fileName: String) {
 
         AndroidFFMPEGLocator(this.activity)
 
@@ -158,16 +158,20 @@ class AudioService {
 
     }
 
-    fun stop() {
+    override fun stop() {
         this.stopRecord()
     }
 
-    fun analyze(klassName: String = SimplePointCalculator::class.qualifiedName!!) : Point {
+    override fun analyze() : Point {
+        return analyze(SimplePointCalculator::class.qualifiedName!!)
+    }
+
+    override fun analyze(klassName: String) : Point {
         val calculator: PointCalculator = Class.forName(klassName).newInstance() as PointCalculator
         return calculator.calc(this.frequencies, this.testFrequencies)
     }
 
-    fun clear() {
+    override fun clear() {
         this.frequencies.clear()
         this.testFrequencies.clear()
     }
@@ -252,7 +256,7 @@ class AudioService {
         }
     }
 
-    fun isRunning(): Boolean {
+    override fun isRunning(): Boolean {
         return this.isRunning
     }
 }

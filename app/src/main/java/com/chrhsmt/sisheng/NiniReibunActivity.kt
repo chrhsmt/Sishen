@@ -34,23 +34,32 @@ class NiniReibunActivity : AppCompatActivity() {
         listReibun.adapter = adapter as ListAdapter
 
 
-        // ダイアログ表示
         listReibun.setOnItemClickListener { parent, view, position, id ->
-            AlertDialog.Builder(this)
-                    .setMessage(resources.getText(R.string.screen2_2_1))
-                    .setNegativeButton(resources.getText(R.string.screen2_2_3), DialogInterface.OnClickListener { dialog, which ->
-                        dialog.dismiss()
-                    })
-                    .setPositiveButton(resources.getText(R.string.screen2_2_2), DialogInterface.OnClickListener { dialog, which ->
-                        reibunInfo.setSelectedItem(position)
-                        val audioName = resources.getStringArray(R.array.sample_audios)[reibunInfo.selectedItem!!.id % 6]
-                        Settings.sampleAudioFileName = audioName
+            // TODO
+            // ダイアログ表示は行わず、例文再生画面に遷移する。
+            /*
+                AlertDialog.Builder(this)
+                        .setMessage(resources.getText(R.string.screen2_2_1))
+                        .setNegativeButton(resources.getText(R.string.screen2_2_3), DialogInterface.OnClickListener { dialog, which ->
+                            dialog.dismiss()
+                        })
+                        .setPositiveButton(resources.getText(R.string.screen2_2_2), DialogInterface.OnClickListener { dialog, which ->
+                            reibunInfo.setSelectedItem(position)
+                            val audioName = resources.getStringArray(R.array.sample_audios)[reibunInfo.selectedItem!!.id % 6]
+                            Settings.sampleAudioFileName = audioName
 
-                        val intent = Intent(this@NiniReibunActivity, ReibunActivity::class.java)
-                        startActivity(intent)
-                    })
-                    .show()
-        }
+                            val intent = Intent(this@NiniReibunActivity, ReibunActivity::class.java)
+                            startActivity(intent)
+                        })
+                        .show()
+            */
+                reibunInfo.setSelectedItem(position)
+                val audioName = resources.getStringArray(R.array.sample_audios)[reibunInfo.selectedItem!!.id % 6]
+                Settings.sampleAudioFileName = audioName
+
+                val intent = Intent(this@NiniReibunActivity, ReibunActivity::class.java)
+                startActivity(intent)
+            }
 
         // タイトル長押下された場合は、デバッグ画面に遷移する。
         if (Settings.DEBUG_MODE) {

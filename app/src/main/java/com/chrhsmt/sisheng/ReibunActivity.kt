@@ -24,7 +24,7 @@ class ReibunActivity : AppCompatActivity() {
     private val TAG: String = "ReibunActivity"
     private val PERMISSION_REQUEST_CODE = 1
 
-    private var service: AudioService? = null
+    private var service: AudioServiceInterface? = null
     private var mChart: LineChart? = null
     private var chart: Chart? = null
 
@@ -49,12 +49,17 @@ class ReibunActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), PERMISSION_REQUEST_CODE)
             //return
         }
-        Settings.setDefaultValueIfNeed(this)
+        Settings.setDefaultValue(this, false)
 
         // グラフの準備
         this.chart = Chart(this)
         this.chart!!.initChartView(this.findViewById<LineChart>(R.id.chart))
-        this.service = AudioService(this.chart!!, this)
+        if (Settings.EMULATOR_MODE) {
+            this.service = AudioServiceMock(this.chart!!, this)
+        } else {
+            this.service = AudioService(this.chart!!, this)
+        }
+
 
         // お手本再生
         btnOtehon.setOnClickListener(View.OnClickListener {
