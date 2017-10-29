@@ -39,7 +39,8 @@ jobs:
           name: Release Github
           command: |
             if [ -n "${CIRCLE_TAG}" ]; then
-              ORG_GRADLE_PROJECT_TAG_VERSION="${CIRCLE_TAG}" ./gradlew githubRelease
+              body=$(git tag -n --sort=-taggerdate --points-at HEAD --format='%(contents)')
+              ORG_GRADLE_PROJECT_TAG_VERSION="${CIRCLE_TAG}" ./gradlew -PreleaseBody="${body}" githubRelease
             fi
 deployment:
   deploy:
