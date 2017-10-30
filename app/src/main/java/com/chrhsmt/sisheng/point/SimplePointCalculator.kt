@@ -39,7 +39,7 @@ open class SimplePointCalculator : PointCalculator() {
     }
 
     open fun getScore(nomalizedDistance: Double): Int {
-        return 100 - Math.max(nomalizedDistance.toInt() - 10, 0)
+        return Math.max(100 - Math.max(nomalizedDistance.toInt() - 10, 0), 0)
     }
 
     private fun getBase(info: TimeWarpInfo) : Int {
