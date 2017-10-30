@@ -2,6 +2,7 @@ package com.chrhsmt.sisheng
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import com.chrhsmt.sisheng.exception.AudioServiceException
 import com.chrhsmt.sisheng.point.Point
 import com.chrhsmt.sisheng.point.SimplePointCalculator
 import com.chrhsmt.sisheng.ui.Chart
@@ -37,14 +38,17 @@ class AudioServiceMock : AudioServiceInterface {
         this.isRunning = false
     }
 
+    @Throws(AudioServiceException::class)
     override fun analyze() : Point {
         return analyze("")
     }
 
+    @Throws(AudioServiceException::class)
     override fun analyze(klassName: String) : Point {
         this.isRunning = true
         Thread.sleep(1000 * 2)
         this.isRunning = false
+        //throw AudioServiceException()
         return Point(
                 80,
                 5.0,
