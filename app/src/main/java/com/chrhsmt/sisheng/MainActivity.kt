@@ -20,6 +20,7 @@ import android.widget.Toast
 import be.tarsos.dsp.pitch.PitchProcessor
 import com.chrhsmt.sisheng.network.RaspberryPi
 import com.chrhsmt.sisheng.point.FreqTransitionPointCalculator
+import com.chrhsmt.sisheng.point.NMultiplyLogarithmPointCalculator
 import com.chrhsmt.sisheng.point.SimplePointCalculator
 import com.github.mikephil.charting.charts.LineChart
 import com.chrhsmt.sisheng.ui.Chart
@@ -212,6 +213,7 @@ class MainActivity : AppCompatActivity() {
         analyze_button.setOnClickListener({ view ->
             val info = this@MainActivity.service!!.analyze()
             val info2 = this@MainActivity.service!!.analyze(FreqTransitionPointCalculator::class.qualifiedName!!)
+            val info3 = this@MainActivity.service!!.analyze(NMultiplyLogarithmPointCalculator::class.qualifiedName!!)
             if (info.success() && info2.success()) {
                 RaspberryPi().send(object: Callback {
                     override fun onFailure(call: Call?, e: IOException?) {
@@ -233,7 +235,10 @@ class MainActivity : AppCompatActivity() {
                     String.format(
                             "score: %d\ndistance: %f, normalizedDistance: %f, base: %d, success: %s" +
                                     "\n" +
-                                    "score: %d\ndistance: %f, normalizedDistance: %f, base: %d, success: %s",
+                                    "score: %d\ndistance: %f, normalizedDistance: %f, base: %d, success: %s" +
+                                    "\n" +
+                                    "log score: %d"
+                            ,
                             info.score,
                             info.distance,
                             info.normalizedDistance,
@@ -243,7 +248,8 @@ class MainActivity : AppCompatActivity() {
                             info2.distance,
                             info2.normalizedDistance,
                             info2.base,
-                            info2.success().toString()
+                            info2.success().toString(),
+                            info3.score
                     ),
                     Toast.LENGTH_LONG
             ).show()

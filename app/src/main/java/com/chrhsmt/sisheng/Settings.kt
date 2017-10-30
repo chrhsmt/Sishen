@@ -16,6 +16,8 @@ object Settings {
     var sampleAudioFileName: String? = null
     var recordedSampleAudioDir: String? = null
     var recordedSampleAudioFileName: String? = null
+    // 対数得点計算の底
+    var baseLogarithmForPoint: Int = 5
 
     // Raspberry pi
     var raspberrypiHost: String = ""

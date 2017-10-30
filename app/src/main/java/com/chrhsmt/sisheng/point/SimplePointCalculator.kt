@@ -9,7 +9,7 @@ import de.qaware.chronix.timeseries.MultivariateTimeSeries
 /**
  * Created by chihiro on 2017/10/10.
  */
-class SimplePointCalculator : PointCalculator() {
+open class SimplePointCalculator : PointCalculator() {
 
     override fun calc(frequencies: MutableList<Float>, testFrequencies: MutableList<Float>): Point {
 
@@ -38,7 +38,7 @@ class SimplePointCalculator : PointCalculator() {
 //    }
     }
 
-    private fun getScore(nomalizedDistance: Double): Int {
+    open fun getScore(nomalizedDistance: Double): Int {
         return 100 - Math.max(nomalizedDistance.toInt() - 10, 0)
     }
 
