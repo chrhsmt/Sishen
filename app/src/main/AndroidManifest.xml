@@ -32,6 +32,9 @@
         <activity
             android:name=".NiniReibunActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".ResultActivity"
+            android:screenOrientation="landscape" />
 
     </application>
 

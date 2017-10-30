@@ -43,7 +43,7 @@ class AudioServiceMock : AudioServiceInterface {
 
     override fun analyze(klassName: String) : Point {
         this.isRunning = true
-        Thread.sleep(1000 * 5)
+        Thread.sleep(1000 * 2)
         this.isRunning = false
         return Point(
                 80,

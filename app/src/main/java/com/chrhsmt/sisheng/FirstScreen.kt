@@ -12,6 +12,8 @@ import com.chrhsmt.sisheng.R.drawable.shape_rounded_corners_5dp
 // 画面用にこれをimport しておく
 import kotlinx.android.synthetic.main.activity_first_screen.*
 import kotlinx.android.synthetic.main.activity_nini_reibun.*
+import org.apache.commons.math3.random.RandomGenerator
+import java.util.*
 
 class FirstScreen : AppCompatActivity() {
 
@@ -24,11 +26,16 @@ class FirstScreen : AppCompatActivity() {
 
         // ランダム例文に移動
         btnRandom.setOnClickListener(View.OnClickListener {
+            val reibunInfo = ReibunInfo.getInstance(this)
+
             //todo: ランダムに例文を渡す処理
+            val random = Random().nextInt(reibunInfo.getSentenceList(ReibunInfo.SENTENCE_TYPE.CHINESE).size)
+            reibunInfo.setSelectedItem(random.toInt())
 
             val intent = Intent(this@FirstScreen,
                     ReibunActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(0, 0);
         })
 
         // 任意例文に移動
@@ -36,6 +43,7 @@ class FirstScreen : AppCompatActivity() {
             val intent = Intent(this@FirstScreen,
                     NiniReibunActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(0, 0);
         })
 
         // お手本の声を女性に設定

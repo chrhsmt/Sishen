@@ -54,11 +54,10 @@ class NiniReibunActivity : AppCompatActivity() {
                         .show()
             */
                 reibunInfo.setSelectedItem(position)
-                val audioName = resources.getStringArray(R.array.sample_audios)[reibunInfo.selectedItem!!.id % 6]
-                Settings.sampleAudioFileName = audioName
 
                 val intent = Intent(this@NiniReibunActivity, ReibunActivity::class.java)
                 startActivity(intent)
+                overridePendingTransition(0, 0);
             }
 
         // タイトル長押下された場合は、デバッグ画面に遷移する。

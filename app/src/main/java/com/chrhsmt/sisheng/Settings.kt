@@ -26,24 +26,24 @@ object Settings {
     val DEBUG_MODE = true
 
     // Emulator Mode (音声再生、録音が動作しない)
-    val EMULATOR_MODE = false
+    val EMULATOR_MODE = true
 
     // Set Default Value.
     fun setDefaultValue(context: Context, force:Boolean) {
         if (force) {
-            Settings.algorithm = PitchProcessor.PitchEstimationAlgorithm.YIN
+            algorithm = PitchProcessor.PitchEstimationAlgorithm.YIN
         }
         if (force || Settings.samplingRate == null) {
-            Settings.samplingRate = context.resources.getIntArray(R.array.sampling_rates)[0]
+            samplingRate = context.resources.getIntArray(R.array.sampling_rates)[0]
         }
         if (force || Settings.sex == null) {
-            Settings.sex = context.resources.getStringArray(R.array.sexes)[1]
+            sex = context.resources.getStringArray(R.array.sexes)[1]
         }
         if (force || Settings.raspberrypiHost == "") {
-            Settings.raspberrypiHost = context.getString(R.string.default_pi_host)
+            raspberrypiHost = context.getString(R.string.default_pi_host)
         }
         if (force || Settings.raspberrypiPath == "") {
-            Settings.raspberrypiPath = context.getString(R.string.default_pi_path)
+            raspberrypiPath = context.getString(R.string.default_pi_path)
         }
     }
 }

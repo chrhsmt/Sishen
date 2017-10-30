@@ -18,6 +18,7 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
+import javax.xml.transform.Result
 
 class ReibunActivity : AppCompatActivity() {
 
@@ -49,6 +50,9 @@ class ReibunActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), PERMISSION_REQUEST_CODE)
             //return
         }
+
+        val audioName = resources.getStringArray(R.array.sample_audios)[reibunInfo.selectedItem!!.id % 5]
+        Settings.sampleAudioFileName = audioName
         Settings.setDefaultValue(this, false)
 
         // グラフの準備
@@ -154,13 +158,14 @@ class ReibunActivity : AppCompatActivity() {
             }
 
             runOnUiThread {
-                //ボタンの状態を更新
-                btnRokuon.setBackgroundResource(R.drawable.ic_record_button)
-                btnRokuon.setEnabled(true)
-                btnOtehon.setBackgroundResource(R.drawable.ic_play_button)
-                btnOtehon.setEnabled(true)
-
-                dialogAnalyzing.visibility = View.INVISIBLE
+                //ボタン等のパーツの状態を戻さずに結果画面に遷移する
+                //本画面に戻る時は、再度 onCreate から行われる想定。
+                val intent = Intent(this@ReibunActivity, ResultActivity::class.java)
+                intent.putExtra("result", info.success() && info2.success())
+                intent.putExtra("score", info.score.toString())
+                startActivity(intent)
+                overridePendingTransition(0, 0);
+                /*
                 Toast.makeText(
                         this@ReibunActivity,
                         String.format(
@@ -180,6 +185,7 @@ class ReibunActivity : AppCompatActivity() {
                         ),
                         Toast.LENGTH_LONG
                 ).show()
+                */
             }
         }).start()
     }

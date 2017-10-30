@@ -14,10 +14,17 @@
     <string name="screen1_5">女性</string>
     <string name="screen1_6">男性</string>
     <string name="screen2_1">例文の選択</string>
-    <string name="screen2_2_1">你确认吗？</string>
-    <string name="screen2_2_2">开始</string>
-    <string name="screen2_2_3">重新选择</string>
-    <string name="screen3_1">向萌神机器人朗读下面的例句</string>
-    <string name="screen3_2">お手本再生</string>
-    <string name="screen3_3">録音</string>
+    <string name="screen3_1">你确认吗？</string>
+    <string name="screen3_2">开始</string>
+    <string name="screen3_3">重新选择</string>
+    <string name="screen4_1">向萌神机器人朗读下面的例句</string>
+    <string name="screen6_1">糟糕！！不能分析，请重新录音</string>
+    <string name="screen7_1">恭喜</string>
+    <string name="screen7_2">萌神超级喜欢你的发音！</string>
+    <string name="screen7_3">重新开始</string>
+    <string name="screen8_1">萌神很努力分析</string>
+    <string name="screen8_2">但是……</string>
+    <string name="screen8_3">不知道你说什么</string>
+    <string name="screen8_4">再试一次</string>
+    <string name="screen8_5">重新开始</string>
 </resources>
