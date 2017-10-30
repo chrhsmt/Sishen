@@ -26,7 +26,7 @@ object Settings {
     val DEBUG_MODE = true
 
     // Emulator Mode (音声再生、録音が動作しない)
-    val EMULATOR_MODE = true
+    val EMULATOR_MODE = false
 
     // Set Default Value.
     fun setDefaultValue(context: Context, force:Boolean) {
