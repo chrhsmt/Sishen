@@ -1,5 +1,7 @@
 package com.chrhsmt.sisheng.point
 
+import com.chrhsmt.sisheng.Settings
+
 /**
  * Created by chihiro on 2017/10/10.
  */
@@ -10,7 +12,7 @@ data class Point(
         val base: Int) {
 
     fun success() : Boolean {
-        return this.score >= 80
+        return this.score >= Settings.pointSuccessThreshold
     }
 
 }
