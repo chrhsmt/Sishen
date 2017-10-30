@@ -78,7 +78,7 @@ abstract class PointCalculator {
             }
         }
 
-        val filler = listOf(0, 0, 0)
+        val filler = listOf(0, 0, 0, 0)
         zeroRangeList.reverse()
         zeroRangeList.forEach { range ->
             range.reversed().forEach { i ->
