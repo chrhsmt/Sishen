@@ -16,6 +16,7 @@ import be.tarsos.dsp.pitch.PitchProcessor
 import com.chrhsmt.sisheng.ui.Chart
 import android.media.AudioManager
 import be.tarsos.dsp.io.android.AndroidAudioPlayer
+import com.chrhsmt.sisheng.exception.AudioServiceException
 import com.chrhsmt.sisheng.point.Point
 import com.chrhsmt.sisheng.point.PointCalculator
 import com.chrhsmt.sisheng.point.SimplePointCalculator
@@ -161,6 +162,7 @@ class AudioService {
         this.stopRecord()
     }
 
+    @Throws(AudioServiceException::class)
     fun analyze(klassName: String = SimplePointCalculator::class.qualifiedName!!) : Point {
         val calculator: PointCalculator = Class.forName(klassName).newInstance() as PointCalculator
         return calculator.calc(this.frequencies, this.testFrequencies)

@@ -1,6 +1,7 @@
 package com.chrhsmt.sisheng
 
 import android.Manifest.permission.*
+import android.app.Dialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -10,6 +11,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityCompat.requestPermissions
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -20,6 +22,7 @@ import android.widget.Toast
 import be.tarsos.dsp.pitch.PitchProcessor
 import com.chrhsmt.sisheng.network.RaspberryPi
 import com.chrhsmt.sisheng.point.FreqTransitionPointCalculator
+import com.chrhsmt.sisheng.point.NMultiplyLogarithmPointCalculator
 import com.chrhsmt.sisheng.point.SimplePointCalculator
 import com.github.mikephil.charting.charts.LineChart
 import com.chrhsmt.sisheng.ui.Chart
@@ -212,6 +215,7 @@ class MainActivity : AppCompatActivity() {
         analyze_button.setOnClickListener({ view ->
             val info = this@MainActivity.service!!.analyze()
             val info2 = this@MainActivity.service!!.analyze(FreqTransitionPointCalculator::class.qualifiedName!!)
+            val info3 = this@MainActivity.service!!.analyze(NMultiplyLogarithmPointCalculator::class.qualifiedName!!)
             if (info.success() && info2.success()) {
                 RaspberryPi().send(object: Callback {
                     override fun onFailure(call: Call?, e: IOException?) {
@@ -228,25 +232,39 @@ class MainActivity : AppCompatActivity() {
                 })
             }
 
-            Toast.makeText(
-                    this@MainActivity,
-                    String.format(
-                            "score: %d\ndistance: %f, normalizedDistance: %f, base: %d, success: %s" +
-                                    "\n" +
-                                    "score: %d\ndistance: %f, normalizedDistance: %f, base: %d, success: %s",
-                            info.score,
-                            info.distance,
-                            info.normalizedDistance,
-                            info.base,
-                            info.success().toString(),
-                            info2.score,
-                            info2.distance,
-                            info2.normalizedDistance,
-                            info2.base,
-                            info2.success().toString()
-                    ),
-                    Toast.LENGTH_LONG
-            ).show()
+            val message = String.format(
+                    "[ log score ]: %d" +
+                    "\n" +
+                    "[ original ]:\n" +
+                    "  score: %d\n  distance: %d, normalizedDistance: %d, base: %d, success: %s" +
+                    "\n" +
+                    "[ transiiton ]:\n" +
+                    "  score: %d\n  distance: %d, normalizedDistance: %d, base: %d, success: %s"
+                    ,
+                    info3.score,
+                    info.score,
+                    info.distance.toInt(),
+                    info.normalizedDistance.toInt(),
+                    info.base,
+                    info.success().toString(),
+                    info2.score,
+                    info2.distance.toInt(),
+                    info2.normalizedDistance.toInt(),
+                    info2.base,
+                    info2.success().toString()
+            )
+
+//            Toast.makeText(
+//                    this@MainActivity,
+//                    message,
+//                    Toast.LENGTH_LONG
+//            ).show()
+            AlertDialog.Builder(this@MainActivity)
+                    .setMessage(message)
+                    .setTitle("Point")
+                    .setPositiveButton("ok", null)
+                    .show()
+
         })
 
         /*
