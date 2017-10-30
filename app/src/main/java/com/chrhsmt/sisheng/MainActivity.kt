@@ -1,6 +1,7 @@
 package com.chrhsmt.sisheng
 
 import android.Manifest.permission.*
+import android.app.Dialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -10,6 +11,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityCompat.requestPermissions
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -230,29 +232,39 @@ class MainActivity : AppCompatActivity() {
                 })
             }
 
-            Toast.makeText(
-                    this@MainActivity,
-                    String.format(
-                            "score: %d\ndistance: %f, normalizedDistance: %f, base: %d, success: %s" +
-                                    "\n" +
-                                    "score: %d\ndistance: %f, normalizedDistance: %f, base: %d, success: %s" +
-                                    "\n" +
-                                    "log score: %d"
-                            ,
-                            info.score,
-                            info.distance,
-                            info.normalizedDistance,
-                            info.base,
-                            info.success().toString(),
-                            info2.score,
-                            info2.distance,
-                            info2.normalizedDistance,
-                            info2.base,
-                            info2.success().toString(),
-                            info3.score
-                    ),
-                    Toast.LENGTH_LONG
-            ).show()
+            val message = String.format(
+                    "[ log score ]: %d" +
+                    "\n" +
+                    "[ original ]:\n" +
+                    "  score: %d\n  distance: %d, normalizedDistance: %d, base: %d, success: %s" +
+                    "\n" +
+                    "[ transiiton ]:\n" +
+                    "  score: %d\n  distance: %d, normalizedDistance: %d, base: %d, success: %s"
+                    ,
+                    info3.score,
+                    info.score,
+                    info.distance.toInt(),
+                    info.normalizedDistance.toInt(),
+                    info.base,
+                    info.success().toString(),
+                    info2.score,
+                    info2.distance.toInt(),
+                    info2.normalizedDistance.toInt(),
+                    info2.base,
+                    info2.success().toString()
+            )
+
+//            Toast.makeText(
+//                    this@MainActivity,
+//                    message,
+//                    Toast.LENGTH_LONG
+//            ).show()
+            AlertDialog.Builder(this@MainActivity)
+                    .setMessage(message)
+                    .setTitle("Point")
+                    .setPositiveButton("ok", null)
+                    .show()
+
         })
 
         /*
