@@ -32,6 +32,9 @@ object Settings {
     // Emulator Mode (音声再生、録音が動作しない)
     val EMULATOR_MODE = false
 
+    // 萌え系フォントへの変更要否
+    val USE_MOE_FONT = true
+
     // Set Default Value.
     fun setDefaultValue(context: Context, force:Boolean) {
         if (force) {

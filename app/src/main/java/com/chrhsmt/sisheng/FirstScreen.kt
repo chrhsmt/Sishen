@@ -9,6 +9,7 @@ import android.graphics.Color.parseColor
 import android.widget.ImageButton
 import com.chrhsmt.sisheng.R.color.colorActivate
 import com.chrhsmt.sisheng.R.drawable.shape_rounded_corners_5dp
+import com.chrhsmt.sisheng.font.FontUtils
 // 画面用にこれをimport しておく
 import kotlinx.android.synthetic.main.activity_first_screen.*
 import kotlinx.android.synthetic.main.activity_nini_reibun.*
@@ -23,6 +24,11 @@ class FirstScreen : AppCompatActivity() {
         // フルスクリーンにする
         val decor = this.window.decorView
         decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+
+        FontUtils.changeButtonFont(this, R.id.btnNini)
+        FontUtils.changeButtonFont(this, R.id.btnRandom)
+        FontUtils.changeButtonFont(this, R.id.btnWoman)
+        FontUtils.changeButtonFont(this, R.id.btnMan)
 
         // ランダム例文に移動
         btnRandom.setOnClickListener(View.OnClickListener {
@@ -57,7 +63,7 @@ class FirstScreen : AppCompatActivity() {
         })
 
         // お手本の声を女性にデフォルト設定
-        selectWoman()
+        selectMan()
 
 
         // タイトル長押下された場合は、デバッグ画面に遷移する。

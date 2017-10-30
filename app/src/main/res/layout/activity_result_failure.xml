@@ -78,9 +78,11 @@
                 android:layout_weight="25"
                 android:layout_height="match_parent"
                 style="@style/style_btn"
+                android:textStyle="bold"
                 android:text="@string/screen8_4"
                 android:textSize="40sp"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:gravity="center_vertical" />
 
             <Space
                 android:layout_width="0dp"
@@ -93,8 +95,11 @@
                 android:layout_weight="25"
                 android:layout_height="match_parent"
                 style="@style/style_btn"
+                android:textStyle="bold"
                 android:text="@string/screen8_5"
-                android:textSize="40sp" />
+                android:textSize="40sp"
+                android:textAlignment="center"
+                android:gravity="center_vertical" />
 
             <Space
                 android:layout_width="0dp"

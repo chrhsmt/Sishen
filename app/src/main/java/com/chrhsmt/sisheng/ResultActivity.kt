@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
+import com.chrhsmt.sisheng.font.FontUtils
 
 class ResultActivity : AppCompatActivity() {
 
@@ -28,6 +29,7 @@ class ResultActivity : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(0, 0);
         })
+        FontUtils.changeButtonFont(this, R.id.btnRestart)
 
         this.findViewById<View>(R.id.btnRetry)?.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@ResultActivity, ReibunActivity::class.java)
@@ -35,6 +37,7 @@ class ResultActivity : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(0, 0);
         })
+        FontUtils.changeButtonFont(this, R.id.btnRetry)
 
         this.findViewById<TextView>(R.id.txtScore)?.text = intent.getStringExtra("score")
 

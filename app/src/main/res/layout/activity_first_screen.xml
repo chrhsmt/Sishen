@@ -52,10 +52,11 @@
                 android:layout_weight="30"
                 android:layout_height="match_parent"
                 style="@style/style_btn"
-
+                android:textStyle="bold"
                 android:text="@string/screen1_2"
                 android:textSize="40sp"
                 android:textAlignment="center"
+                android:gravity="center_vertical"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 
@@ -70,9 +71,11 @@
                 android:layout_weight="30"
                 android:layout_height="match_parent"
                 style="@style/style_btn"
-
+                android:textStyle="bold"
                 android:text="@string/screen1_3"
                 android:textSize="40sp"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 
@@ -117,15 +120,16 @@
                 tools:layout_editor_absoluteY="0dp" />
 
             <Button
-                android:id="@+id/btnWoman"
+                android:id="@+id/btnMan"
                 android:layout_width="0dp"
                 android:layout_weight="25"
                 android:layout_height="match_parent"
                 android:background="@drawable/shape_rounded_corners_5dp"
-
+                android:textStyle="bold"
                 android:text="@string/screen1_5"
                 android:textSize="40sp"
                 android:textAlignment="center"
+                android:gravity="center_vertical"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 
@@ -135,14 +139,16 @@
                 android:layout_weight="10" />
 
             <Button
-                android:id="@+id/btnMan"
+                android:id="@+id/btnWoman"
                 android:layout_width="0dp"
                 android:layout_weight="25"
                 android:layout_height="match_parent"
                 android:background="@drawable/shape_rounded_corners_5dp"
-
+                android:textStyle="bold"
                 android:text="@string/screen1_6"
                 android:textSize="40sp"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 
