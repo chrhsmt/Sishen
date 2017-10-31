@@ -1,11 +1,8 @@
 package com.chrhsmt.sisheng
 
 import android.content.Context
-import android.content.res.AssetManager
-import android.content.res.Resources
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
-import java.io.InputStream
 import java.io.StringReader
 
 /**
@@ -30,6 +27,10 @@ class ReibunInfo {
         var chinese : String = ""
         var japanese : String = ""
         var english : String = ""
+
+        fun getMFSZExampleAudioFileName(): String {
+            return "mfsz/" + ReibunInfo.instance!!.audioFileNameList.first { asset -> asset.matches(Regex(String.format("%d_(f|m)\\.wav", this.id))) }
+        }
     }
 
     enum class SENTENCE_TYPE(val rawValue: Int) {
@@ -40,6 +41,9 @@ class ReibunInfo {
     }
     private var itemList : ArrayList<ReibunInfoItem> = ArrayList()
     var selectedItem : ReibunInfoItem? = null
+
+    // mfsz用お手本音源ファイル名List
+    private val audioFileNameList: Array<String>
 
     private constructor(context: Context) {
         // assets情報の取得
@@ -87,6 +91,9 @@ class ReibunInfo {
             }
             eventType = xpp.nextToken() // xpp.next()かどちらかを使う
         }
+
+        // お手本音源ファイル名取得
+        this.audioFileNameList = context.assets.list("mfsz")
     }
 
     fun getSentenceList(type : SENTENCE_TYPE) : ArrayList<String> {
