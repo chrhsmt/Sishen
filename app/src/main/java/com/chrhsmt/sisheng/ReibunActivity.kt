@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.chrhsmt.sisheng.exception.AudioServiceException
 import com.chrhsmt.sisheng.network.RaspberryPi
 import com.chrhsmt.sisheng.point.FreqTransitionPointCalculator
+import com.chrhsmt.sisheng.point.NMultiplyLogarithmPointCalculator
 import com.chrhsmt.sisheng.ui.Chart
 import com.github.mikephil.charting.charts.LineChart
 import kotlinx.android.synthetic.main.activity_reibun.*
@@ -93,8 +94,10 @@ class ReibunActivity : AppCompatActivity() {
 
             this@ReibunActivity.service!!.clear()
             this@ReibunActivity.chart!!.clear()
-            Log.d(TAG, "Play " + Settings.sampleAudioFileName)
-            this.service!!.testPlay(Settings.sampleAudioFileName!!)
+
+            val fileName = reibunInfo.selectedItem!!.getMFSZExampleAudioFileName()
+            Log.d(TAG, "Play " + fileName)
+            this.service!!.testPlay(fileName)
 
             Thread(Runnable {
                 Thread.sleep(2000)
@@ -126,8 +129,8 @@ class ReibunActivity : AppCompatActivity() {
                 nowStatus = REIBUN_STATUS.RECODING
                 updateButtonStatus()
 
-                this@ReibunActivity.service!!.clear()
-                this@ReibunActivity.chart!!.clear()
+//                this@ReibunActivity.service!!.clear()
+//                this@ReibunActivity.chart!!.clear()
                 this.service!!.startAudioRecord()
                 isRecording = true
             }
@@ -167,9 +170,10 @@ class ReibunActivity : AppCompatActivity() {
 
     @Throws(AudioServiceException::class)
     private fun analyzeInner() {
-        val info = this@ReibunActivity.service!!.analyze()
-        val info2 = this@ReibunActivity.service!!.analyze(FreqTransitionPointCalculator::class.qualifiedName!!)
-        if (info.success() && info2.success()) {
+//        val info = this@ReibunActivity.service!!.analyze()
+//        val info2 = this@ReibunActivity.service!!.analyze(FreqTransitionPointCalculator::class.qualifiedName!!)
+        val info3 = this@ReibunActivity.service!!.analyze(NMultiplyLogarithmPointCalculator::class.qualifiedName!!)
+        if (info3.success()) {
             RaspberryPi().send(object: Callback {
                 override fun onFailure(call: Call?, e: IOException?) {
                     runOnUiThread {
@@ -190,8 +194,8 @@ class ReibunActivity : AppCompatActivity() {
             updateButtonStatus()
 
             val intent = Intent(this@ReibunActivity, ResultActivity::class.java)
-            intent.putExtra("result", info.success() && info2.success())
-            intent.putExtra("score", info.score.toString())
+            intent.putExtra("result", info3.success())
+            intent.putExtra("score", info3.score.toString())
             startActivity(intent)
             overridePendingTransition(0, 0);
             /*
