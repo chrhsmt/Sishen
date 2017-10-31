@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.chrhsmt.sisheng.exception.AudioServiceException
+import com.chrhsmt.sisheng.font.FontUtils
 import com.chrhsmt.sisheng.network.RaspberryPi
 import com.chrhsmt.sisheng.point.FreqTransitionPointCalculator
 import com.chrhsmt.sisheng.point.NMultiplyLogarithmPointCalculator
@@ -71,6 +72,10 @@ class ReibunActivity : AppCompatActivity() {
         val decor = this.window.decorView
         decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
+        // タイトル、エラーメッセージのフォントを変更する
+        FontUtils.changeFont(this, txtReibun)
+        FontUtils.changeFont(this, txtError)
+
         // ピンイン、中文、英文の配置
         val reibunInfo = ReibunInfo.getInstance(this)
         adjustTextSet(reibunInfo.selectedItem!!.pinyin, txtPinyin)
@@ -114,6 +119,7 @@ class ReibunActivity : AppCompatActivity() {
                 when (this@ReibunActivity.service!!.isRunning()) {
                     true -> Thread.sleep(1000)
                 }
+                Thread.sleep(1000)
 
                 this@ReibunActivity.runOnUiThread {
                     nowStatus = REIBUN_STATUS.NORMAL
