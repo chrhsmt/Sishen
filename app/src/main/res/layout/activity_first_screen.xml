@@ -35,21 +35,21 @@
 
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="20"
+            android:layout_weight="15"
             android:orientation="horizontal"
             android:weightSum="100">
 
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="15"
+                android:layout_weight="20"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 
             <Button
-                android:id="@+id/btnRandom"
+                android:id="@+id/btnMan"
                 android:layout_width="0dp"
-                android:layout_weight="30"
+                android:layout_weight="25"
                 android:layout_height="match_parent"
                 style="@style/style_btn"
                 android:textStyle="bold"
@@ -66,9 +66,9 @@
                 android:layout_weight="10" />
 
             <Button
-                android:id="@+id/btnNini"
+                android:id="@+id/btnWoman"
                 android:layout_width="0dp"
-                android:layout_weight="30"
+                android:layout_weight="25"
                 android:layout_height="match_parent"
                 style="@style/style_btn"
                 android:textStyle="bold"
@@ -82,7 +82,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="15" />
+                android:layout_weight="20" />
 
         </LinearLayout>
 
@@ -120,7 +120,7 @@
                 tools:layout_editor_absoluteY="0dp" />
 
             <Button
-                android:id="@+id/btnMan"
+                android:id="@+id/btnRandom"
                 android:layout_width="0dp"
                 android:layout_weight="25"
                 android:layout_height="match_parent"
@@ -139,7 +139,7 @@
                 android:layout_weight="10" />
 
             <Button
-                android:id="@+id/btnWoman"
+                android:id="@+id/btnNini"
                 android:layout_width="0dp"
                 android:layout_weight="25"
                 android:layout_height="match_parent"

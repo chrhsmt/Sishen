@@ -29,6 +29,7 @@ class FirstScreen : AppCompatActivity() {
         FontUtils.changeButtonFont(this, R.id.btnRandom)
         FontUtils.changeButtonFont(this, R.id.btnWoman)
         FontUtils.changeButtonFont(this, R.id.btnMan)
+        setButtonEnable(false)
 
         // ランダム例文に移動
         btnRandom.setOnClickListener(View.OnClickListener {
@@ -63,7 +64,7 @@ class FirstScreen : AppCompatActivity() {
         })
 
         // お手本の声を女性にデフォルト設定
-        selectMan()
+        //selectMan()
 
 
         // タイトル長押下された場合は、デバッグ画面に遷移する。
@@ -80,12 +81,18 @@ class FirstScreen : AppCompatActivity() {
         btnMan.setBackgroundResource(shape_rounded_corners_5dp)
         btnWoman.setBackgroundColor(resources.getColor(colorActivate, null))
         Settings.sex = resources.getStringArray(R.array.sexes)[1]
+        setButtonEnable(true)
     }
 
     private fun selectMan() {
         btnMan.setBackgroundColor(resources.getColor(colorActivate, null))
         btnWoman.setBackgroundResource(shape_rounded_corners_5dp)
         Settings.sex = resources.getStringArray(R.array.sexes)[0]
+        setButtonEnable(true)
+    }
 
+    private fun setButtonEnable(enable: Boolean) {
+        btnRandom.setEnabled(enable)
+        btnNini.setEnabled(enable)
     }
 }
