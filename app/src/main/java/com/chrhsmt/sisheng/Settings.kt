@@ -1,5 +1,6 @@
 package com.chrhsmt.sisheng
 
+import android.content.Context
 import be.tarsos.dsp.pitch.PitchProcessor
 
 /**
@@ -24,4 +25,32 @@ object Settings {
     // Raspberry pi
     var raspberrypiHost: String = ""
     var raspberrypiPath: String = ""
+
+    // Debug Mode
+    val DEBUG_MODE = true
+
+    // Emulator Mode (音声再生、録音が動作しない)
+    val EMULATOR_MODE = false
+
+    // 萌え系フォントへの変更要否
+    val USE_MOE_FONT = true
+
+    // Set Default Value.
+    fun setDefaultValue(context: Context, force:Boolean) {
+        if (force) {
+            algorithm = PitchProcessor.PitchEstimationAlgorithm.YIN
+        }
+        if (force || Settings.samplingRate == null) {
+            samplingRate = context.resources.getIntArray(R.array.sampling_rates)[0]
+        }
+        if (force || Settings.sex == null) {
+            sex = context.resources.getStringArray(R.array.sexes)[1]
+        }
+        if (force || Settings.raspberrypiHost == "") {
+            raspberrypiHost = context.getString(R.string.default_pi_host)
+        }
+        if (force || Settings.raspberrypiPath == "") {
+            raspberrypiPath = context.getString(R.string.default_pi_path)
+        }
+    }
 }

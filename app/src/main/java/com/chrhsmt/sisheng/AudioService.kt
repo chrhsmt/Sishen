@@ -1,6 +1,7 @@
 package com.chrhsmt.sisheng
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.media.*
@@ -33,7 +34,7 @@ import kotlin.reflect.KClass
 /**
  * Created by chihiro on 2017/08/22.
  */
-class AudioService {
+class AudioService : AudioServiceInterface {
 
     companion object {
 //        val SAMPLING_RATE: Int = 22050 // 44100
@@ -46,7 +47,7 @@ class AudioService {
 
     private val TAG: String = "AudioService"
 
-    private val activity: MainActivity
+    private val activity: Activity
     private val chart: Chart
     private var audioDispatcher: AudioDispatcher? = null
     private var analyzeThread: Thread? = null
@@ -55,14 +56,14 @@ class AudioService {
     private var frequencies: MutableList<Float> = ArrayList<Float>()
     private var testFrequencies: MutableList<Float> = ArrayList<Float>()
 
-    constructor(chart: Chart, activity: MainActivity) {
+    constructor(chart: Chart, activity: Activity) {
         this.activity = activity
         this.chart = chart
         // Setting ffmpeg
         AndroidFFMPEGLocator(this.activity)
     }
 
-    fun startAudioRecord() {
+    override fun startAudioRecord() {
         // マイクロフォンバッファサイズの計算
         val microphoneBufferSize = AudioRecord.getMinBufferSize(
                 Settings.samplingRate!!,
@@ -77,7 +78,7 @@ class AudioService {
     }
 
     @SuppressLint("WrongConstant")
-    fun testPlay(fileName: String) {
+    override fun testPlay(fileName: String) {
 
         Thread(Runnable {
             // ファイル移動
@@ -118,7 +119,7 @@ class AudioService {
     }
 
     @SuppressLint("WrongConstant")
-    fun attemptPlay(fileName: String) {
+    override fun attemptPlay(fileName: String) {
 
         AndroidFFMPEGLocator(this.activity)
 
@@ -158,17 +159,22 @@ class AudioService {
 
     }
 
-    fun stop() {
+    override fun stop() {
         this.stopRecord()
     }
 
     @Throws(AudioServiceException::class)
-    fun analyze(klassName: String = SimplePointCalculator::class.qualifiedName!!) : Point {
+    override fun analyze() : Point {
+        return analyze(SimplePointCalculator::class.qualifiedName!!)
+    }
+
+    @Throws(AudioServiceException::class)
+    override fun analyze(klassName: String) : Point {
         val calculator: PointCalculator = Class.forName(klassName).newInstance() as PointCalculator
         return calculator.calc(this.frequencies, this.testFrequencies)
     }
 
-    fun clear() {
+    override fun clear() {
         this.frequencies.clear()
         this.testFrequencies.clear()
     }
@@ -249,8 +255,11 @@ class AudioService {
         this.analyzeThread!!.interrupt()
         this.isRunning = false
         this@AudioService.activity.runOnUiThread {
-            this.activity.button.text = "開始"
+            this.activity.button?.text = "開始"
         }
     }
 
+    override fun isRunning(): Boolean {
+        return this.isRunning
+    }
 }
