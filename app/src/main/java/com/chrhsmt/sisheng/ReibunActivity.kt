@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.chrhsmt.sisheng.exception.AudioServiceException
 import com.chrhsmt.sisheng.network.RaspberryPi
@@ -42,6 +43,16 @@ class ReibunActivity : AppCompatActivity() {
     }
     private var nowStatus: REIBUN_STATUS = REIBUN_STATUS.NORMAL
 
+    private fun adjustTextSet(str: String, txtView: TextView) {
+        if (str == null){
+            return
+        }
+        if (str.indexOf("\\n") > 0) {
+            txtView.textSize = txtView.textSize.div(3).toFloat()
+        }
+        txtView.setText(str.replace("\\n", "\n"))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reibun)
@@ -52,9 +63,9 @@ class ReibunActivity : AppCompatActivity() {
 
         // ピンイン、中文、英文の配置
         val reibunInfo = ReibunInfo.getInstance(this)
-        txtPinyin.setText(reibunInfo.selectedItem?.pinyin)
-        txtChinese.setText(reibunInfo.selectedItem?.chinese)
-        txtEnglish.setText(reibunInfo.selectedItem?.english)
+        adjustTextSet(reibunInfo.selectedItem!!.pinyin, txtPinyin)
+        adjustTextSet(reibunInfo.selectedItem!!.chinese, txtChinese)
+        txtEnglish.setText(reibunInfo.selectedItem!!.english)
 
         // 音声再生、録画の準備
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {

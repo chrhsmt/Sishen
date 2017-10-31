@@ -24,6 +24,9 @@ object FontUtils {
                 activity.assets,
                 "fonts/SentyCreamPuff.ttf")
         button.setTypeface(typeface)
-        button.textSize = button.textSize.times(1.5).toFloat()
+
+        if (Settings.EMULATOR_MODE) {
+            button.textSize = button.textSize.times(1.5).toFloat()
+        }
     }
 }
