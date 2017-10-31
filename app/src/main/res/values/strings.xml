@@ -7,4 +7,24 @@
     <string name="audio_prompt">サンプル音源を選択してください</string>
     <string name="analyze_button_title">解析</string>
     <string name="clear_button_title">クリア</string>
+    <string name="screen1_1">请选择出题方式</string>
+    <string name="screen1_2">随机</string>
+    <string name="screen1_3">自己选择</string>
+    <string name="screen1_4">你是</string>
+    <string name="screen1_5">宅男</string>
+    <string name="screen1_6">宅女</string>
+    <string name="screen2_1">选择例句</string>
+    <string name="screen3_1">你确认吗？</string>
+    <string name="screen3_2">开始</string>
+    <string name="screen3_3">重新选择</string>
+    <string name="screen4_1">向萌神机器人朗读下面的例句</string>
+    <string name="screen6_1">糟糕！！不能分析，请重新录音</string>
+    <string name="screen7_1">恭喜</string>
+    <string name="screen7_2">萌神超级喜欢你的发音！</string>
+    <string name="screen7_3">重新开始</string>
+    <string name="screen8_1">萌神很努力分析</string>
+    <string name="screen8_2">但是……</string>
+    <string name="screen8_3">不知道你说什么</string>
+    <string name="screen8_4">再试一次</string>
+    <string name="screen8_5">重新开始</string>
 </resources>
