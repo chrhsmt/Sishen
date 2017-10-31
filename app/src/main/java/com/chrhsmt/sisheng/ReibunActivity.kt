@@ -47,10 +47,20 @@ class ReibunActivity : AppCompatActivity() {
         if (str == null){
             return
         }
-        if (str.indexOf("\\n") > 0) {
-            txtView.textSize = txtView.textSize.div(3).toFloat()
+
+        var checkStr = str
+        while (true) {
+            val index = checkStr.indexOf("\\n")
+
+            if (index > 0) {
+                txtView.textSize = txtView.textSize.div(3).toFloat()
+                checkStr = checkStr.substring(index + 2)
+            }
+            else {
+                break
+            }
         }
-        txtView.setText(str.replace("\\n", "\n"))
+        txtView.text = ReibunInfo.replaceNewLine(str)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +75,7 @@ class ReibunActivity : AppCompatActivity() {
         val reibunInfo = ReibunInfo.getInstance(this)
         adjustTextSet(reibunInfo.selectedItem!!.pinyin, txtPinyin)
         adjustTextSet(reibunInfo.selectedItem!!.chinese, txtChinese)
-        txtEnglish.setText(reibunInfo.selectedItem!!.english)
+        adjustTextSet(reibunInfo.selectedItem!!.english, txtEnglish)
 
         // 音声再生、録画の準備
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {

@@ -36,7 +36,7 @@ class FirstScreen : AppCompatActivity() {
             val reibunInfo = ReibunInfo.getInstance(this)
 
             //todo: ランダムに例文を渡す処理
-            val random = Random().nextInt(reibunInfo.getSentenceList(ReibunInfo.SENTENCE_TYPE.CHINESE).size)
+            val random = Random().nextInt(reibunInfo.getSentenceList(ReibunInfo.SENTENCE_TYPE.CHINESE, false).size)
             reibunInfo.setSelectedItem(random.toInt())
 
             val intent = Intent(this@FirstScreen,
