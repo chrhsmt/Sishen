@@ -200,10 +200,10 @@ class ReibunActivity : AppCompatActivity() {
 
     @Throws(AudioServiceException::class)
     private fun analyzeInner() {
-//        val info = this@ReibunActivity.service!!.analyze()
+        val info = this@ReibunActivity.service!!.analyze()
 //        val info2 = this@ReibunActivity.service!!.analyze(FreqTransitionPointCalculator::class.qualifiedName!!)
-        val info3 = this@ReibunActivity.service!!.analyze(NMultiplyLogarithmPointCalculator::class.qualifiedName!!)
-        if (info3.success()) {
+//        val info = this@ReibunActivity.service!!.analyze(NMultiplyLogarithmPointCalculator::class.qualifiedName!!)
+        if (info.success()) {
             RaspberryPi().send(object: Callback {
                 override fun onFailure(call: Call?, e: IOException?) {
                     runOnUiThread {
@@ -224,8 +224,8 @@ class ReibunActivity : AppCompatActivity() {
             updateButtonStatus()
 
             val intent = Intent(this@ReibunActivity, ResultActivity::class.java)
-            intent.putExtra("result", info3.success())
-            intent.putExtra("score", info3.score.toString())
+            intent.putExtra("result", info.success())
+            intent.putExtra("score", info.score.toString())
             startActivity(intent)
             overridePendingTransition(0, 0);
             /*
