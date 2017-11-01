@@ -102,6 +102,17 @@ class Chart {
         this.mChart!!.notifyDataSetChanged()
     }
 
+    /**
+     * 特定のデータアセットをクリア.
+     * @name データセット名
+     */
+    fun clearDateSet(name: String) {
+        val set = this.mChart!!.data.getDataSetByLabel(name, false)
+        set?.let {
+            set.clear()
+        }
+    }
+
     private fun createDefaultSet(name: String = "Default Data", color: Int = ColorTemplate.getHoloBlue()): LineDataSet {
 
         val set = LineDataSet(null, name)

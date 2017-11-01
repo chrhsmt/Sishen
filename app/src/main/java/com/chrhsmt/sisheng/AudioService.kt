@@ -22,13 +22,7 @@ import com.chrhsmt.sisheng.point.Point
 import com.chrhsmt.sisheng.point.PointCalculator
 import com.chrhsmt.sisheng.point.SimplePointCalculator
 import com.github.mikephil.charting.utils.ColorTemplate
-import de.qaware.chronix.distance.DistanceFunctionEnum
-import de.qaware.chronix.distance.DistanceFunctionFactory
-import de.qaware.chronix.dtw.FastDTW
-import de.qaware.chronix.dtw.TimeWarpInfo
-import de.qaware.chronix.timeseries.MultivariateTimeSeries
 import kotlinx.android.synthetic.main.content_main.*
-import kotlin.reflect.KClass
 
 
 /**
@@ -43,6 +37,7 @@ class AudioService : AudioServiceInterface {
         val STOP_RECORDING_AFTER_SECOND: Int = 2
         val BUFFER_SIZE: Int = 1024
         val MAX_FREQ_THRESHOLD = 500f
+        val MICROPHONE_DATA_SET_LABEL_NAME = "Microphone"
     }
 
     private val TAG: String = "AudioService"
@@ -64,6 +59,10 @@ class AudioService : AudioServiceInterface {
     }
 
     override fun startAudioRecord() {
+        // 既存データをクリア
+        this.frequencies.clear()
+        this.chart.clearDateSet(MICROPHONE_DATA_SET_LABEL_NAME)
+
         // マイクロフォンバッファサイズの計算
         val microphoneBufferSize = AudioRecord.getMinBufferSize(
                 Settings.samplingRate!!,
@@ -72,34 +71,20 @@ class AudioService : AudioServiceInterface {
         this.startRecord(
                 AudioDispatcherFactory.fromDefaultMicrophone(Settings.samplingRate!!, microphoneBufferSize, 0),
                 targetList = this.frequencies,
-                labelName = "Microphone",
+                labelName = MICROPHONE_DATA_SET_LABEL_NAME,
                 color = Color.rgb(10, 240, 10)
         )
     }
 
     @SuppressLint("WrongConstant")
-    override fun testPlay(fileName: String) {
+    override fun testPlay(fileName: String, playback: Boolean, callback: Runnable?) {
+
+        this.testFrequencies.clear()
+        this.chart.clear()
 
         Thread(Runnable {
-            // ファイル移動
-            var dataName = fileName
-            if (fileName.contains("/")) {
-                dataName = fileName.replace("/", "_")
-            }
-            val path = String.format("/data/data/%s/files/%s", this.activity.packageName, dataName)
-            val input = this.activity.assets.open(fileName)
-            val output = this.activity.openFileOutput(dataName, Context.MODE_ENABLE_WRITE_AHEAD_LOGGING)
-            val DEFAULT_BUFFER_SIZE = 1024 * 4
 
-            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-            var n = 0
-            while (true) {
-                n = input.read(buffer)
-                if (n == -1) break
-                output.write(buffer, 0, n)
-            }
-            output.close()
-            input.close()
+            val path =  this.copyAudioFile(fileName)
 
             this.startRecord(
                     AudioDispatcherFactory.fromPipe(
@@ -109,10 +94,11 @@ class AudioService : AudioServiceInterface {
                             0
                     ),
                     false,
-                    playback = true,
+                    playback = playback,
                     samplingRate = AUDIO_FILE_SAMPLING_RATE,
                     targetList = this.testFrequencies,
-                    labelName = "SampleAudio"
+                    labelName = "SampleAudio",
+                    callback = callback
             )
         }).start()
 
@@ -124,22 +110,8 @@ class AudioService : AudioServiceInterface {
         AndroidFFMPEGLocator(this.activity)
 
         Thread(Runnable {
-            // ファイル移動
-            val dataName = fileName.replace("/", "_")
-            val path = String.format("/data/data/%s/files/%s", this.activity.packageName, dataName)
-            val input = this.activity.assets.open(fileName)
-            val output = this.activity.openFileOutput(dataName, Context.MODE_ENABLE_WRITE_AHEAD_LOGGING)
-            val DEFAULT_BUFFER_SIZE = 1024 * 4
 
-            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-            var n = 0
-            while (true) {
-                n = input.read(buffer)
-                if (n == -1) break
-                output.write(buffer, 0, n)
-            }
-            output.close()
-            input.close()
+            val path =  this.copyAudioFile(fileName)
 
             this.startRecord(
                     AudioDispatcherFactory.fromPipe(
@@ -171,7 +143,12 @@ class AudioService : AudioServiceInterface {
     @Throws(AudioServiceException::class)
     override fun analyze(klassName: String) : Point {
         val calculator: PointCalculator = Class.forName(klassName).newInstance() as PointCalculator
-        return calculator.calc(this.frequencies, this.testFrequencies)
+        val point = calculator.calc(this.frequencies, this.testFrequencies)
+        if (point.base <= this.testFrequencies.size) {
+            // 録音が失敗している場合
+            throw AudioServiceException("不好意思，我听不懂")
+        }
+        return point
     }
 
     override fun clear() {
@@ -185,7 +162,8 @@ class AudioService : AudioServiceInterface {
                             samplingRate: Int = Settings.samplingRate!!,
                             targetList: MutableList<Float>,
                             labelName: String = "Default",
-                            color: Int = ColorTemplate.getHoloBlue()) {
+                            color: Int = ColorTemplate.getHoloBlue(),
+                            callback: Runnable? = null) {
         val pdh: PitchDetectionHandler = object: PitchDetectionHandler {
 
             private var silinceBegin: Long = -1
@@ -229,6 +207,9 @@ class AudioService : AudioServiceInterface {
             override fun processingFinished() {
                 super.processingFinished()
                 this@AudioService.isRunning = false
+                callback?.let { block ->
+                    block.run()
+                }
             }
         }
 
@@ -261,5 +242,30 @@ class AudioService : AudioServiceInterface {
 
     override fun isRunning(): Boolean {
         return this.isRunning
+    }
+
+    @SuppressLint("WrongConstant")
+    private fun copyAudioFile(fileName: String): String {
+        // ファイル移動
+        var dataName = fileName
+        if (fileName.contains("/")) {
+            dataName = fileName.replace("/", "_")
+        }
+        val path = String.format("/data/data/%s/files/%s", this.activity.packageName, dataName)
+        val input = this.activity.assets.open(fileName)
+        val output = this.activity.openFileOutput(dataName, Context.MODE_ENABLE_WRITE_AHEAD_LOGGING)
+        val DEFAULT_BUFFER_SIZE = 1024 * 4
+
+        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+        var n = 0
+        while (true) {
+            n = input.read(buffer)
+            if (n == -1) break
+            output.write(buffer, 0, n)
+        }
+        output.close()
+        input.close()
+
+        return path
     }
 }
