@@ -13,8 +13,6 @@ import android.widget.Toast
 import com.chrhsmt.sisheng.exception.AudioServiceException
 import com.chrhsmt.sisheng.font.FontUtils
 import com.chrhsmt.sisheng.network.RaspberryPi
-import com.chrhsmt.sisheng.point.FreqTransitionPointCalculator
-import com.chrhsmt.sisheng.point.NMultiplyLogarithmPointCalculator
 import com.chrhsmt.sisheng.ui.Chart
 import com.github.mikephil.charting.charts.LineChart
 import kotlinx.android.synthetic.main.activity_reibun.*
@@ -22,7 +20,6 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
-import javax.xml.transform.Result
 
 class ReibunActivity : AppCompatActivity() {
 
@@ -256,30 +253,30 @@ class ReibunActivity : AppCompatActivity() {
         when (nowStatus) {
             REIBUN_STATUS.NORMAL -> {
                 // 録音ボタン：録音可、再生ボタン：再生可
-                btnRokuon.setBackgroundResource(R.drawable.ic_record_button)
+                btnRokuon.setBackgroundResource(R.drawable.shape_round_button)
                 btnRokuon.setEnabled(true)
-                btnOtehon.setBackgroundResource(R.drawable.ic_play_button)
+                btnOtehon.setBackgroundResource(R.drawable.shape_round_button)
                 btnOtehon.setEnabled(true)
             }
             REIBUN_STATUS.PLAYING -> {
                 // 録音ボタン：利用不可、再生ボタン：再生中
-                btnRokuon.setBackgroundResource(R.drawable.ic_record_button_disable)
+                btnRokuon.setBackgroundResource(R.drawable.shape_round_button_disable)
                 btnRokuon.setEnabled(false)
-                btnOtehon.setBackgroundResource(R.drawable.ic_now_playing_button)
+                btnOtehon.setBackgroundResource(R.drawable.shape_round_button_press)
                 btnOtehon.setEnabled(false)
             }
             REIBUN_STATUS.RECODING -> {
                 // 録音ボタン：録音中、再生ボタン：再生不可
-                btnRokuon.setBackgroundResource(R.drawable.ic_now_recording_button)
+                btnRokuon.setBackgroundResource(R.drawable.shape_round_button_press)
                 btnRokuon.setEnabled(true)
-                btnOtehon.setBackgroundResource(R.drawable.ic_play_button_disable)
+                btnOtehon.setBackgroundResource(R.drawable.shape_round_button_disable)
                 btnOtehon.setEnabled(false)
             }
             REIBUN_STATUS.ANALYZING -> {
                 // 録音ボタン：録音不可、再生ボタン：再生不可
-                btnRokuon.setBackgroundResource(R.drawable.ic_record_button_disable)
+                btnRokuon.setBackgroundResource(R.drawable.shape_round_button_disable)
                 btnRokuon.setEnabled(false)
-                btnOtehon.setBackgroundResource(R.drawable.ic_play_button_disable)
+                btnOtehon.setBackgroundResource(R.drawable.shape_round_button_disable)
                 btnOtehon.setEnabled(false)
             }
             REIBUN_STATUS.ANALYZE_FINISH -> {
@@ -288,9 +285,9 @@ class ReibunActivity : AppCompatActivity() {
             }
             REIBUN_STATUS.ANALYZE_ERROR_OCCUR -> {
                 // 録音ボタン：録音可、再生ボタン：再生不可
-                btnRokuon.setBackgroundResource(R.drawable.ic_record_button)
+                btnRokuon.setBackgroundResource(R.drawable.shape_round_button)
                 btnRokuon.setEnabled(true)
-                btnOtehon.setBackgroundResource(R.drawable.ic_play_button_disable)
+                btnOtehon.setBackgroundResource(R.drawable.shape_round_button_disable)
                 btnOtehon.setEnabled(false)
             }
         }
