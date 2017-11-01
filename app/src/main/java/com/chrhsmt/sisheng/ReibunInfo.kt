@@ -18,6 +18,14 @@ class ReibunInfo {
 
             return instance!!
         }
+
+        fun removeNewLine(str: String) : String {
+            return str.replace("\\n", "")
+        }
+
+        fun replaceNewLine(str: String) : String {
+            return str.replace("\\n", "\n")
+        }
     }
 
     class ReibunInfoItem {
@@ -96,7 +104,7 @@ class ReibunInfo {
         this.audioFileNameList = context.assets.list("mfsz")
     }
 
-    fun getSentenceList(type : SENTENCE_TYPE) : ArrayList<String> {
+    fun getSentenceList(type : SENTENCE_TYPE, needRemoveNewLine: Boolean) : ArrayList<String> {
         val ret: ArrayList<String> = ArrayList()
 
         for (item in itemList) {
@@ -108,9 +116,14 @@ class ReibunInfo {
             }
         }
 
+        if (needRemoveNewLine) {
+            for (index in ret.indices) {
+                ret[index] = removeNewLine(ret[index])
+            }
+        }
         return ret;
     }
-    fun getSentenceList(type1 : SENTENCE_TYPE, type2 : SENTENCE_TYPE) : ArrayList<String> {
+    fun getSentenceList(type1 : SENTENCE_TYPE, type2 : SENTENCE_TYPE, needRemoveNewLine: Boolean) : ArrayList<String> {
         val ret: ArrayList<String> = ArrayList()
 
         for (item in itemList) {
@@ -131,6 +144,11 @@ class ReibunInfo {
             ret.add(str)
         }
 
+        if (needRemoveNewLine) {
+            for (index in ret.indices) {
+                ret[index] = removeNewLine(ret[index])
+            }
+        }
         return ret;
     }
     fun setSelectedItem(position : Int) {

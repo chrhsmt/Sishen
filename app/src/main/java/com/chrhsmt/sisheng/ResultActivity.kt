@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import com.chrhsmt.sisheng.font.FontUtils
+import org.w3c.dom.Text
 
 class ResultActivity : AppCompatActivity() {
 
@@ -22,6 +24,22 @@ class ResultActivity : AppCompatActivity() {
         val decor = this.window.decorView
         decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
+        // タイトル、メッセージ、スコアのフォントを変更する
+        FontUtils.changeFont(this, R.id.txtTitle)
+        FontUtils.changeFont(this, R.id.txtMessage1)
+        FontUtils.changeFont(this, R.id.txtMessage2)
+        FontUtils.changeFont(this, R.id.txtScore)
+
+        // ボタンのフォントを変更する
+        FontUtils.changeFont(this, R.id.btnRestart)
+        FontUtils.changeFont(this, R.id.btnRetry)
+
+        // 分析結果の点数を表示する
+        this.findViewById<TextView>(R.id.txtScore)?.text = intent.getStringExtra("score")
+
+        // 初期画面に戻る
+        // その際、今までの画面遷移のスタックは全て削除する
+        // 初期画面は再生成しない (onRestart が走るようにする)
         this.findViewById<View>(R.id.btnRestart)?.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@ResultActivity, FirstScreen::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -29,17 +47,15 @@ class ResultActivity : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(0, 0);
         })
-        FontUtils.changeButtonFont(this, R.id.btnRestart)
 
+        // １つ前の画面に戻る
+        // その際、１つ前の画面は再生成する (onRestart ではなく、onCreate が走るようにする)
         this.findViewById<View>(R.id.btnRetry)?.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@ResultActivity, ReibunActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent)
             overridePendingTransition(0, 0);
         })
-        FontUtils.changeButtonFont(this, R.id.btnRetry)
-
-        this.findViewById<TextView>(R.id.txtScore)?.text = intent.getStringExtra("score")
 
         // タイトル長押下された場合は、デバッグ画面に遷移する。
         if (Settings.DEBUG_MODE) {

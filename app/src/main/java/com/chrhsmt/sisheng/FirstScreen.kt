@@ -4,16 +4,11 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Color.parseColor
-import android.widget.ImageButton
 import com.chrhsmt.sisheng.R.color.colorActivate
 import com.chrhsmt.sisheng.R.drawable.shape_rounded_corners_5dp
 import com.chrhsmt.sisheng.font.FontUtils
 // 画面用にこれをimport しておく
 import kotlinx.android.synthetic.main.activity_first_screen.*
-import kotlinx.android.synthetic.main.activity_nini_reibun.*
-import org.apache.commons.math3.random.RandomGenerator
 import java.util.*
 
 class FirstScreen : AppCompatActivity() {
@@ -25,18 +20,25 @@ class FirstScreen : AppCompatActivity() {
         val decor = this.window.decorView
         decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
-        FontUtils.changeButtonFont(this, R.id.btnNini)
-        FontUtils.changeButtonFont(this, R.id.btnRandom)
-        FontUtils.changeButtonFont(this, R.id.btnWoman)
-        FontUtils.changeButtonFont(this, R.id.btnMan)
-        setButtonEnable(false)
+        // タイトルのフォントを変更する
+        FontUtils.changeFont(this, textFirstScreenTitle)
+        FontUtils.changeFont(this, textFirstScreenTitle2)
+
+        // ボタンのフォントを変更する
+        FontUtils.changeFont(this, btnNini)
+        FontUtils.changeFont(this, btnRandom)
+        FontUtils.changeFont(this, btnWoman)
+        FontUtils.changeFont(this, btnMan)
+
+        // 画面遷移に関わるランダム、任意ボタンを一旦無効にする
+        setRandomAndNiniButtonEnable(false)
 
         // ランダム例文に移動
         btnRandom.setOnClickListener(View.OnClickListener {
             val reibunInfo = ReibunInfo.getInstance(this)
 
             //todo: ランダムに例文を渡す処理
-            val random = Random().nextInt(reibunInfo.getSentenceList(ReibunInfo.SENTENCE_TYPE.CHINESE).size)
+            val random = Random().nextInt(reibunInfo.getSentenceList(ReibunInfo.SENTENCE_TYPE.CHINESE, false).size)
             reibunInfo.setSelectedItem(random.toInt())
 
             val intent = Intent(this@FirstScreen,
@@ -69,7 +71,7 @@ class FirstScreen : AppCompatActivity() {
 
         // タイトル長押下された場合は、デバッグ画面に遷移する。
         if (Settings.DEBUG_MODE) {
-            textFirstScreen.setOnLongClickListener(View.OnLongClickListener {
+            textFirstScreenTitle.setOnLongClickListener(View.OnLongClickListener {
                 val intent = Intent(this@FirstScreen, MainActivity::class.java)
                 startActivity(intent)
                 true
@@ -81,17 +83,17 @@ class FirstScreen : AppCompatActivity() {
         btnMan.setBackgroundResource(shape_rounded_corners_5dp)
         btnWoman.setBackgroundColor(resources.getColor(colorActivate, null))
         Settings.sex = resources.getStringArray(R.array.sexes)[1]
-        setButtonEnable(true)
+        setRandomAndNiniButtonEnable(true)
     }
 
     private fun selectMan() {
         btnMan.setBackgroundColor(resources.getColor(colorActivate, null))
         btnWoman.setBackgroundResource(shape_rounded_corners_5dp)
         Settings.sex = resources.getStringArray(R.array.sexes)[0]
-        setButtonEnable(true)
+        setRandomAndNiniButtonEnable(true)
     }
 
-    private fun setButtonEnable(enable: Boolean) {
+    private fun setRandomAndNiniButtonEnable(enable: Boolean) {
         btnRandom.setEnabled(enable)
         btnNini.setEnabled(enable)
     }
