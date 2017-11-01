@@ -101,6 +101,19 @@ class ReibunActivity : AppCompatActivity() {
             this.service = AudioService(this.chart!!, this)
         }
 
+        // お手本事前再生
+        nowStatus = REIBUN_STATUS.PLAYING
+        updateButtonStatus()
+        val fileName = reibunInfo.selectedItem!!.getMFSZExampleAudioFileName()
+        this.service!!.testPlay(fileName, playback = false, callback = object : Runnable {
+            override fun run() {
+                this@ReibunActivity.runOnUiThread {
+                    nowStatus = REIBUN_STATUS.NORMAL
+                    updateButtonStatus()
+//                    Toast.makeText(this@ReibunActivity, "准备好👌", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
 
         // お手本再生
         btnOtehon.setOnClickListener(View.OnClickListener {
@@ -173,6 +186,7 @@ class ReibunActivity : AppCompatActivity() {
             try {
                 analyzeInner()
             } catch (e: AudioServiceException) {
+                Log.e(TAG, e.message)
                 runOnUiThread {
                     dialogAnalyzing.visibility = View.INVISIBLE
                     txtError.visibility = View.VISIBLE
@@ -186,10 +200,10 @@ class ReibunActivity : AppCompatActivity() {
 
     @Throws(AudioServiceException::class)
     private fun analyzeInner() {
-//        val info = this@ReibunActivity.service!!.analyze()
+        val info = this@ReibunActivity.service!!.analyze()
 //        val info2 = this@ReibunActivity.service!!.analyze(FreqTransitionPointCalculator::class.qualifiedName!!)
-        val info3 = this@ReibunActivity.service!!.analyze(NMultiplyLogarithmPointCalculator::class.qualifiedName!!)
-        if (info3.success()) {
+//        val info = this@ReibunActivity.service!!.analyze(NMultiplyLogarithmPointCalculator::class.qualifiedName!!)
+        if (info.success()) {
             RaspberryPi().send(object: Callback {
                 override fun onFailure(call: Call?, e: IOException?) {
                     runOnUiThread {
@@ -210,8 +224,8 @@ class ReibunActivity : AppCompatActivity() {
             updateButtonStatus()
 
             val intent = Intent(this@ReibunActivity, ResultActivity::class.java)
-            intent.putExtra("result", info3.success())
-            intent.putExtra("score", info3.score.toString())
+            intent.putExtra("result", info.success())
+            intent.putExtra("score", info.score.toString())
             startActivity(intent)
             overridePendingTransition(0, 0);
             /*
