@@ -7,7 +7,7 @@ import com.chrhsmt.sisheng.point.Point
  */
 interface AudioServiceInterface {
     fun startAudioRecord()
-    fun testPlay(fileName: String)
+    fun testPlay(fileName: String, playback: Boolean = true, callback: Runnable? = null)
     fun attemptPlay(fileName: String)
     fun stop()
     fun analyze() : Point

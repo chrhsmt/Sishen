@@ -72,7 +72,10 @@ class AudioService : AudioServiceInterface {
     }
 
     @SuppressLint("WrongConstant")
-    override fun testPlay(fileName: String) {
+    override fun testPlay(fileName: String, playback: Boolean, callback: Runnable?) {
+
+        this.testFrequencies.clear()
+        this.chart.clear()
 
         Thread(Runnable {
 
@@ -86,10 +89,11 @@ class AudioService : AudioServiceInterface {
                             0
                     ),
                     false,
-                    playback = true,
+                    playback = playback,
                     samplingRate = AUDIO_FILE_SAMPLING_RATE,
                     targetList = this.testFrequencies,
-                    labelName = "SampleAudio"
+                    labelName = "SampleAudio",
+                    callback = callback
             )
         }).start()
 
@@ -153,7 +157,8 @@ class AudioService : AudioServiceInterface {
                             samplingRate: Int = Settings.samplingRate!!,
                             targetList: MutableList<Float>,
                             labelName: String = "Default",
-                            color: Int = ColorTemplate.getHoloBlue()) {
+                            color: Int = ColorTemplate.getHoloBlue(),
+                            callback: Runnable? = null) {
         val pdh: PitchDetectionHandler = object: PitchDetectionHandler {
 
             private var silinceBegin: Long = -1
@@ -197,6 +202,9 @@ class AudioService : AudioServiceInterface {
             override fun processingFinished() {
                 super.processingFinished()
                 this@AudioService.isRunning = false
+                callback?.let { block ->
+                    block.run()
+                }
             }
         }
 

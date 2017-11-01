@@ -26,7 +26,7 @@ class AudioServiceMock : AudioServiceInterface {
         // NOP
     }
 
-    override fun testPlay(fileName: String) {
+    override fun testPlay(fileName: String, playback: Boolean, callback: Runnable?) {
         this.isRunning = true
     }
 

@@ -101,6 +101,19 @@ class ReibunActivity : AppCompatActivity() {
             this.service = AudioService(this.chart!!, this)
         }
 
+        // お手本事前再生
+        nowStatus = REIBUN_STATUS.PLAYING
+        updateButtonStatus()
+        val fileName = reibunInfo.selectedItem!!.getMFSZExampleAudioFileName()
+        this.service!!.testPlay(fileName, playback = false, callback = object : Runnable {
+            override fun run() {
+                this@ReibunActivity.runOnUiThread {
+                    nowStatus = REIBUN_STATUS.NORMAL
+                    updateButtonStatus()
+//                    Toast.makeText(this@ReibunActivity, "准备好👌", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
 
         // お手本再生
         btnOtehon.setOnClickListener(View.OnClickListener {
