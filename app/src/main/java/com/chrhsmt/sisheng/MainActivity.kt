@@ -1,20 +1,18 @@
 package com.chrhsmt.sisheng
 
-import android.Manifest.permission.*
-import android.app.Dialog
+import android.Manifest.permission.RECORD_AUDIO
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityCompat.requestPermissions
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -24,9 +22,9 @@ import com.chrhsmt.sisheng.exception.AudioServiceException
 import com.chrhsmt.sisheng.network.RaspberryPi
 import com.chrhsmt.sisheng.point.FreqTransitionPointCalculator
 import com.chrhsmt.sisheng.point.NMultiplyLogarithmPointCalculator
-import com.chrhsmt.sisheng.point.SimplePointCalculator
-import com.github.mikephil.charting.charts.LineChart
 import com.chrhsmt.sisheng.ui.Chart
+import com.github.mikephil.charting.charts.LineChart
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.Call
 import okhttp3.Callback

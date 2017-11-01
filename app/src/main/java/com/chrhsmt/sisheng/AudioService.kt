@@ -75,25 +75,8 @@ class AudioService : AudioServiceInterface {
     override fun testPlay(fileName: String) {
 
         Thread(Runnable {
-            // ファイル移動
-            var dataName = fileName
-            if (fileName.contains("/")) {
-                dataName = fileName.replace("/", "_")
-            }
-            val path = String.format("/data/data/%s/files/%s", this.activity.packageName, dataName)
-            val input = this.activity.assets.open(fileName)
-            val output = this.activity.openFileOutput(dataName, Context.MODE_ENABLE_WRITE_AHEAD_LOGGING)
-            val DEFAULT_BUFFER_SIZE = 1024 * 4
 
-            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-            var n = 0
-            while (true) {
-                n = input.read(buffer)
-                if (n == -1) break
-                output.write(buffer, 0, n)
-            }
-            output.close()
-            input.close()
+            val path =  this.copyAudioFile(fileName)
 
             this.startRecord(
                     AudioDispatcherFactory.fromPipe(
@@ -118,22 +101,8 @@ class AudioService : AudioServiceInterface {
         AndroidFFMPEGLocator(this.activity)
 
         Thread(Runnable {
-            // ファイル移動
-            val dataName = fileName.replace("/", "_")
-            val path = String.format("/data/data/%s/files/%s", this.activity.packageName, dataName)
-            val input = this.activity.assets.open(fileName)
-            val output = this.activity.openFileOutput(dataName, Context.MODE_ENABLE_WRITE_AHEAD_LOGGING)
-            val DEFAULT_BUFFER_SIZE = 1024 * 4
 
-            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-            var n = 0
-            while (true) {
-                n = input.read(buffer)
-                if (n == -1) break
-                output.write(buffer, 0, n)
-            }
-            output.close()
-            input.close()
+            val path =  this.copyAudioFile(fileName)
 
             this.startRecord(
                     AudioDispatcherFactory.fromPipe(
@@ -260,5 +229,30 @@ class AudioService : AudioServiceInterface {
 
     override fun isRunning(): Boolean {
         return this.isRunning
+    }
+
+    @SuppressLint("WrongConstant")
+    private fun copyAudioFile(fileName: String): String {
+        // ファイル移動
+        var dataName = fileName
+        if (fileName.contains("/")) {
+            dataName = fileName.replace("/", "_")
+        }
+        val path = String.format("/data/data/%s/files/%s", this.activity.packageName, dataName)
+        val input = this.activity.assets.open(fileName)
+        val output = this.activity.openFileOutput(dataName, Context.MODE_ENABLE_WRITE_AHEAD_LOGGING)
+        val DEFAULT_BUFFER_SIZE = 1024 * 4
+
+        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+        var n = 0
+        while (true) {
+            n = input.read(buffer)
+            if (n == -1) break
+            output.write(buffer, 0, n)
+        }
+        output.close()
+        input.close()
+
+        return path
     }
 }
