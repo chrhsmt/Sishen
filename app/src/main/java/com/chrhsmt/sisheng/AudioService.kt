@@ -37,6 +37,7 @@ class AudioService : AudioServiceInterface {
         val STOP_RECORDING_AFTER_SECOND: Int = 2
         val BUFFER_SIZE: Int = 1024
         val MAX_FREQ_THRESHOLD = 500f
+        val MICROPHONE_DATA_SET_LABEL_NAME = "Microphone"
     }
 
     private val TAG: String = "AudioService"
@@ -58,6 +59,10 @@ class AudioService : AudioServiceInterface {
     }
 
     override fun startAudioRecord() {
+        // 既存データをクリア
+        this.frequencies.clear()
+        this.chart.clearDateSet(MICROPHONE_DATA_SET_LABEL_NAME)
+
         // マイクロフォンバッファサイズの計算
         val microphoneBufferSize = AudioRecord.getMinBufferSize(
                 Settings.samplingRate!!,
@@ -66,7 +71,7 @@ class AudioService : AudioServiceInterface {
         this.startRecord(
                 AudioDispatcherFactory.fromDefaultMicrophone(Settings.samplingRate!!, microphoneBufferSize, 0),
                 targetList = this.frequencies,
-                labelName = "Microphone",
+                labelName = MICROPHONE_DATA_SET_LABEL_NAME,
                 color = Color.rgb(10, 240, 10)
         )
     }
