@@ -22,13 +22,7 @@ import com.chrhsmt.sisheng.point.Point
 import com.chrhsmt.sisheng.point.PointCalculator
 import com.chrhsmt.sisheng.point.SimplePointCalculator
 import com.github.mikephil.charting.utils.ColorTemplate
-import de.qaware.chronix.distance.DistanceFunctionEnum
-import de.qaware.chronix.distance.DistanceFunctionFactory
-import de.qaware.chronix.dtw.FastDTW
-import de.qaware.chronix.dtw.TimeWarpInfo
-import de.qaware.chronix.timeseries.MultivariateTimeSeries
 import kotlinx.android.synthetic.main.content_main.*
-import kotlin.reflect.KClass
 
 
 /**
@@ -171,7 +165,12 @@ class AudioService : AudioServiceInterface {
     @Throws(AudioServiceException::class)
     override fun analyze(klassName: String) : Point {
         val calculator: PointCalculator = Class.forName(klassName).newInstance() as PointCalculator
-        return calculator.calc(this.frequencies, this.testFrequencies)
+        val point = calculator.calc(this.frequencies, this.testFrequencies)
+        if (point.base <= this.testFrequencies.size) {
+            // 録音が失敗している場合
+            throw AudioServiceException("不好意思，我听不懂")
+        }
+        return point
     }
 
     override fun clear() {

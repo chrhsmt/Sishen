@@ -173,6 +173,7 @@ class ReibunActivity : AppCompatActivity() {
             try {
                 analyzeInner()
             } catch (e: AudioServiceException) {
+                Log.e(TAG, e.message)
                 runOnUiThread {
                     dialogAnalyzing.visibility = View.INVISIBLE
                     txtError.visibility = View.VISIBLE
