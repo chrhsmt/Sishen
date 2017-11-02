@@ -17,6 +17,7 @@ import com.chrhsmt.sisheng.point.FreqTransitionPointCalculator
 import com.chrhsmt.sisheng.point.NMultiplyLogarithmPointCalculator
 import com.chrhsmt.sisheng.ui.Chart
 import com.github.mikephil.charting.charts.LineChart
+import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_reibun.*
 import okhttp3.Call
 import okhttp3.Callback
@@ -104,12 +105,15 @@ class ReibunActivity : AppCompatActivity() {
         // お手本事前再生
         nowStatus = REIBUN_STATUS.PLAYING
         updateButtonStatus()
+        val dialog = SpotsDialog(this@ReibunActivity, R.style.CustomSpotDialog)
+        dialog.show()
         val fileName = reibunInfo.selectedItem!!.getMFSZExampleAudioFileName()
         this.service!!.testPlay(fileName, playback = false, callback = object : Runnable {
             override fun run() {
                 this@ReibunActivity.runOnUiThread {
                     nowStatus = REIBUN_STATUS.NORMAL
                     updateButtonStatus()
+                    dialog.dismiss()
 //                    Toast.makeText(this@ReibunActivity, "准备好👌", Toast.LENGTH_LONG).show()
                 }
             }
