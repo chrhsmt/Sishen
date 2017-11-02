@@ -21,4 +21,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="CustomSpotDialog" parent="android:Theme.DeviceDefault.Dialog">
+        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="DialogTitleText">快要开始了！稍等～</item>
+        <item name="DialogSpotColor">@color/colorAccent</item>
+        <item name="DialogSpotCount">4</item>
+    </style>
 </resources>
