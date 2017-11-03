@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         Settings.raspberrypiHost = this.getString(R.string.default_pi_host)
         Settings.raspberrypiPath = this.getString(R.string.default_pi_path)
 
-        this.chart = Chart(this)
+        this.chart = Chart()
         this.chart!!.initChartView(this.findViewById<LineChart>(R.id.chart))
         this.service = AudioService(this.chart!!, this)
 
@@ -403,6 +403,5 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        this.chart!!.stop()
     }
 }
