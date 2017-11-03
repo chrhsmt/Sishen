@@ -185,7 +185,7 @@ class ReibunActivity : AppCompatActivity() {
         // プログレスダイアログを表示する
         val dialog = SpotsDialog(this@ReibunActivity, R.style.CustomSpotDialog)
         dialog.show()
-        FontUtils.changeFont(this@ReibunActivity, dialog.findViewById<TextView>(dmax.dialog.R.id.dmax_spots_title), 1.2f)
+        FontUtils.changeFont(this@ReibunActivity, dialog.findViewById<TextView>(dmax.dialog.R.id.dmax_spots_title), 1.1f)
         ScreenUtils.setFullScreen(dialog.window)
 
         // スレッドを開始する
