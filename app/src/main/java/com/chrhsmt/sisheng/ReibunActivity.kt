@@ -105,12 +105,18 @@ class ReibunActivity : AppCompatActivity() {
         // お手本事前再生
         nowStatus = REIBUN_STATUS.PREPARE
         updateButtonStatus()
+        val dialog = SpotsDialog(this@ReibunActivity, R.style.CustomSpotDialog)
+        dialog.show()
+        FontUtils.changeFont(this@ReibunActivity, dialog.findViewById<TextView>(dmax.dialog.R.id.dmax_spots_title), 1.2f)
+        ScreenUtils.setFullScreen(dialog.window)
+
         val fileName = reibunInfo.selectedItem!!.getMFSZExampleAudioFileName()
         this.service!!.testPlay(fileName, playback = false, callback = object : Runnable {
             override fun run() {
                 this@ReibunActivity.runOnUiThread {
                     nowStatus = REIBUN_STATUS.NORMAL
                     updateButtonStatus()
+                    dialog.dismiss()
 //                    Toast.makeText(this@ReibunActivity, "准备好👌", Toast.LENGTH_LONG).show()
                 }
             }
