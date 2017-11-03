@@ -4,5 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorNotActivate">#EE5B8C</color>
+    <color name="colorNotActivate_02">#FE6B9C</color>
+    <color name="colorNotActivate_03">#FFABCC</color>
     <color name="colorActivate">#FFA4CC</color>
+    <color name="colorActivate_02">#FFB4DC</color>
+    <color name="colorActivate_03">#FFE4DC</color>
 </resources>

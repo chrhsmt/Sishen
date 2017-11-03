@@ -14,6 +14,7 @@ import android.widget.AdapterView
 import org.xmlpull.v1.XmlPullParserFactory
 import android.util.Xml.newPullParser
 import com.chrhsmt.sisheng.font.FontUtils
+import com.chrhsmt.sisheng.ui.ScreenUtils
 import kotlinx.android.synthetic.main.activity_reibun.*
 import org.xmlpull.v1.XmlPullParser
 import java.io.InputStream
@@ -27,8 +28,7 @@ class NiniReibunActivity : AppCompatActivity() {
         setContentView(R.layout.activity_nini_reibun)
 
         // フルスクリーンにする
-        val decor = this.window.decorView
-        decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        ScreenUtils.setFullScreen(this.window)
 
         // タイトルのフォントを変更する
         FontUtils.changeFont(this, txtNiniReibun)
