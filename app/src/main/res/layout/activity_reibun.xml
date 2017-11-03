@@ -82,7 +82,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="66"
                     android:orientation="vertical"
-                    android:background="@color/colorActivate"
+                    android:background="@drawable/shape_rounded_corners_30dp_selected"
                     android:weightSum="100">
 
                     <TextView

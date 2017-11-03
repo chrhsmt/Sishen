@@ -4,19 +4,19 @@
     <item
         android:state_pressed="true"
         android:state_enabled="true"
-        android:drawable="@drawable/shape_rounded_corners_5dp_selected"/>
+        android:drawable="@drawable/shape_rounded_corners_30dp_selected"/>
     <!-- ボタンが選択状態の時 -->
     <item
         android:state_selected="true"
         android:state_enabled="true"
-        android:drawable="@drawable/shape_rounded_corners_5dp_selected"/>
+        android:drawable="@drawable/shape_rounded_corners_30dp_selected"/>
     <!-- ボタンにフォーカスがあたった時 -->
     <item
         android:state_focused="true"
         android:state_enabled="true"
-        android:drawable="@drawable/shape_rounded_corners_5dp_focus"/>
+        android:drawable="@drawable/shape_rounded_corners_30dp_focus"/>
     <!-- 上記以外の条件の時 -->
     <item
         android:state_enabled="true"
-        android:drawable="@drawable/shape_rounded_corners_5dp"/>
+        android:drawable="@drawable/shape_rounded_corners_30dp"/>
 </selector>
