@@ -19,12 +19,7 @@ class Chart {
 
     private val AXIS_MAXIMUM = AudioService.MAX_FREQ_THRESHOLD // Maximum Hz
     private val AXIS_MINIMUM = 0f
-    private val activity: Activity
     private var mChart: LineChart? = null
-
-    constructor(activity: Activity) {
-        this.activity = activity
-    }
 
     fun initChartView(chart: LineChart) {
         this.mChart = chart
@@ -65,13 +60,6 @@ class Chart {
         val rightAxis = this.mChart!!.getAxisRight()
         rightAxis.isEnabled = false
 
-    }
-
-    fun stop() {
-        if (this.thread != null) {
-            this.thread!!.interrupt()
-            this.thread = null
-        }
     }
 
     fun addEntry(value: Float, name: String = "Default Data", color: Int = ColorTemplate.getHoloBlue()) {
@@ -129,29 +117,4 @@ class Chart {
         set.setDrawValues(false)
         return set
     }
-
-    // temporary thread
-    private var thread: Thread? = null
-    private fun feedMultiple() {
-        if (this.thread != null) {
-            this.thread!!.interrupt()
-            this.thread = null
-        }
-        val runnable: Runnable = Runnable {
-            addEntry((Math.random() * 40).toFloat())
-        }
-
-        this.thread = Thread(Runnable({
-            for (i in 1..100) {
-                this.activity.runOnUiThread(runnable)
-                try {
-                    Thread.sleep(100)
-                } catch (exception: InterruptedException) {
-                    exception.printStackTrace()
-                }
-            }
-        }))
-        this.thread!!.start()
-    }
-
 }
