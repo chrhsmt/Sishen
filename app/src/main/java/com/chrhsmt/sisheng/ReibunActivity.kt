@@ -102,6 +102,12 @@ class ReibunActivity : AppCompatActivity() {
             this.service = AudioService(this.chart!!, this)
         }
 
+        // プログレスダイアログを表示する
+        val dialog = SpotsDialog(this@ReibunActivity, getString(R.string.screen6_2), R.style.CustomSpotDialog)
+        dialog.show()
+        FontUtils.changeFont(this@ReibunActivity, dialog.findViewById<TextView>(dmax.dialog.R.id.dmax_spots_title), 1.1f)
+        ScreenUtils.setFullScreen(dialog.window)
+
         // お手本事前再生
         nowStatus = REIBUN_STATUS.PREPARE
         updateButtonStatus()
@@ -112,6 +118,7 @@ class ReibunActivity : AppCompatActivity() {
                     nowStatus = REIBUN_STATUS.NORMAL
                     updateButtonStatus()
 //                    Toast.makeText(this@ReibunActivity, "准备好👌", Toast.LENGTH_LONG).show()
+                    dialog.dismiss()
                 }
             }
         })
@@ -183,7 +190,7 @@ class ReibunActivity : AppCompatActivity() {
 
     fun analyze() {
         // プログレスダイアログを表示する
-        val dialog = SpotsDialog(this@ReibunActivity, R.style.CustomSpotDialog)
+        val dialog = SpotsDialog(this@ReibunActivity, getString(R.string.screen6_3), R.style.CustomSpotDialog)
         dialog.show()
         FontUtils.changeFont(this@ReibunActivity, dialog.findViewById<TextView>(dmax.dialog.R.id.dmax_spots_title), 1.1f)
         ScreenUtils.setFullScreen(dialog.window)

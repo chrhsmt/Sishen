@@ -19,10 +19,12 @@
     <string name="screen3_3">重新选择</string>
     <string name="screen4_1">向萌神机器人朗读下面的例句</string>
     <string name="screen6_1">糟糕！！不能分析，请重新录音</string>
+    <string name="screen6_2">快要开始了！稍等～</string>
+    <string name="screen6_3">萌神很努力分析中</string>
     <string name="screen7_1">恭喜</string>
     <string name="screen7_2">萌神超级喜欢你的发音！</string>
     <string name="screen7_3">重新开始</string>
-    <string name="screen8_1">快要开始了！稍等～</string>
+    <string name="screen8_1">萌神很努力分析</string>
     <string name="screen8_2">但是……</string>
     <string name="screen8_3">不知道你说什么</string>
     <string name="screen8_4">再试一次</string>
