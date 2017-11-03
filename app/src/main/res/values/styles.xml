@@ -23,7 +23,6 @@
 
     <style name="CustomSpotDialog" parent="android:Theme.DeviceDefault.Dialog">
         <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
-        <item name="DialogTitleText">@string/screen8_1</item>
         <item name="DialogSpotColor">@color/colorAccent</item>
         <item name="DialogSpotCount">4</item>
     </style>
