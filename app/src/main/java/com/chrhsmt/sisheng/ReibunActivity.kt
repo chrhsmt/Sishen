@@ -1,6 +1,7 @@
 package com.chrhsmt.sisheng
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
@@ -13,9 +14,11 @@ import android.widget.Toast
 import com.chrhsmt.sisheng.exception.AudioServiceException
 import com.chrhsmt.sisheng.font.FontUtils
 import com.chrhsmt.sisheng.network.RaspberryPi
+import com.chrhsmt.sisheng.ui.ScreenUtils
 import com.chrhsmt.sisheng.ui.Chart
 import com.github.mikephil.charting.charts.LineChart
 import dmax.dialog.SpotsDialog
+import kotlinx.android.synthetic.main.activity_first_screen.*
 import kotlinx.android.synthetic.main.activity_reibun.*
 import okhttp3.Call
 import okhttp3.Callback
@@ -33,12 +36,13 @@ class ReibunActivity : AppCompatActivity() {
 
     private var isRecording = false
     enum class REIBUN_STATUS(val rawValue: Int) {
-        NORMAL(1),
-        PLAYING(2),
-        RECODING(3),
-        ANALYZING(4),
-        ANALYZE_FINISH(5),
-        ANALYZE_ERROR_OCCUR(6),
+        PREPARE(1),
+        NORMAL(2),
+        PLAYING(3),
+        RECODING(4),
+        ANALYZING(5),
+        ANALYZE_FINISH(6),
+        ANALYZE_ERROR_OCCUR(7),
     }
     private var nowStatus: REIBUN_STATUS = REIBUN_STATUS.NORMAL
 
@@ -67,8 +71,7 @@ class ReibunActivity : AppCompatActivity() {
         setContentView(R.layout.activity_reibun)
 
         // フルスクリーンにする
-        val decor = this.window.decorView
-        decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        ScreenUtils.setFullScreen(this.window)
 
         // タイトル、エラーメッセージのフォントを変更する
         FontUtils.changeFont(this, txtReibun)
@@ -100,17 +103,14 @@ class ReibunActivity : AppCompatActivity() {
         }
 
         // お手本事前再生
-        nowStatus = REIBUN_STATUS.PLAYING
+        nowStatus = REIBUN_STATUS.PREPARE
         updateButtonStatus()
-        val dialog = SpotsDialog(this@ReibunActivity, R.style.CustomSpotDialog)
-        dialog.show()
         val fileName = reibunInfo.selectedItem!!.getMFSZExampleAudioFileName()
         this.service!!.testPlay(fileName, playback = false, callback = object : Runnable {
             override fun run() {
                 this@ReibunActivity.runOnUiThread {
                     nowStatus = REIBUN_STATUS.NORMAL
                     updateButtonStatus()
-                    dialog.dismiss()
 //                    Toast.makeText(this@ReibunActivity, "准备好👌", Toast.LENGTH_LONG).show()
                 }
             }
@@ -176,9 +176,17 @@ class ReibunActivity : AppCompatActivity() {
         }
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        ScreenUtils.setFullScreen(this@ReibunActivity.window)
+    }
+
     fun analyze() {
         // プログレスダイアログを表示する
-        dialogAnalyzing.visibility = View.VISIBLE
+        val dialog = SpotsDialog(this@ReibunActivity, R.style.CustomSpotDialog)
+        dialog.show()
+        FontUtils.changeFont(this@ReibunActivity, dialog.findViewById<TextView>(dmax.dialog.R.id.dmax_spots_title), 1.2f)
+        ScreenUtils.setFullScreen(dialog.window)
 
         // スレッドを開始する
         Thread(Runnable {
@@ -189,7 +197,7 @@ class ReibunActivity : AppCompatActivity() {
             } catch (e: AudioServiceException) {
                 Log.e(TAG, e.message)
                 runOnUiThread {
-                    dialogAnalyzing.visibility = View.INVISIBLE
+                    dialog.dismiss()
                     txtError.visibility = View.VISIBLE
 
                     nowStatus = REIBUN_STATUS.ANALYZE_ERROR_OCCUR
@@ -255,6 +263,13 @@ class ReibunActivity : AppCompatActivity() {
 
     private fun updateButtonStatus() {
         when (nowStatus) {
+            REIBUN_STATUS.PREPARE -> {
+                // 録音ボタン：録音可、再生ボタン：再生可
+                btnRokuon.setBackgroundResource(R.drawable.shape_round_button)
+                btnRokuon.setEnabled(false)
+                btnOtehon.setBackgroundResource(R.drawable.shape_round_button)
+                btnOtehon.setEnabled(false)
+            }
             REIBUN_STATUS.NORMAL -> {
                 // 録音ボタン：録音可、再生ボタン：再生可
                 btnRokuon.setBackgroundResource(R.drawable.shape_round_button)

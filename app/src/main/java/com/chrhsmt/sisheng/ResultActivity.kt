@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.chrhsmt.sisheng.font.FontUtils
+import com.chrhsmt.sisheng.ui.ScreenUtils
 import org.w3c.dom.Text
 
 class ResultActivity : AppCompatActivity() {
@@ -21,8 +22,7 @@ class ResultActivity : AppCompatActivity() {
         }
 
         // フルスクリーンにする
-        val decor = this.window.decorView
-        decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        ScreenUtils.setFullScreen(this.window)
 
         // タイトル、メッセージ、スコアのフォントを変更する
         FontUtils.changeFont(this, R.id.txtTitle)
@@ -39,11 +39,10 @@ class ResultActivity : AppCompatActivity() {
 
         // 初期画面に戻る
         // その際、今までの画面遷移のスタックは全て削除する
-        // 初期画面は再生成しない (onRestart が走るようにする)
+        // 初期画面は再生成する (onCreate が走るようにする)
         this.findViewById<View>(R.id.btnRestart)?.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@ResultActivity, FirstScreen::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent)
             overridePendingTransition(0, 0);
         })
