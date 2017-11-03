@@ -4,9 +4,10 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.content.Intent
-import com.chrhsmt.sisheng.R.color.colorActivate
-import com.chrhsmt.sisheng.R.drawable.shape_rounded_corners_5dp
+import com.chrhsmt.sisheng.R.drawable.shape_rounded_corners_30dp
+import com.chrhsmt.sisheng.R.drawable.shape_rounded_corners_30dp_selected
 import com.chrhsmt.sisheng.font.FontUtils
+import com.chrhsmt.sisheng.ui.ScreenUtils
 // 画面用にこれをimport しておく
 import kotlinx.android.synthetic.main.activity_first_screen.*
 import java.util.*
@@ -16,9 +17,9 @@ class FirstScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_screen)
+
         // フルスクリーンにする
-        val decor = this.window.decorView
-        decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        ScreenUtils.setFullScreen(this.window)
 
         // タイトルのフォントを変更する
         FontUtils.changeFont(this, textFirstScreenTitle)
@@ -80,15 +81,15 @@ class FirstScreen : AppCompatActivity() {
     }
 
     private fun selectWoman() {
-        btnMan.setBackgroundResource(shape_rounded_corners_5dp)
-        btnWoman.setBackgroundColor(resources.getColor(colorActivate, null))
+        btnMan.setBackgroundResource(shape_rounded_corners_30dp)
+        btnWoman.setBackgroundResource(shape_rounded_corners_30dp_selected)
         Settings.sex = resources.getStringArray(R.array.sexes)[1]
         setRandomAndNiniButtonEnable(true)
     }
 
     private fun selectMan() {
-        btnMan.setBackgroundColor(resources.getColor(colorActivate, null))
-        btnWoman.setBackgroundResource(shape_rounded_corners_5dp)
+        btnMan.setBackgroundResource(shape_rounded_corners_30dp_selected)
+        btnWoman.setBackgroundResource(shape_rounded_corners_30dp)
         Settings.sex = resources.getStringArray(R.array.sexes)[0]
         setRandomAndNiniButtonEnable(true)
     }

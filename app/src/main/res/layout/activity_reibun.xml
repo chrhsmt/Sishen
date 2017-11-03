@@ -57,12 +57,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="35" />
-                    <Button
+                    <android.widget.ImageButton
                         android:id="@+id/btnOtehon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="55"
+                        android:background="@drawable/shape_round_button"
+                        android:scaleType="fitXY"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_play_arrow_black_24px"/>
+                    <Space
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="65"
-                        android:background="@drawable/ic_play_button"/>
+                        android:layout_weight="10" />
                 </LinearLayout>
 
                 <Space
@@ -75,7 +82,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="66"
                     android:orientation="vertical"
-                    android:background="@color/colorActivate"
+                    android:background="@drawable/shape_rounded_corners_30dp_selected"
                     android:weightSum="100">
 
                     <TextView
@@ -144,31 +151,44 @@
 
             </LinearLayout>
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="15"
+                android:layout_weight="12"
                 android:orientation="horizontal"
                 android:weightSum="100">
 
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="42" />
+                    android:layout_weight="46" />
 
-                <Button
+                <android.widget.ImageButton
                     android:id="@+id/btnRokuon"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10"
-                    android:background="@drawable/ic_record_button" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:background="@drawable/shape_round_button"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_mic_black_24px" />
 
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="43" />
+                    android:layout_weight="46" />
 
             </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
         </LinearLayout>
         <ProgressBar
             android:id="@+id/dialogAnalyzing"
@@ -176,12 +196,14 @@
             android:layout_width="480dp"
             android:layout_height="360dp"
             android:layout_centerInParent="true"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
             android:indeterminateDrawable="@drawable/animation_dialog_reibun" />
         <TextView
             android:id="@+id/txtError"
             android:visibility="invisible"
             android:layout_width="860dp"
-            android:layout_height="360dp"
+            android:layout_height="200dp"
             android:layout_centerInParent="true"
             android:gravity="bottom"
             android:text="@string/screen6_1"
