@@ -94,7 +94,7 @@ class ReibunActivity : AppCompatActivity() {
         Settings.setDefaultValue(this, false)
 
         // グラフの準備
-        this.chart = Chart(this)
+        this.chart = Chart()
         this.chart!!.initChartView(this.findViewById<LineChart>(R.id.chart))
         if (Settings.EMULATOR_MODE) {
             this.service = AudioServiceMock(this.chart!!, this)
