@@ -24,6 +24,9 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
+import android.view.animation.AlphaAnimation
+
+
 
 class ReibunActivity : AppCompatActivity() {
 
@@ -140,7 +143,6 @@ class ReibunActivity : AppCompatActivity() {
                 when (this@ReibunActivity.service!!.isRunning()) {
                     true -> Thread.sleep(1000)
                 }
-                Thread.sleep(1000)
 
                 this@ReibunActivity.runOnUiThread {
                     nowStatus = REIBUN_STATUS.NORMAL
@@ -295,6 +297,11 @@ class ReibunActivity : AppCompatActivity() {
                 // 録音ボタン：録音中、再生ボタン：再生不可
                 btnRokuon.setBackgroundResource(R.drawable.shape_round_button_press)
                 btnRokuon.setEnabled(true)
+                val alphaAnimation = AlphaAnimation(1.0f, 0.7f)
+                alphaAnimation.duration = 1000
+                alphaAnimation.fillAfter = true
+                alphaAnimation.repeatCount = -1
+                btnRokuon.startAnimation(alphaAnimation)
                 btnOtehon.setBackgroundResource(R.drawable.shape_round_button_disable)
                 btnOtehon.setEnabled(false)
             }
@@ -302,6 +309,7 @@ class ReibunActivity : AppCompatActivity() {
                 // 録音ボタン：録音不可、再生ボタン：再生不可
                 btnRokuon.setBackgroundResource(R.drawable.shape_round_button_disable)
                 btnRokuon.setEnabled(false)
+                btnRokuon.clearAnimation()
                 btnOtehon.setBackgroundResource(R.drawable.shape_round_button_disable)
                 btnOtehon.setEnabled(false)
             }
