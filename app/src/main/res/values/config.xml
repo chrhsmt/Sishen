@@ -24,6 +24,8 @@
         <item>歌呢</item>
         <item>我今天真是</item>
     </string-array>
-    <string name="default_pi_host">192.168.137.52:8080</string>
+    <string name="default_pi_hostname">ras55</string>
+    <string name="default_pi_host">192.168.137.52</string>
+    <string name="default_pi_port">8080</string>
     <string name="default_pi_path">/ame</string>
 </resources>

@@ -4,9 +4,13 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.content.Intent
+import android.net.nsd.NsdManager
+import android.net.nsd.NsdServiceInfo
+import android.util.Log
 import com.chrhsmt.sisheng.R.drawable.shape_rounded_corners_30dp
 import com.chrhsmt.sisheng.R.drawable.shape_rounded_corners_30dp_selected
 import com.chrhsmt.sisheng.font.FontUtils
+import com.chrhsmt.sisheng.network.MDnsResolver
 import com.chrhsmt.sisheng.ui.ScreenUtils
 // 画面用にこれをimport しておく
 import kotlinx.android.synthetic.main.activity_first_screen.*
@@ -14,9 +18,15 @@ import java.util.*
 
 class FirstScreen : AppCompatActivity() {
 
+    var mMDnsResolver: MDnsResolver? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_screen)
+
+        // mDNS
+        mMDnsResolver = MDnsResolver(this)
+        mMDnsResolver!!.discoverServices()
 
         // フルスクリーンにする
         ScreenUtils.setFullScreen(this.window)
@@ -97,5 +107,26 @@ class FirstScreen : AppCompatActivity() {
     private fun setRandomAndNiniButtonEnable(enable: Boolean) {
         btnRandom.setEnabled(enable)
         btnNini.setEnabled(enable)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        this.mMDnsResolver?.let { it ->
+            it.tearDown()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        this.mMDnsResolver?.let { it ->
+            it.discoverServices()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        this.mMDnsResolver?.let { it ->
+            it.tearDown()
+        }
     }
 }
