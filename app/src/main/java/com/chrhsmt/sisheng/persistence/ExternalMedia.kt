@@ -12,6 +12,7 @@ import java.io.File
 object ExternalMedia {
 
     val TAG = "ExternalMedia"
+    var saveDir: File? = null
 
     fun isExternalStorageWritable(): Boolean {
         val state = Environment.getExternalStorageState()
@@ -24,10 +25,11 @@ object ExternalMedia {
     }
 
     fun getExternalDirectoryPath(context: Context): File {
-        val file = context.getExternalFilesDir(android.os.Environment.DIRECTORY_MUSIC)
-        if (!file.mkdirs()) {
+        val dirs = context.getExternalFilesDirs(android.os.Environment.DIRECTORY_MUSIC)
+        if (dirs.size >= 2 && !dirs.last().mkdirs()) {
             Log.e(TAG, "Directory not created");
         }
-        return file
+        this.saveDir = dirs.last()
+        return dirs.last()
     }
 }

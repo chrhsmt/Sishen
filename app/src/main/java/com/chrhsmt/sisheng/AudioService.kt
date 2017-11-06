@@ -4,25 +4,34 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
-import android.media.*
+import android.media.AudioFormat
+import android.media.AudioManager
+import android.media.AudioRecord
+import android.media.AudioTrack
 import android.util.Log
 import be.tarsos.dsp.AudioDispatcher
 import be.tarsos.dsp.AudioEvent
 import be.tarsos.dsp.AudioProcessor
+import be.tarsos.dsp.io.TarsosDSPAudioFormat
+import be.tarsos.dsp.io.android.AndroidAudioPlayer
 import be.tarsos.dsp.io.android.AndroidFFMPEGLocator
 import be.tarsos.dsp.io.android.AudioDispatcherFactory
 import be.tarsos.dsp.pitch.PitchDetectionHandler
 import be.tarsos.dsp.pitch.PitchDetectionResult
 import be.tarsos.dsp.pitch.PitchProcessor
-import com.chrhsmt.sisheng.ui.Chart
-import android.media.AudioManager
-import be.tarsos.dsp.io.android.AndroidAudioPlayer
+import be.tarsos.dsp.writer.WriterProcessor
 import com.chrhsmt.sisheng.exception.AudioServiceException
+import com.chrhsmt.sisheng.persistence.ExternalMedia
 import com.chrhsmt.sisheng.point.Point
 import com.chrhsmt.sisheng.point.PointCalculator
 import com.chrhsmt.sisheng.point.SimplePointCalculator
+import com.chrhsmt.sisheng.ui.Chart
 import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.content_main.*
+import java.io.File
+import java.io.RandomAccessFile
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -72,7 +81,8 @@ class AudioService : AudioServiceInterface {
                 AudioDispatcherFactory.fromDefaultMicrophone(Settings.samplingRate!!, microphoneBufferSize, 0),
                 targetList = this.frequencies,
                 labelName = MICROPHONE_DATA_SET_LABEL_NAME,
-                color = Color.rgb(10, 240, 10)
+                color = Color.rgb(10, 240, 10),
+                shouldRecord = true
         )
     }
 
@@ -163,7 +173,8 @@ class AudioService : AudioServiceInterface {
                             targetList: MutableList<Float>,
                             labelName: String = "Default",
                             color: Int = ColorTemplate.getHoloBlue(),
-                            callback: Runnable? = null) {
+                            callback: Runnable? = null,
+                            shouldRecord: Boolean = false) {
         val pdh: PitchDetectionHandler = object: PitchDetectionHandler {
 
             private var silinceBegin: Long = -1
@@ -214,6 +225,18 @@ class AudioService : AudioServiceInterface {
         }
 
         dispatcher.addAudioProcessor(processor)
+
+        if (shouldRecord) {
+            ExternalMedia.saveDir?.takeIf { it -> it.canWrite() }?.let { it ->
+                val dateString = SimpleDateFormat("yyyy-MM-dd_HH_mm_ss").format(Date())
+                val id = Regex("^mfsz/(\\d)_[f|m].wav$").find(Settings.sampleAudioFileName!!)?.groups?.last()?.value
+                val sex = Settings.sex!!.first().toLowerCase()
+                val newFile = File(it, String.format("%s-%s-%s.wav", dateString, id, sex))
+                val format = TarsosDSPAudioFormat(AUDIO_FILE_SAMPLING_RATE.toFloat(), 16, 1, true, false)
+                val writeProcessor: AudioProcessor = WriterProcessor(format, RandomAccessFile(newFile, "rw"))
+                dispatcher.addAudioProcessor(writeProcessor)
+            }
+        }
 
         if (playback) {
             val bufferSize = AudioTrack.getMinBufferSize(dispatcher.format.sampleRate.toInt(), AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT)
