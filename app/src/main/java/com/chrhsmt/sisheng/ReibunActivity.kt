@@ -46,25 +46,29 @@ class ReibunActivity : AppCompatActivity() {
     }
     private var nowStatus: REIBUN_STATUS = REIBUN_STATUS.NORMAL
 
+    /*
+    AutoResizeTextView を使うように変更したため、以下メソッドは不要
     private fun adjustTextSet(str: String, txtView: TextView) {
-        if (str == null){
-            return
-        }
+    if (str == null){
+        return
+    }
 
-        var checkStr = str
-        while (true) {
-            val index = checkStr.indexOf("\\n")
+    var checkStr = str
+    // 改行を含む場合はリサイズする。
+    while (true) {
+        val index = checkStr.indexOf("\\n")
 
-            if (index > 0) {
-                txtView.textSize = txtView.textSize.div(3).toFloat()
-                checkStr = checkStr.substring(index + 2)
-            }
-            else {
-                break
-            }
+        if (index > 0) {
+            txtView.textSize = txtView.textSize.div(3).toFloat()
+            checkStr = checkStr.substring(index + 2)
         }
+        else {
+            break
+        }
+    }
         txtView.text = ReibunInfo.replaceNewLine(str)
     }
+    */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,9 +84,9 @@ class ReibunActivity : AppCompatActivity() {
 
         // ピンイン、中文、英文の配置
         val reibunInfo = ReibunInfo.getInstance(this)
-        adjustTextSet(reibunInfo.selectedItem!!.pinyin, txtPinyin)
-        adjustTextSet(reibunInfo.selectedItem!!.chinese, txtChinese)
-        adjustTextSet(reibunInfo.selectedItem!!.english, txtEnglish)
+        txtPinyin.text = ReibunInfo.replaceNewLine(reibunInfo.selectedItem!!.pinyin)
+        txtChinese.text = ReibunInfo.replaceNewLine(reibunInfo.selectedItem!!.chinese)
+        txtEnglish.text = ReibunInfo.replaceNewLine(reibunInfo.selectedItem!!.english)
 
         // 音声再生、録画の準備
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
