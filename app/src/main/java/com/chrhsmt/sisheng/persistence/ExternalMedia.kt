@@ -24,12 +24,16 @@ object ExternalMedia {
         return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)
     }
 
-    fun getExternalDirectoryPath(context: Context): File {
+    fun getExternalDirectoryPath(context: Context): File? {
         val dirs = context.getExternalFilesDirs(android.os.Environment.DIRECTORY_MUSIC)
         if (dirs.size >= 2 && !dirs.last().mkdirs()) {
             Log.e(TAG, "Directory not created");
         }
-        this.saveDir = dirs.last()
-        return dirs.last()
+        if (dirs.size > 1) {
+            this.saveDir = dirs.last()
+            return dirs.last()
+        } else {
+            return null
+        }
     }
 }
