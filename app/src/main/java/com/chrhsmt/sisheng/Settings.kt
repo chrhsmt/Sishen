@@ -21,6 +21,8 @@ object Settings {
     var baseLogarithmForPoint: Int = 5
     // ポイント成功閾値
     var pointSuccessThreshold: Int = 80
+    // ノイズのバッファカウントの閾値
+    var freqNoizeCountThreashold: Int = 2
 
     // Raspberry pi
     var raspberrypiHost: String = ""
@@ -44,7 +46,7 @@ object Settings {
             algorithm = PitchProcessor.PitchEstimationAlgorithm.YIN
         }
         if (force || Settings.samplingRate == null) {
-            samplingRate = context.resources.getIntArray(R.array.sampling_rates)[0]
+            samplingRate = context.resources.getIntArray(R.array.sampling_rates)[1]
         }
         if (force || Settings.sex == null) {
             sex = context.resources.getStringArray(R.array.sexes)[1]
