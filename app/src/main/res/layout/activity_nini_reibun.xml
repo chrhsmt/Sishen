@@ -7,6 +7,7 @@
     tools:context="com.chrhsmt.sisheng.NiniReibunActivity">
 
     <LinearLayout
+        android:id="@+id/screenBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"

@@ -72,6 +72,7 @@ class ReibunActivity : AppCompatActivity() {
 
         // フルスクリーンにする
         ScreenUtils.setFullScreen(this.window)
+        ScreenUtils.setScreenBackground(this)
 
         // タイトル、エラーメッセージのフォントを変更する
         FontUtils.changeFont(this, txtReibun)

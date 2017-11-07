@@ -7,6 +7,7 @@
     tools:context="com.chrhsmt.sisheng.FirstScreen">
 
     <LinearLayout
+        android:id="@+id/screenBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -152,8 +153,10 @@
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 
-            <Space
+            <Button
+                android:id="@+id/btnChangeScriptMode"
                 android:layout_width="0dp"
+                android:background="#00000000"
                 android:layout_height="match_parent"
                 android:layout_weight="20" />
 

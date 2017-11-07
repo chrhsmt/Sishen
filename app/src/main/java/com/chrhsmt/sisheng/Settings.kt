@@ -35,6 +35,9 @@ object Settings {
     // 萌え系フォントへの変更要否
     val USE_MOE_FONT = true
 
+    // スタッフ用スクリプト起動要否
+    var PRACTICE_STAFF_SCRIPT = false
+
     // Set Default Value.
     fun setDefaultValue(context: Context, force:Boolean) {
         if (force) {

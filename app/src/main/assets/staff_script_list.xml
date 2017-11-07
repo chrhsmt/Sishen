@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<REIBUN>
+    <SENTENCE><ID>1001</ID><LECTURE>萌神について考えられる質問</LECTURE><PINYIN>Zhè shì shénme</PINYIN><CHINESE>这是什么？</CHINESE><JAPANESE>これは何？</JAPANESE><ENGLISH>What is it?</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1002</ID><LECTURE>萌神について考えられる質問</LECTURE><PINYIN>Gàn shénme</PINYIN><CHINESE>干什么？</CHINESE><JAPANESE>何をするの？</JAPANESE><ENGLISH>What for?</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1003</ID><LECTURE>萌神について考えられる質問</LECTURE><PINYIN>Zěnme yòng</PINYIN><CHINESE>怎么用？</CHINESE><JAPANESE>どう使うの？</JAPANESE><ENGLISH>How to use it?</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1004</ID><LECTURE>萌神について考えられる質問</LECTURE><PINYIN>Zěnme wán</PINYIN><CHINESE>怎么玩？</CHINESE><JAPANESE>どう遊ぶの？</JAPANESE><ENGLISH>How do you play?</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1005</ID><LECTURE>萌神についての質問への答え</LECTURE><PINYIN>Zhè shì xuéxí zhōngwén fāyīn de jīqìrén</PINYIN><CHINESE>这是学习 中文发音的 机器人</CHINESE><JAPANESE>これは中国語の発音を学ぶロボットです。</JAPANESE><ENGLISH>This is a robot for learning Chinese pronunciation.</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1006</ID><LECTURE>萌神についての質問への答え</LECTURE><PINYIN>Zhè li yǒu shuōmíng</PINYIN><CHINESE>这里有 说明</CHINESE><JAPANESE>こちらに説明があります。</JAPANESE><ENGLISH>Here's an explanation.</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1007</ID><LECTURE>萌神についての質問への答え</LECTURE><PINYIN>Qǐng shì yí shì</PINYIN><CHINESE>请试一试</CHINESE><JAPANESE>どうぞお試しください。</JAPANESE><ENGLISH>Try,please.</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1008</ID><LECTURE>トラブル：固まってしまった時</LECTURE><PINYIN>Méng shén sǐjīle, qǐng shāo děng yíxià</PINYIN><CHINESE>萌神死机了， 请稍等一下</CHINESE><JAPANESE>萌神は固まってしまいました。少々お待ちください。</JAPANESE><ENGLISH>萌神 Crashed, please wait a moment</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1009</ID><LECTURE>トラブル：固まってしまった時</LECTURE><PINYIN>Sǐjīle, shāo děng yíxià</PINYIN><CHINESE>死机了，稍等一下</CHINESE><JAPANESE>固まってしまいました。少々おまちを。</JAPANESE><ENGLISH>It Crashed. Wait a minute</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1010</ID><LECTURE>トラブル：固まってしまった時</LECTURE><PINYIN>Shāo děng</PINYIN><CHINESE>稍等</CHINESE><JAPANESE>ちょっと待って</JAPANESE><ENGLISH>Wait a moment.</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1011</ID><LECTURE>トラブル：再度試してもらうよう促す時</LECTURE><PINYIN>Qǐng zài shì yícì</PINYIN><CHINESE>请再 试一次</CHINESE><JAPANESE>もう一度試してください。</JAPANESE><ENGLISH>Please try again.</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1012</ID><LECTURE>トラブル：再度試してもらうよう促す時</LECTURE><PINYIN>Qǐng zàishuō yícì</PINYIN><CHINESE>请再 说一次</CHINESE><JAPANESE>もう一度話してください。</JAPANESE><ENGLISH>Once more, please.</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1013</ID><LECTURE>結果(OK)が出た時</LECTURE><PINYIN>Gōngxǐ, gōngxǐ Méng shén gěi nǐ de jiǎnglì</PINYIN><CHINESE>恭喜，恭喜！ 萌神给你的 奖励！</CHINESE><JAPANESE>おめでとう！萌神からご褒美です！</JAPANESE><ENGLISH>Congratulations. Congratulations! The reward of the god!</ENGLISH></SENTENCE>
+    <SENTENCE><ID>1014</ID><LECTURE>結果(NG)が出た時</LECTURE><PINYIN>Tài yíhànle, qǐng zài shì yícì ba</PINYIN><CHINESE>太遗憾了，请再试一次把！</CHINESE><JAPANESE>残念、もう一度やってみてください！</JAPANESE><ENGLISH>What a pity. Please try again!</ENGLISH></SENTENCE>
+</REIBUN>

@@ -42,6 +42,7 @@ class FirstScreen : AppCompatActivity() {
 
         // フルスクリーンにする
         ScreenUtils.setFullScreen(this.window)
+        ScreenUtils.setScreenBackground(this)
 
         // タイトルのフォントを変更する
         FontUtils.changeFont(this, textFirstScreenTitle)
@@ -91,12 +92,18 @@ class FirstScreen : AppCompatActivity() {
         // お手本の声を女性にデフォルト設定
         //selectMan()
 
-
-        // タイトル長押下された場合は、デバッグ画面に遷移する。
         if (Settings.DEBUG_MODE) {
+            // タイトル長押下された場合は、デバッグ画面に遷移する。
             textFirstScreenTitle.setOnLongClickListener(View.OnLongClickListener {
                 val intent = Intent(this@FirstScreen, MainActivity::class.java)
                 startActivity(intent)
+                true
+            })
+
+            // 背景長押下された場合は、スタッフ用スクリプト表示を切り返る。
+            btnChangeScriptMode.setOnLongClickListener(View.OnLongClickListener {
+                Settings.PRACTICE_STAFF_SCRIPT = !Settings.PRACTICE_STAFF_SCRIPT
+                ScreenUtils.setScreenBackground(this@FirstScreen)
                 true
             })
         }
