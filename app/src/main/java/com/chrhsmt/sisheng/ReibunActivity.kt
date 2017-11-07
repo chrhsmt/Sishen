@@ -1,31 +1,28 @@
 package com.chrhsmt.sisheng
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.view.animation.AlphaAnimation
 import android.widget.TextView
 import android.widget.Toast
 import com.chrhsmt.sisheng.exception.AudioServiceException
 import com.chrhsmt.sisheng.font.FontUtils
 import com.chrhsmt.sisheng.network.RaspberryPi
-import com.chrhsmt.sisheng.ui.ScreenUtils
 import com.chrhsmt.sisheng.ui.Chart
+import com.chrhsmt.sisheng.ui.ScreenUtils
 import com.github.mikephil.charting.charts.LineChart
 import dmax.dialog.SpotsDialog
-import kotlinx.android.synthetic.main.activity_first_screen.*
 import kotlinx.android.synthetic.main.activity_reibun.*
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
-import android.view.animation.AlphaAnimation
-
 
 
 class ReibunActivity : AppCompatActivity() {
@@ -115,6 +112,7 @@ class ReibunActivity : AppCompatActivity() {
         nowStatus = REIBUN_STATUS.PREPARE
         updateButtonStatus()
         val fileName = reibunInfo.selectedItem!!.getMFSZExampleAudioFileName()
+        Settings.sampleAudioFileName = fileName
         this.service!!.testPlay(fileName, playback = false, callback = object : Runnable {
             override fun run() {
                 this@ReibunActivity.runOnUiThread {

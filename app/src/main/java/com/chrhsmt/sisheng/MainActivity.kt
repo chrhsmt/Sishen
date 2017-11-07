@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        Settings.raspberrypiHost = this.getString(R.string.default_pi_host)
+//        Settings.raspberrypiHost = this.getString(R.string.default_pi_host) + ":" + context.getString(R.string.default_pi_port)
         Settings.raspberrypiPath = this.getString(R.string.default_pi_path)
 
         this.chart = Chart()
@@ -322,8 +322,15 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onResponse(call: Call?, response: Response?) {
-                    runOnUiThread {
-                        Toast.makeText(this@MainActivity, response!!.body()!!.string(), Toast.LENGTH_LONG).show()
+                    response?.let {
+                        if (response.isSuccessful) {
+                            response.body()?.let { it ->
+                                val text = it.string()
+                                runOnUiThread {
+                                    Toast.makeText(this@MainActivity, text, Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        }
                     }
                 }
             })

@@ -47,7 +47,7 @@ object Settings {
             sex = context.resources.getStringArray(R.array.sexes)[1]
         }
         if (force || Settings.raspberrypiHost == "") {
-            raspberrypiHost = context.getString(R.string.default_pi_host)
+            raspberrypiHost = context.getString(R.string.default_pi_host) + ":" + context.getString(R.string.default_pi_port)
         }
         if (force || Settings.raspberrypiPath == "") {
             raspberrypiPath = context.getString(R.string.default_pi_path)
