@@ -21,6 +21,8 @@ object Settings {
     var baseLogarithmForPoint: Int = 5
     // ポイント成功閾値
     var pointSuccessThreshold: Int = 80
+    // ノイズのバッファカウントの閾値
+    var freqNoizeCountThreashold: Int = 2
 
     // Raspberry pi
     var raspberrypiHost: String = ""

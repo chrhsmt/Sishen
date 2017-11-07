@@ -14,8 +14,13 @@ open class SimplePointCalculator : PointCalculator() {
     override fun calc(frequencies: MutableList<Float>, testFrequencies: MutableList<Float>): Point {
 
         var analyzedFreqList: MutableList<Float> = this.copy(frequencies)
+        // 調整(男女差)
         this.adjustFrequencies(analyzedFreqList)
 
+        // ノイズ除去
+        this.removeNoises(analyzedFreqList)
+
+        // 無音除去
         analyzedFreqList = this.removeLastSilence(analyzedFreqList)
         this.minimizeSilence(analyzedFreqList)
         val exampleFrequencies = this.removeLastSilence(testFrequencies)
