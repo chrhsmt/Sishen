@@ -46,7 +46,7 @@ object Settings {
             algorithm = PitchProcessor.PitchEstimationAlgorithm.YIN
         }
         if (force || Settings.samplingRate == null) {
-            samplingRate = context.resources.getIntArray(R.array.sampling_rates)[0]
+            samplingRate = context.resources.getIntArray(R.array.sampling_rates)[1]
         }
         if (force || Settings.sex == null) {
             sex = context.resources.getStringArray(R.array.sexes)[1]
