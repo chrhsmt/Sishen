@@ -11,12 +11,32 @@ import java.io.StringReader
 class ReibunInfo {
     companion object {
         private var instance : ReibunInfo? = null
+        private var instanceForTest : ReibunInfo? = null
 
         fun  getInstance(context: Context): ReibunInfo {
-            if (instance == null)
-                instance = ReibunInfo(context)
+            if (Settings.PRACTICE_STAFF_SCRIPT) {
+                if (instanceForTest == null)
+                    instanceForTest = ReibunInfo(context, "staff_script_list.xml")
 
-            return instance!!
+                return instanceForTest!!
+            }
+            else
+            {
+                if (instance == null)
+                    instance = ReibunInfo(context, "reibun_list.xml")
+
+                return instance!!
+            }
+        }
+
+        private fun  myInstance(): ReibunInfo? {
+            if (Settings.PRACTICE_STAFF_SCRIPT) {
+                return instanceForTest
+            }
+            else
+            {
+                return instance
+            }
         }
 
         fun removeNewLine(str: String) : String {
@@ -37,15 +57,17 @@ class ReibunInfo {
         var english : String = ""
 
         fun getMFSZExampleAudioFileName(): String {
-            return "mfsz/" + ReibunInfo.instance!!.audioFileNameList.first { asset -> asset.matches(Regex(String.format("%d_(f|m)\\.wav", this.id))) }
+            return "mfsz/" + ReibunInfo.myInstance()!!.audioFileNameList.first { asset -> asset.matches(Regex(String.format("%d_(f|m)\\.wav", this.id))) }
         }
     }
 
     enum class SENTENCE_TYPE(val rawValue: Int) {
+        LECTURE(0),
         PINYIN(1),
         CHINESE(2),
         JAPANESE(3),
         ENGLISH(4),
+        NONE(5),
     }
     private var itemList : ArrayList<ReibunInfoItem> = ArrayList()
     var selectedItem : ReibunInfoItem? = null
@@ -53,9 +75,9 @@ class ReibunInfo {
     // mfsz用お手本音源ファイル名List
     private val audioFileNameList: Array<String>
 
-    private constructor(context: Context) {
+    private constructor(context: Context, listName: String) {
         // assets情報の取得
-        val message = context.resources.assets.open("reibun_list.xml").reader(charset=Charsets.UTF_8).use{it.readText()}
+        val message = context.resources.assets.open(listName).reader(charset=Charsets.UTF_8).use{it.readText()}
 
         // XMLの読み込み
         val factory = XmlPullParserFactory.newInstance()
@@ -90,6 +112,7 @@ class ReibunInfo {
                 if (item != null) {
                     when (xppName){
                         "ID" -> item.id = xpp.text.toInt()
+                        "LECTURE" -> item.lecture = xpp.text
                         "PINYIN" -> item.pinyin = xpp.text
                         "CHINESE" -> item.chinese = xpp.text
                         "JAPANESE" -> item.japanese = xpp.text
@@ -105,42 +128,37 @@ class ReibunInfo {
     }
 
     fun getSentenceList(type : SENTENCE_TYPE, needRemoveNewLine: Boolean) : ArrayList<String> {
-        val ret: ArrayList<String> = ArrayList()
-
-        for (item in itemList) {
-            when (type) {
-                SENTENCE_TYPE.PINYIN -> ret.add(item.pinyin)
-                SENTENCE_TYPE.CHINESE -> ret.add(item.chinese)
-                SENTENCE_TYPE.JAPANESE -> ret.add(item.japanese)
-                SENTENCE_TYPE.ENGLISH -> ret.add(item.english)
-            }
-        }
-
-        if (needRemoveNewLine) {
-            for (index in ret.indices) {
-                ret[index] = removeNewLine(ret[index])
-            }
-        }
-        return ret;
+        return getSentenceList(type, SENTENCE_TYPE.NONE, SENTENCE_TYPE.NONE, needRemoveNewLine)
     }
     fun getSentenceList(type1 : SENTENCE_TYPE, type2 : SENTENCE_TYPE, needRemoveNewLine: Boolean) : ArrayList<String> {
+        return getSentenceList(type1, type2, SENTENCE_TYPE.NONE, needRemoveNewLine)
+    }
+    fun getSentenceList(type1 : SENTENCE_TYPE, type2 : SENTENCE_TYPE, type3 : SENTENCE_TYPE, needRemoveNewLine: Boolean) : ArrayList<String> {
         val ret: ArrayList<String> = ArrayList()
 
         for (item in itemList) {
             var str = ""
             when (type1) {
+                SENTENCE_TYPE.LECTURE -> str = item.lecture
                 SENTENCE_TYPE.PINYIN -> str = item.pinyin
                 SENTENCE_TYPE.CHINESE -> str = item.chinese
                 SENTENCE_TYPE.JAPANESE -> str = item.japanese
                 SENTENCE_TYPE.ENGLISH -> str = item.english
             }
             when (type2) {
+                SENTENCE_TYPE.LECTURE -> str = str + "\n" + item.lecture
                 SENTENCE_TYPE.PINYIN -> str = str + "\n" + item.pinyin
                 SENTENCE_TYPE.CHINESE -> str = str + "\n" + item.chinese
                 SENTENCE_TYPE.JAPANESE -> str = str + "\n" + item.japanese
                 SENTENCE_TYPE.ENGLISH -> str = str + "\n" + item.english
             }
-
+            when (type3) {
+                SENTENCE_TYPE.LECTURE -> str = str + "\n" + item.lecture
+                SENTENCE_TYPE.PINYIN -> str = str + "\n" + item.pinyin
+                SENTENCE_TYPE.CHINESE -> str = str + "\n" + item.chinese
+                SENTENCE_TYPE.JAPANESE -> str = str + "\n" + item.japanese
+                SENTENCE_TYPE.ENGLISH -> str = str + "\n" + item.english
+            }
             ret.add(str)
         }
 
@@ -149,7 +167,7 @@ class ReibunInfo {
                 ret[index] = removeNewLine(ret[index])
             }
         }
-        return ret;
+        return ret
     }
     fun setSelectedItem(position : Int) {
         selectedItem = itemList[position]

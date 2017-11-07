@@ -29,13 +29,18 @@ class NiniReibunActivity : AppCompatActivity() {
 
         // フルスクリーンにする
         ScreenUtils.setFullScreen(this.window)
+        ScreenUtils.setScreenBackground(this)
 
         // タイトルのフォントを変更する
         FontUtils.changeFont(this, txtNiniReibun)
 
         // 例文のリストを表示する
         val reibunInfo = ReibunInfo.getInstance(this)
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, reibunInfo.getSentenceList(ReibunInfo.SENTENCE_TYPE.CHINESE, ReibunInfo.SENTENCE_TYPE.ENGLISH, true))
+        val reibunInfoList = if (Settings.PRACTICE_STAFF_SCRIPT)
+            reibunInfo.getSentenceList(ReibunInfo.SENTENCE_TYPE.LECTURE, ReibunInfo.SENTENCE_TYPE.CHINESE, ReibunInfo.SENTENCE_TYPE.ENGLISH, true)
+        else
+            reibunInfo.getSentenceList(ReibunInfo.SENTENCE_TYPE.CHINESE, ReibunInfo.SENTENCE_TYPE.ENGLISH, true)
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, reibunInfoList)
         listReibun.adapter = adapter as ListAdapter
 
         listReibun.setOnItemClickListener { parent, view, position, id ->
