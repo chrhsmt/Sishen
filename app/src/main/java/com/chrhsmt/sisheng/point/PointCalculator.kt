@@ -8,6 +8,7 @@ import de.qaware.chronix.distance.DistanceFunctionFactory
 import de.qaware.chronix.dtw.FastDTW
 import de.qaware.chronix.dtw.TimeWarpInfo
 import de.qaware.chronix.timeseries.MultivariateTimeSeries
+import java.util.*
 
 /**
  * Created by chihiro on 2017/10/10.
@@ -89,6 +90,50 @@ abstract class PointCalculator {
             range.count()
         }
 
+    }
+
+    /**
+     * Removing noises.
+     * @freqList List of frequency
+     */
+    fun removeNoises(freqList: MutableList<Float>) {
+
+        val noizeMaxLength = Settings.freqNoizeCountThreashold
+        val freqSize = freqList.size
+        val noizeIndexList: MutableList<Int> = arrayListOf()
+
+        // 反転したListのインスタンスでループ
+        freqList.reversed().forEachIndexed { index, fl ->
+            // 実Index
+            val realIndex = freqSize - 1 - index
+
+            if (fl > 0) {
+                // ノイズ発見、indexにする
+                noizeIndexList.add(realIndex)
+            }
+
+            if (noizeIndexList.size > noizeMaxLength) {
+                // ノイズ判定サイズを超えたものはノイズとみなさないのでクリアー
+                noizeIndexList.clear()
+            }
+
+            if (fl <= 0) {
+                // 無音
+                if (noizeIndexList.size <= noizeMaxLength) {
+                    noizeIndexList.forEach { i ->
+                        // 除去(後ろから)
+                        freqList.removeAt(i)
+                    }
+                }
+                noizeIndexList.clear()
+            }
+
+            if (realIndex == 0 && noizeIndexList.isNotEmpty()) {
+                noizeIndexList.forEach { i ->
+                    freqList.removeAt(i)
+                }
+            }
+        }
     }
 
     fun calcDistance(analyzedFreqList: List<Float>, exampleFrequencies: List<Float>): TimeWarpInfo {
