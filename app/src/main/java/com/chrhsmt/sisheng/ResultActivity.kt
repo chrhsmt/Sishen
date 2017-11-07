@@ -23,6 +23,7 @@ class ResultActivity : AppCompatActivity() {
 
         // フルスクリーンにする
         ScreenUtils.setFullScreen(this.window)
+        ScreenUtils.setScreenBackground(this)
 
         // タイトル、メッセージ、スコアのフォントを変更する
         FontUtils.changeFont(this, R.id.txtTitle)
