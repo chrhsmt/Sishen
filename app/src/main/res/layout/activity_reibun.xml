@@ -21,7 +21,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="5" />
 
-            <TextView
+            <com.chrhsmt.sisheng.ui.AutoResizeTextView
                 android:id="@+id/txtReibun"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -86,7 +86,7 @@
                     android:background="@drawable/shape_rounded_corners_30dp_selected"
                     android:weightSum="100">
 
-                    <TextView
+                    <com.chrhsmt.sisheng.ui.AutoResizeTextView
                         android:id="@+id/txtPinyin"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
@@ -95,7 +95,7 @@
                         android:textAlignment="center"
                         android:textSize="24sp" />
 
-                    <TextView
+                    <com.chrhsmt.sisheng.ui.AutoResizeTextView
                         android:id="@+id/txtChinese"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
@@ -113,7 +113,7 @@
             </LinearLayout>
 
 
-            <TextView
+            <com.chrhsmt.sisheng.ui.AutoResizeTextView
                 android:id="@+id/txtEnglish"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
