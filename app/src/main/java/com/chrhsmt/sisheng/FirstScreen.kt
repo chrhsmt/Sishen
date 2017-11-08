@@ -131,7 +131,7 @@ class FirstScreen : AppCompatActivity() {
     private fun setUpReadWriteExternalStorage() {
         val dir = ExternalMedia.getExternalDirectoryPath(this)
         if (ExternalMedia.isExternalStorageWritable() && dir != null && dir!!.canWrite()) {
-            Toast.makeText(this, "SDカードへの書き込みが可能です", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "SDカードへの書き込みが可能です", Toast.LENGTH_SHORT).show()
             Log.d(TAG, String.format("External media path: %s", dir.absoluteFile))
         } else {
             Toast.makeText(this, "SDカードがマウントされていない、もしくは書き込みが不可能な状態です", Toast.LENGTH_SHORT).show()
