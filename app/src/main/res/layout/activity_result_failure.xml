@@ -80,7 +80,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="20" />
 
-            <Button
+            <com.chrhsmt.sisheng.ui.AutoResizeButton
                 android:id="@+id/btnRetry"
                 android:layout_width="0dp"
                 android:layout_weight="25"
@@ -97,7 +97,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="10" />
 
-            <Button
+            <com.chrhsmt.sisheng.ui.AutoResizeButton
                 android:id="@+id/btnRestart"
                 android:layout_width="0dp"
                 android:layout_weight="25"
