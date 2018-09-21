@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".debug.AnalyzeActivity">
+
+    <LinearLayout
+        android:id="@+id/screenBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/first_screen_bg"
+        android:orientation="vertical"
+        android:weightSum="100"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="26dp">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="データベース化(初期表示遅いから)\n波形解析"/>
+
+        <Button
+            android:id="@+id/btnAnalyze"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:text="Analyze" />
+
+        <com.chrhsmt.sisheng.ui.AutoResizeTextView
+            android:id="@+id/txtNiniReibun"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:text="Debug Analyze"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="40sp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="80"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10" />
+
+            <ListView
+                android:id="@+id/listFiles"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="60"
+                android:fadeScrollbars="false"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="0dp">
+
+            </ListView>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="30" />
+
+        </LinearLayout>
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5" />
+
+    </LinearLayout></android.support.constraint.ConstraintLayout>
