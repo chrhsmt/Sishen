@@ -45,9 +45,14 @@ class AnalyzeActivity : Activity() {
         this.files = cardManager.getFileList()
         val lines = cardManager.readCsv(this@AnalyzeActivity, "result.csv")
 
-        this.datas = this.files?.map { file ->
-            val line = lines.find { line -> line.startsWith(file.name) }
-            AnalyzedRecordedData(file, line).init()
+        try {
+            this.datas = this.files?.map { file ->
+                val line = lines.find { line -> line.startsWith(file.name) }
+                lines.minus(line)
+                AnalyzedRecordedData(file, line).init()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
 
         // ファイルリスト
@@ -63,8 +68,11 @@ class AnalyzeActivity : Activity() {
                 return@setOnItemClickListener
             }
             reibunInfo.setSelectedItem(itemPosition)
+            val data = this.datas!!.get(position)
+            AnalyzedRecordedData.setSelected(data)
+            Settings.sex = data.sex!!
 
-            val intent = Intent(this@AnalyzeActivity, ReibunActivity::class.java)
+            val intent = Intent(this@AnalyzeActivity, CompareActivity::class.java)
             startActivity(intent)
             overridePendingTransition(0, 0);
         }
@@ -81,13 +89,15 @@ class AnalyzeActivity : Activity() {
         btnAnalyze.setOnClickListener({ v: View? ->
             Toast.makeText(this@AnalyzeActivity, "解析開始します", Toast.LENGTH_SHORT).show()
 
+            Settings.setDefaultValue(this@AnalyzeActivity, false)
+
             var count = 0
             var map: MutableMap<String, MutableList<Float>> = HashMap<String, MutableList<Float>>()
             val reibunInfo = ReibunInfo.getInstance(this@AnalyzeActivity)
             reibunInfo.getItemList().forEach {
                 this@AnalyzeActivity.service?.testPlay(it.getMFSZExampleAudioFileName(), playback = false, async = false)
                 val sampleData = this@AnalyzeActivity.service?.getTestFreq()
-                map[it.id.toString()] = sampleData!!
+                map[it.id.toString()] = sampleData!!.toMutableList()
             }
 
             var buffer = StringBuilder()
@@ -132,6 +142,7 @@ class AnalyzeActivity : Activity() {
                 SDCardManager().write(this@AnalyzeActivity, "nullFemaleResult.csv", nullFemaleBuffer.toString())
             }
 
+            Log.i(TAG, "finished")
             Toast.makeText(this@AnalyzeActivity, String.format("解析完了: %d件", count), Toast.LENGTH_LONG).show()
         })
     }
@@ -148,7 +159,8 @@ class AnalyzeActivity : Activity() {
             val point = calculator.calc(data!!, sampleData)
             if (point.base <= sampleData!!.size) {
                 // 録音が失敗している場合
-//                            throw AudioServiceException("不好意思，我听不懂")
+//                throw AudioServiceException("不好意思，我听不懂")
+                buffer.append(fileName + ", " + id + ", " + sex + ", " + point.score + ", " + point.success() +  "\n")
             } else {
                 buffer.append(fileName + ", " + id + ", " + sex + ", " + point.score + ", " + point.success() +  "\n")
             }
