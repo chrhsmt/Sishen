@@ -11,6 +11,7 @@ import com.chrhsmt.sisheng.ui.Chart
  * Created by hkimura on 2017/10/30.
  */
 class AudioServiceMock : AudioServiceInterface {
+
     private val TAG: String = "AudioServiceMock"
 
     private val activity: Activity
@@ -26,8 +27,11 @@ class AudioServiceMock : AudioServiceInterface {
         // NOP
     }
 
-    override fun testPlay(fileName: String, playback: Boolean, callback: Runnable?) {
+    override fun testPlay(fileName: String, path: String?, playback: Boolean, callback: Runnable?, async: Boolean, labelName: String) {
         this.isRunning = true
+    }
+
+    override fun debugTestPlay(fileName: String, path: String, playback: Boolean, callback: Runnable?) {
     }
 
     override fun attemptPlay(fileName: String) {
@@ -58,6 +62,14 @@ class AudioServiceMock : AudioServiceInterface {
 
     override fun clear() {
         // NOP
+    }
+
+    override fun clearFrequencies() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun clearTestFrequencies() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun isRunning(): Boolean {

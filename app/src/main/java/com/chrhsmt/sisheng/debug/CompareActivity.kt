@@ -108,6 +108,58 @@ class CompareActivity : AppCompatActivity() {
             }
         })
 
+        // お手本再生
+        btnAnalyzeOtehon.setOnClickListener({
+            nowStatus = CompareActivity.REIBUN_STATUS.PLAYING
+            updateButtonStatus()
+
+            this@CompareActivity.service!!.clearTestFrequencies()
+            this@CompareActivity.chart!!.clear()
+
+            val fileName = reibunInfo.selectedItem!!.getMFSZExampleAudioFileName()
+            Log.d(TAG, "Play " + fileName)
+            this.service!!.testPlay(fileName, callback = object : Runnable {
+                override fun run() {
+                    Thread.sleep(300)
+
+                    this@CompareActivity.runOnUiThread {
+
+                        // DEBUG解析
+                        val analyzed = AnalyzedRecordedData.getSelected()
+                        if (analyzed != null) {
+                            val file = analyzed.file
+                            val path= SDCardManager().copyAudioFile(file, this@CompareActivity)
+                            this@CompareActivity.service!!.clearFrequencies()
+                            this@CompareActivity.service!!.debugTestPlay(file.name, path, playback = true, callback = object : Runnable {
+                                override fun run() {
+                                    val point = this@CompareActivity.service?.analyze()
+                                    this@CompareActivity.runOnUiThread {
+                                        txtScore.text = String.format("Point: %s, distance: %s", point?.score, point?.distance)
+
+                                        this@CompareActivity.nowStatus = REIBUN_STATUS.NORMAL
+                                        this@CompareActivity.updateButtonStatus()
+                                        dialog.dismiss()
+                                    }
+                                }
+                            })
+                        }
+                    }
+                }
+            })
+
+            Thread(Runnable {
+                Thread.sleep(2000)
+                when (this@CompareActivity.service!!.isRunning()) {
+                    true -> Thread.sleep(1000)
+                }
+
+                this@CompareActivity.runOnUiThread {
+                    nowStatus = CompareActivity.REIBUN_STATUS.NORMAL
+                    updateButtonStatus()
+                }
+            }).start()
+        })
+
         // タイトル長押下された場合は、デバッグ画面に遷移する。
         if (Settings.DEBUG_MODE) {
             txtDebugReibun.setOnLongClickListener(View.OnLongClickListener {
@@ -183,22 +235,21 @@ class CompareActivity : AppCompatActivity() {
     }
 
     private fun updateButtonStatus() {
-        /*
         when (nowStatus) {
             REIBUN_STATUS.PREPARE -> {
                 // 録音ボタン：録音可、再生ボタン：再生可
-                btnOtehon.setBackgroundResource(R.drawable.shape_round_button)
-                btnOtehon.setEnabled(false)
+                btnAnalyzeOtehon.setBackgroundResource(R.drawable.shape_round_button)
+                btnAnalyzeOtehon.setEnabled(false)
             }
             REIBUN_STATUS.NORMAL -> {
                 // 録音ボタン：録音可、再生ボタン：再生可
-                btnOtehon.setBackgroundResource(R.drawable.shape_round_button)
-                btnOtehon.setEnabled(true)
+                btnAnalyzeOtehon.setBackgroundResource(R.drawable.shape_round_button)
+                btnAnalyzeOtehon.setEnabled(true)
             }
             REIBUN_STATUS.PLAYING -> {
                 // 録音ボタン：利用不可、再生ボタン：再生中
-                btnOtehon.setBackgroundResource(R.drawable.shape_round_button_press)
-                btnOtehon.setEnabled(false)
+                btnAnalyzeOtehon.setBackgroundResource(R.drawable.shape_round_button_press)
+                btnAnalyzeOtehon.setEnabled(false)
             }
             REIBUN_STATUS.RECODING -> {
                 // 録音ボタン：録音中、再生ボタン：再生不可
@@ -206,13 +257,13 @@ class CompareActivity : AppCompatActivity() {
                 alphaAnimation.duration = 1000
                 alphaAnimation.fillAfter = true
                 alphaAnimation.repeatCount = -1
-                btnOtehon.setBackgroundResource(R.drawable.shape_round_button_disable)
-                btnOtehon.setEnabled(false)
+                btnAnalyzeOtehon.setBackgroundResource(R.drawable.shape_round_button_disable)
+                btnAnalyzeOtehon.setEnabled(false)
             }
             REIBUN_STATUS.ANALYZING -> {
                 // 録音ボタン：録音不可、再生ボタン：再生不可
-                btnOtehon.setBackgroundResource(R.drawable.shape_round_button_disable)
-                btnOtehon.setEnabled(false)
+                btnAnalyzeOtehon.setBackgroundResource(R.drawable.shape_round_button_disable)
+                btnAnalyzeOtehon.setEnabled(false)
             }
             REIBUN_STATUS.ANALYZE_FINISH -> {
                 //ボタン等のパーツの状態を戻さずに結果画面に遷移する想定。
@@ -220,10 +271,9 @@ class CompareActivity : AppCompatActivity() {
             }
             REIBUN_STATUS.ANALYZE_ERROR_OCCUR -> {
                 // 録音ボタン：録音可、再生ボタン：再生不可
-                btnOtehon.setBackgroundResource(R.drawable.shape_round_button_disable)
-                btnOtehon.setEnabled(false)
+                btnAnalyzeOtehon.setBackgroundResource(R.drawable.shape_round_button_disable)
+                btnAnalyzeOtehon.setEnabled(false)
             }
         }
-        */
     }
 }

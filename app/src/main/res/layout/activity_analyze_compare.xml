@@ -19,27 +19,27 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="5" />
+                android:layout_weight="4" />
 
             <com.chrhsmt.sisheng.ui.AutoResizeTextView
                 android:id="@+id/txtDebugReibun"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="10"
+                android:layout_weight="8"
                 android:gravity="center_vertical"
                 android:textAlignment="center"
                 android:text="@string/screen4_1"
-                android:textSize="36sp" />
+                android:textSize="28sp" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="5" />
+                android:layout_weight="4" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="22"
+                android:layout_weight="17"
                 android:orientation="horizontal"
                 android:weightSum="100">
 
@@ -48,11 +48,10 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5" />
 
-                <!--
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="10"
+                    android:layout_weight="8"
                     android:orientation="vertical"
                     android:weightSum="100">
                     <Space
@@ -60,7 +59,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="35" />
                     <android.widget.ImageButton
-                        android:id="@+id/btnOtehon"
+                        android:id="@+id/btnAnalyzeOtehon"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="55"
@@ -73,7 +72,6 @@
                         android:layout_height="0dp"
                         android:layout_weight="10" />
                 </LinearLayout>
-                -->
 
                 <Space
                     android:layout_width="0dp"
@@ -83,7 +81,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="66"
+                    android:layout_weight="48"
                     android:orientation="vertical"
                     android:background="@drawable/shape_rounded_corners_30dp_selected"
                     android:weightSum="100">
@@ -122,25 +120,25 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="35"
+                android:layout_weight="50"
                 android:orientation="horizontal"
                 android:weightSum="100">
 
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="20" />
+                    android:layout_weight="10" />
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="55" />
+                    android:layout_weight="75" />
 
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="25" />
+                    android:layout_weight="15" />
 
             </LinearLayout>
 

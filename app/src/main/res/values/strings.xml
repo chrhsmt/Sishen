@@ -29,4 +29,5 @@
     <string name="screen8_3">不知道你说什么</string>
     <string name="screen8_4">再试一次</string>
     <string name="screen8_5">重新开始</string>
+    <string name="title_activity_analyze">AnalyzeActivity</string>
 </resources>

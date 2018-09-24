@@ -24,7 +24,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="データベース化(初期表示遅いから)\n波形解析"/>
+            android:text="データベース化(初期表示遅いから)\n波形解析(聴き比べ・距離と点数表示)"/>
 
         <Button
             android:id="@+id/btnAnalyze"
