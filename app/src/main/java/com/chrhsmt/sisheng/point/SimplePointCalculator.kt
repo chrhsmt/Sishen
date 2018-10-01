@@ -32,7 +32,8 @@ open class SimplePointCalculator : PointCalculator() {
                 score,
                 info.distance,
                 info.normalizedDistance,
-                this.getBase(info))
+                this.getBase(info),
+                analyzedFreqList)
 
 //        var items = this.frequencies.mapIndexed { index, fl -> TimeSeriesItem(index.toDouble(), TimeSeriesPoint(kotlin.DoubleArray(1){ fl.toDouble() })) }
 //        val ts0 = TimeSeriesBase(items)

@@ -28,7 +28,7 @@ data class AnalyzedRecordedData(var file: File, var csvLine: String?) {
         val line = this.csvLine?.split(",")
         this.id = line?.get(1)?.trim()?.toInt()
         this.sex = line?.get(2)?.trim()
-        this.point = Point(line?.get(3)?.trim()?.toInt()?: 0, 0.0, 0.0, 0)
+        this.point = Point(line?.get(3)?.trim()?.toInt()?: 0, 0.0, 0.0, 0, null)
         return this
     }
 

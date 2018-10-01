@@ -9,7 +9,8 @@ data class Point(
         val score: Int,
         val distance: Double,
         val normalizedDistance: Double,
-        val base: Int) {
+        val base: Int,
+        val analyzedFreqList: MutableList<Float>?) {
 
     fun success() : Boolean {
         return this.score >= Settings.pointSuccessThreshold

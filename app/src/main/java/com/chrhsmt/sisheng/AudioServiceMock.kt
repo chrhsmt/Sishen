@@ -57,7 +57,8 @@ class AudioServiceMock : AudioServiceInterface {
                 80,
                 5.0,
                 5.0,
-                1)
+                1,
+                null)
     }
 
     override fun clear() {

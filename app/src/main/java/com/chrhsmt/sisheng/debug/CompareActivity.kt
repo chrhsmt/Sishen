@@ -3,6 +3,7 @@ package com.chrhsmt.sisheng.debug
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
@@ -20,7 +21,6 @@ import com.chrhsmt.sisheng.ui.ScreenUtils
 import com.github.mikephil.charting.charts.LineChart
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_analyze_compare.*
-import kotlinx.android.synthetic.main.activity_reibun.*
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -134,6 +134,10 @@ class CompareActivity : AppCompatActivity() {
                                 override fun run() {
                                     val point = this@CompareActivity.service?.analyze()
                                     this@CompareActivity.runOnUiThread {
+                                        (this@CompareActivity.service as? AudioService)?.addOtherChart(
+                                                point?.analyzedFreqList,
+                                                "addOtherChart",
+                                                Color.rgb(10, 255, 10))
                                         txtScore.text = String.format("Point: %s, distance: %s", point?.score, point?.distance)
 
                                         this@CompareActivity.nowStatus = REIBUN_STATUS.NORMAL

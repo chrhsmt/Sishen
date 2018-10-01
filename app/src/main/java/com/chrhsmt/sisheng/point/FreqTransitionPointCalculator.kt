@@ -27,7 +27,8 @@ class FreqTransitionPointCalculator : PointCalculator() {
                 score,
                 info.distance,
                 info.normalizedDistance,
-                this.getBase(info))
+                this.getBase(info),
+                analyzedFreqList)
     }
 
     private fun calcTransitions(frequencies: MutableList<Float>): List<Float> {

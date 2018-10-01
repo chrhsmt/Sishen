@@ -337,4 +337,10 @@ class AudioService : AudioServiceInterface {
     fun getTestFreq(): MutableList<Float> {
         return this.testFrequencies
     }
+
+    fun addOtherChart(freqs: MutableList<Float>?, labelName: String, color: Int) {
+        freqs?.forEach { fl ->
+            chart?.addEntry(fl, name = labelName, color = color)
+        }
+    }
 }
