@@ -1,6 +1,5 @@
 package com.chrhsmt.sisheng.point
 
-import android.util.Range
 import com.chrhsmt.sisheng.AudioService
 import com.chrhsmt.sisheng.Settings
 import de.qaware.chronix.distance.DistanceFunctionEnum
@@ -32,8 +31,20 @@ abstract class PointCalculator {
         }
 
         val testFirst = testFreqList.first { fl: Float -> fl > 0 }
-        val analyzedFirst = analyzedFreqList.first { fl: Float -> fl > 0 }
-        val degree = testFirst - analyzedFirst
+
+        val firstSentence = analyzedFreqList.dropWhile { fl: Float -> fl <= 0 }.takeWhile { fl: Float -> fl > 0 }.sorted()
+        val ave = firstSentence.average()
+        var medium: Float = 0f
+        if (firstSentence.size % 2 == 1) {
+            medium = firstSentence.get(firstSentence.size / 2)
+        } else {
+            medium = (firstSentence.get(firstSentence.size / 2) + firstSentence.get(firstSentence.size / 2 - 1)) / 2
+        }
+
+//        val variance = firstSentence.sumByDouble { fl -> Math.pow((fl - ave), 2.0) } / firstSentence.size
+//        val sd = Math.sqrt(variance)
+
+        val degree = testFirst - medium
 
         if (degree > 0) {
             // お手本のほうが周波数が高かった場合
