@@ -11,11 +11,22 @@ import de.qaware.chronix.timeseries.MultivariateTimeSeries
  */
 open class SimplePointCalculator : PointCalculator() {
 
+    companion object {
+        enum class CALIBRATION_TYPE(val type: Int) {
+            SEX(0),
+            FREQ(1)
+        }
+    }
+
+    var calirationType: CALIBRATION_TYPE = CALIBRATION_TYPE.SEX
+
+    fun setCalibrationType(type: CALIBRATION_TYPE) {
+        this.calirationType = type
+    }
+
     override fun calc(frequencies: MutableList<Float>, testFrequencies: MutableList<Float>): Point {
 
         var analyzedFreqList: MutableList<Float> = this.copy(frequencies)
-        // 調整(男女差)
-        this.adjustFrequencies(analyzedFreqList)
 
         // ノイズ除去
         this.removeNoises(analyzedFreqList)
@@ -23,6 +34,16 @@ open class SimplePointCalculator : PointCalculator() {
         // 無音除去
         analyzedFreqList = this.removeLastSilence(analyzedFreqList)
         this.minimizeSilence(analyzedFreqList)
+
+        if (this.calirationType == CALIBRATION_TYPE.SEX) {
+            // 調整(男女差)
+            this.adjustFrequencies(analyzedFreqList)
+        } else {
+            // 調整(周波数)
+            this.calibrateFrequencies(analyzedFreqList, testFrequencies)
+
+        }
+
         val exampleFrequencies = this.removeLastSilence(testFrequencies)
 
         val info: TimeWarpInfo = this.calcDistance(analyzedFreqList, exampleFrequencies)

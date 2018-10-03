@@ -23,6 +23,40 @@ abstract class PointCalculator {
     abstract fun calc(frequencies: MutableList<Float>, testFrequencies: MutableList<Float>): Point
 
     /**
+     * お手本音声の最初の音を参考に、録音した音声をキャリブレーションして周波数を調整する.
+     */
+    fun calibrateFrequencies(analyzedFreqList: MutableList<Float>, testFreqList: MutableList<Float>) {
+
+        if (analyzedFreqList.size == 0 || testFreqList.size == 0) {
+            return
+        }
+
+        val testFirst = testFreqList.first { fl: Float -> fl > 0 }
+        val analyzedFirst = analyzedFreqList.first { fl: Float -> fl > 0 }
+        val degree = testFirst - analyzedFirst
+
+        if (degree > 0) {
+            // お手本のほうが周波数が高かった場合
+            analyzedFreqList.forEachIndexed { index, fl ->
+                if (fl > 0) {
+                    analyzedFreqList[index] = fl + degree
+                }
+            }
+        } else {
+            // お手本のほうが周波数が低かった場合
+            analyzedFreqList.forEachIndexed { index, fl ->
+                if (fl > 0) {
+                    analyzedFreqList[index] = fl - (degree * -1) // マイナスなので一度反転
+                    if (analyzedFreqList[index] < 0) {
+                        analyzedFreqList[index] = 0F
+                    }
+                }
+            }
+        }
+
+    }
+
+    /**
      * 音声周波数の男女差を調整する
      */
     fun adjustFrequencies(analyzedFreqList: MutableList<Float>) {

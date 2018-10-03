@@ -14,6 +14,7 @@ import com.chrhsmt.sisheng.font.FontUtils
 import com.chrhsmt.sisheng.point.PointCalculator
 import com.chrhsmt.sisheng.point.SimplePointCalculator
 import com.chrhsmt.sisheng.ui.ScreenUtils
+import dmax.dialog.SpotsDialog
 
 import kotlinx.android.synthetic.main.activity_analyze.*
 import java.io.File
@@ -79,7 +80,7 @@ class AnalyzeActivity : Activity() {
 
         // タイトル長押下された場合は、デバッグ画面に遷移する。
         if (Settings.DEBUG_MODE) {
-            txtNiniReibun.setOnLongClickListener(View.OnLongClickListener {
+            analyze_title.setOnLongClickListener(View.OnLongClickListener {
                 val intent = Intent(this@AnalyzeActivity, MainActivity::class.java)
                 startActivity(intent)
                 true
@@ -87,63 +88,79 @@ class AnalyzeActivity : Activity() {
         }
 
         btnAnalyze.setOnClickListener({ v: View? ->
+            val dialog = SpotsDialog(this@AnalyzeActivity, getString(R.string.screen6_3), R.style.CustomSpotDialog)
+            analyze_title.setText("解析開始します")
+            // プログレスダイアログを表示する
+            dialog.show()
+            ScreenUtils.setFullScreen(dialog.window)
+            runOnUiThread {
+            }
+
             Toast.makeText(this@AnalyzeActivity, "解析開始します", Toast.LENGTH_SHORT).show()
 
             Settings.setDefaultValue(this@AnalyzeActivity, false)
 
-            var count = 0
-            var map: MutableMap<String, MutableList<Float>> = HashMap<String, MutableList<Float>>()
-            val reibunInfo = ReibunInfo.getInstance(this@AnalyzeActivity)
-            reibunInfo.getItemList().forEach {
-                this@AnalyzeActivity.service?.testPlay(it.getMFSZExampleAudioFileName(), playback = false, async = false)
-                val sampleData = this@AnalyzeActivity.service?.getTestFreq()
-                map[it.id.toString()] = sampleData!!.toMutableList()
-            }
 
-            var buffer = StringBuilder()
-            var nullMaleBuffer = StringBuilder()
-            var nullFemaleBuffer = StringBuilder()
-
-            this@AnalyzeActivity.files?.forEach { file ->
-                val fileName = file.name
-
-                // ファイル名から条件取得
-                ".*-(.*)-(.*)\\.wav".toRegex().find(fileName)?.groups?.let { it ->
-                    val id = it.get(1)?.value
-                    val sex = it.get(2)?.value
-                    if (id != null && !"null".equals(id)) {
-                        val position = id.toInt().minus(1)
-                        reibunInfo.setSelectedItem(position)
-                        val reibunName = reibunInfo.selectedItem!!.getMFSZExampleAudioFileName()
-                        Settings.sampleAudioFileName = reibunName
-
-                        if (sex == "null") {
-                            // male
-                            Settings.sex = "m"
-                            this@AnalyzeActivity.extractLastYearData(file, nullMaleBuffer, map[id]!!, id, "m", fileName)
-                            // female
-                            Settings.sex = "f"
-                            this@AnalyzeActivity.extractLastYearData(file, nullFemaleBuffer, map[id]!!, id, "f", fileName)
-                        } else {
-                            Settings.sex = sex
-                            this@AnalyzeActivity.extractLastYearData(file, buffer, map[id]!!, id, sex!!, fileName)
-                        }
-                    }
+            Thread(Runnable {
+                var count = 0
+                var map: MutableMap<String, MutableList<Float>> = HashMap<String, MutableList<Float>>()
+                val reibunInfo = ReibunInfo.getInstance(this@AnalyzeActivity)
+                reibunInfo.getItemList().forEach {
+                    this@AnalyzeActivity.service?.testPlay(it.getMFSZExampleAudioFileName(), playback = false, async = false)
+                    val sampleData = this@AnalyzeActivity.service?.getTestFreq()
+                    map[it.id.toString()] = sampleData!!.toMutableList()
                 }
 
-            }
+                var buffer = StringBuilder()
+                var nullMaleBuffer = StringBuilder()
+                var nullFemaleBuffer = StringBuilder()
 
-            // file書き出し？
-            SDCardManager().write(this@AnalyzeActivity, "result.csv", buffer.toString())
-            if (nullMaleBuffer.isNotEmpty()) {
-                SDCardManager().write(this@AnalyzeActivity, "nullMaleResult.csv", nullMaleBuffer.toString())
-            }
-            if (nullFemaleBuffer.isNotEmpty()) {
-                SDCardManager().write(this@AnalyzeActivity, "nullFemaleResult.csv", nullFemaleBuffer.toString())
-            }
+                this@AnalyzeActivity.files?.forEach { file ->
+                    val fileName = file.name
 
-            Log.i(TAG, "finished")
-            Toast.makeText(this@AnalyzeActivity, String.format("解析完了: %d件", count), Toast.LENGTH_LONG).show()
+                    // ファイル名から条件取得
+                    ".*-(.*)-(.*)\\.wav".toRegex().find(fileName)?.groups?.let { it ->
+                        val id = it.get(1)?.value
+                        val sex = it.get(2)?.value
+                        if (id != null && !"null".equals(id)) {
+                            val position = id.toInt().minus(1)
+                            reibunInfo.setSelectedItem(position)
+                            val reibunName = reibunInfo.selectedItem!!.getMFSZExampleAudioFileName()
+                            Settings.sampleAudioFileName = reibunName
+
+                            if (sex == "null") {
+                                // male
+                                Settings.sex = "m"
+                                this@AnalyzeActivity.extractLastYearData(file, nullMaleBuffer, map[id]!!, id, "m", fileName)
+                                // female
+                                Settings.sex = "f"
+                                this@AnalyzeActivity.extractLastYearData(file, nullFemaleBuffer, map[id]!!, id, "f", fileName)
+                            } else {
+                                Settings.sex = sex
+                                this@AnalyzeActivity.extractLastYearData(file, buffer, map[id]!!, id, sex!!, fileName)
+                            }
+                            count++
+                        }
+                    }
+
+                }
+
+                // file書き出し？
+                SDCardManager().write(this@AnalyzeActivity, "result.csv", buffer.toString())
+                if (nullMaleBuffer.isNotEmpty()) {
+                    SDCardManager().write(this@AnalyzeActivity, "nullMaleResult.csv", nullMaleBuffer.toString())
+                }
+                if (nullFemaleBuffer.isNotEmpty()) {
+                    SDCardManager().write(this@AnalyzeActivity, "nullFemaleResult.csv", nullFemaleBuffer.toString())
+                }
+
+                Log.i(TAG, "finished")
+                Toast.makeText(this@AnalyzeActivity, String.format("解析完了: %d件", count), Toast.LENGTH_LONG).show()
+                runOnUiThread {
+                    dialog.dismiss()
+                    analyze_title.text = String.format("解析完了: %d件", count)
+                }
+            }).start()
         })
     }
 
@@ -155,15 +172,14 @@ class AnalyzeActivity : Activity() {
 
             val data = this@AnalyzeActivity.service?.getTestFreq()
 
-            val calculator: PointCalculator = SimplePointCalculator()
+            val calculator: SimplePointCalculator = SimplePointCalculator()
             val point = calculator.calc(data!!, sampleData)
-            if (point.base <= sampleData!!.size) {
-                // 録音が失敗している場合
-//                throw AudioServiceException("不好意思，我听不懂")
-                buffer.append(fileName + ", " + id + ", " + sex + ", " + point.score + ", " + point.success() +  "\n")
-            } else {
-                buffer.append(fileName + ", " + id + ", " + sex + ", " + point.score + ", " + point.success() +  "\n")
-            }
+            val sexBaseScore= point.score
+            val sexBaseSuccess= point.success()
+
+            calculator.setCalibrationType(SimplePointCalculator.Companion.CALIBRATION_TYPE.FREQ)
+            val freqPoint = calculator.calc(data!!, sampleData)
+            buffer.append(fileName + ", " + id + ", " + sex + ", " + sexBaseScore + ", " + sexBaseSuccess + ", " + freqPoint.score +  "\n")
 
         }, async = false)
     }

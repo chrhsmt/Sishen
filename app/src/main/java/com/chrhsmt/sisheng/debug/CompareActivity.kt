@@ -16,6 +16,7 @@ import com.chrhsmt.sisheng.*
 import com.chrhsmt.sisheng.exception.AudioServiceException
 import com.chrhsmt.sisheng.font.FontUtils
 import com.chrhsmt.sisheng.network.RaspberryPi
+import com.chrhsmt.sisheng.point.SimplePointCalculator
 import com.chrhsmt.sisheng.ui.Chart
 import com.chrhsmt.sisheng.ui.ScreenUtils
 import com.github.mikephil.charting.charts.LineChart
@@ -94,8 +95,20 @@ class CompareActivity : AppCompatActivity() {
                         this@CompareActivity.service!!.debugTestPlay(file.name, path, callback = object : Runnable {
                             override fun run() {
                                 val point = this@CompareActivity.service?.analyze()
+                                val calcurator = SimplePointCalculator()
+                                calcurator.setCalibrationType(SimplePointCalculator.Companion.CALIBRATION_TYPE.FREQ)
+                                val freqPoint = (this@CompareActivity.service as AudioService)?.analyze(calcurator)
+
                                 this@CompareActivity.runOnUiThread {
-                                    txtScore.text = String.format("Point: %s, distance: %s", point?.score, point?.distance)
+                                    (this@CompareActivity.service as? AudioService)?.addOtherChart(
+                                            point?.analyzedFreqList,
+                                            "男女設定キャリブレーション",
+                                            Color.rgb(10, 255, 10))
+                                    (this@CompareActivity.service as? AudioService)?.addOtherChart(
+                                            freqPoint?.analyzedFreqList,
+                                            "周波数キャリブレーション",
+                                            Color.rgb(255, 10, 255))
+                                    txtScore.text = String.format("Point: %s, F-Point: %s", point?.score, freqPoint?.score)
                                 }
                             }
                         })
@@ -133,12 +146,20 @@ class CompareActivity : AppCompatActivity() {
                             this@CompareActivity.service!!.debugTestPlay(file.name, path, playback = true, callback = object : Runnable {
                                 override fun run() {
                                     val point = this@CompareActivity.service?.analyze()
+                                    val calcurator = SimplePointCalculator()
+                                    calcurator.setCalibrationType(SimplePointCalculator.Companion.CALIBRATION_TYPE.FREQ)
+                                    val freqPoint = (this@CompareActivity.service as AudioService)?.analyze(calcurator)
+
                                     this@CompareActivity.runOnUiThread {
                                         (this@CompareActivity.service as? AudioService)?.addOtherChart(
                                                 point?.analyzedFreqList,
-                                                "addOtherChart",
+                                                "男女設定キャリブレーション",
                                                 Color.rgb(10, 255, 10))
-                                        txtScore.text = String.format("Point: %s, distance: %s", point?.score, point?.distance)
+                                        (this@CompareActivity.service as? AudioService)?.addOtherChart(
+                                                freqPoint?.analyzedFreqList,
+                                                "周波数キャリブレーション",
+                                                Color.rgb(255, 10, 255))
+                                        txtScore.text = String.format("Point: %s, F-Point: %s", point?.score, freqPoint?.score)
 
                                         this@CompareActivity.nowStatus = REIBUN_STATUS.NORMAL
                                         this@CompareActivity.updateButtonStatus()

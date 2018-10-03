@@ -195,6 +195,16 @@ class AudioService : AudioServiceInterface {
         return point
     }
 
+    @Throws(AudioServiceException::class)
+    fun analyze(calculator: PointCalculator) : Point {
+        val point = calculator.calc(this.frequencies, this.testFrequencies)
+        if (point.base <= this.testFrequencies.size) {
+            // 録音が失敗している場合
+            throw AudioServiceException("不好意思，我听不懂")
+        }
+        return point
+    }
+
     override fun clearTestFrequencies() {
         this.testFrequencies.clear()
     }
