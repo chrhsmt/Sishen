@@ -130,7 +130,7 @@ abstract class PointCalculator {
      * Removing noises.
      * @freqList List of frequency
      */
-    fun removeNoises(freqList: MutableList<Float>) {
+    open fun removeNoises(freqList: MutableList<Float>) {
 
         val noizeMaxLength = Settings.freqNoizeCountThreashold
         val freqSize = freqList.size
@@ -147,7 +147,7 @@ abstract class PointCalculator {
             }
 
             if (noizeIndexList.size > noizeMaxLength) {
-                // ノイズ判定サイズを超えたものはノイズとみなさないのでクリアー
+                // ノイズ判定サイズを超えた連続した部分のものはノイズとみなさないのでクリアー
                 noizeIndexList.clear()
             }
 
