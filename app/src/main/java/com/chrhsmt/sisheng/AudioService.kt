@@ -52,7 +52,7 @@ class AudioService : AudioServiceInterface {
     private val TAG: String = "AudioService"
 
     private val activity: Activity
-    private val chart: Chart
+    private var chart: Chart? = null
     private var audioDispatcher: AudioDispatcher? = null
     private var analyzeThread: Thread? = null
     private var isRunning: Boolean = false
@@ -60,7 +60,7 @@ class AudioService : AudioServiceInterface {
     private var frequencies: MutableList<Float> = ArrayList<Float>()
     private var testFrequencies: MutableList<Float> = ArrayList<Float>()
 
-    constructor(chart: Chart, activity: Activity) {
+    constructor(chart: Chart?, activity: Activity) {
         this.activity = activity
         this.chart = chart
         // Setting ffmpeg
@@ -70,7 +70,8 @@ class AudioService : AudioServiceInterface {
     override fun startAudioRecord() {
         // 既存データをクリア
         this.frequencies.clear()
-        this.chart.clearDateSet(MICROPHONE_DATA_SET_LABEL_NAME)
+        this.chart?.clearDateSet(MICROPHONE_DATA_SET_LABEL_NAME)
+
 
         // マイクロフォンバッファサイズの計算
         val microphoneBufferSize = AudioRecord.getMinBufferSize(
@@ -87,14 +88,46 @@ class AudioService : AudioServiceInterface {
     }
 
     @SuppressLint("WrongConstant")
-    override fun testPlay(fileName: String, playback: Boolean, callback: Runnable?) {
+    override fun testPlay(fileName: String, path: String?, playback: Boolean, callback: Runnable?, async: Boolean, labelName: String) {
 
         this.testFrequencies.clear()
-        this.chart.clear()
+        this.chart?.clear()
+
+        val run = Runnable {
+
+            val audioPath: String = if (path == null) {
+                this.copyAudioFile(fileName)
+            } else {
+                path
+            }
+
+            this.startRecord(
+                    AudioDispatcherFactory.fromPipe(
+                            audioPath,
+                            AUDIO_FILE_SAMPLING_RATE,
+                            BUFFER_SIZE,
+                            0
+                    ),
+                    false,
+                    playback = playback,
+                    samplingRate = AUDIO_FILE_SAMPLING_RATE,
+                    targetList = this.testFrequencies,
+                    labelName = labelName,
+                    callback = callback
+            )
+        }
+        if (async) {
+            Thread(run).start()
+        } else {
+            run.run()
+        }
+
+    }
+
+    @SuppressLint("WrongConstant")
+    override fun debugTestPlay(fileName: String, path: String, playback: Boolean, callback: Runnable?) {
 
         Thread(Runnable {
-
-            val path =  this.copyAudioFile(fileName)
 
             this.startRecord(
                     AudioDispatcherFactory.fromPipe(
@@ -106,9 +139,10 @@ class AudioService : AudioServiceInterface {
                     false,
                     playback = playback,
                     samplingRate = AUDIO_FILE_SAMPLING_RATE,
-                    targetList = this.testFrequencies,
-                    labelName = "SampleAudio",
-                    callback = callback
+                    targetList = this.frequencies,
+                    labelName = "RecordedSampleAudio",
+                    callback = callback,
+                    color = Color.rgb(255, 10, 10)
             )
         }).start()
 
@@ -161,6 +195,24 @@ class AudioService : AudioServiceInterface {
         return point
     }
 
+    @Throws(AudioServiceException::class)
+    fun analyze(calculator: PointCalculator) : Point {
+        val point = calculator.calc(this.frequencies, this.testFrequencies)
+        if (point.base <= this.testFrequencies.size) {
+            // 録音が失敗している場合
+            throw AudioServiceException("不好意思，我听不懂")
+        }
+        return point
+    }
+
+    override fun clearTestFrequencies() {
+        this.testFrequencies.clear()
+    }
+
+    override fun clearFrequencies() {
+        this.frequencies.clear()
+    }
+
     override fun clear() {
         this.frequencies.clear()
         this.testFrequencies.clear()
@@ -210,7 +262,7 @@ class AudioService : AudioServiceInterface {
                     }
                 }
                 this@AudioService.activity.runOnUiThread {
-                    chart.addEntry(pitch, name = labelName, color = color)
+                    chart?.addEntry(pitch, name = labelName, color = color)
                 }
             }
         }
@@ -228,10 +280,15 @@ class AudioService : AudioServiceInterface {
 
         if (shouldRecord) {
             ExternalMedia.saveDir?.takeIf { it -> it.canWrite() }?.let { it ->
-                val dateString = SimpleDateFormat("yyyy-MM-dd_HH_mm_ss").format(Date())
-                val id = Regex("^mfsz/(\\d)_[f|m].wav$").find(Settings.sampleAudioFileName!!)?.groups?.last()?.value
+                val dateString = SimpleDateFormat("yyyy-MM-dd").format(Date())
+                val directory = File(it, dateString)
+                if (!directory.isDirectory) {
+                    directory.mkdir()
+                }
+                val dateTimeString = SimpleDateFormat("yyyy-MM-dd_HH_mm_ss").format(Date())
+                val id = Regex("^mfsz/(\\d+)_[f|m].wav$").find(Settings.sampleAudioFileName!!)?.groups?.last()?.value
                 val sex = Settings.sex!!.first().toLowerCase()
-                val newFile = File(it, String.format("%s-%s-%s.wav", dateString, id, sex))
+                val newFile = File(directory, String.format("%s-%s-%s.wav", dateTimeString, id, sex))
                 val format = TarsosDSPAudioFormat(AUDIO_FILE_SAMPLING_RATE.toFloat(), 16, 1, true, false)
                 val writeProcessor: AudioProcessor = WriterProcessor(format, RandomAccessFile(newFile, "rw"))
                 dispatcher.addAudioProcessor(writeProcessor)
@@ -255,8 +312,8 @@ class AudioService : AudioServiceInterface {
     }
 
     private fun stopRecord() {
-        this.audioDispatcher!!.stop()
-        this.analyzeThread!!.interrupt()
+        this.audioDispatcher?.stop()
+        this.analyzeThread?.interrupt()
         this.isRunning = false
         this@AudioService.activity.runOnUiThread {
             this.activity.button?.text = "開始"
@@ -290,5 +347,15 @@ class AudioService : AudioServiceInterface {
         input.close()
 
         return path
+    }
+
+    fun getTestFreq(): MutableList<Float> {
+        return this.testFrequencies
+    }
+
+    fun addOtherChart(freqs: MutableList<Float>?, labelName: String, color: Int) {
+        freqs?.forEach { fl ->
+            chart?.addEntry(fl, name = labelName, color = color)
+        }
     }
 }
