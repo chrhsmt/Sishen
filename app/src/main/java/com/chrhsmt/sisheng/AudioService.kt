@@ -280,10 +280,15 @@ class AudioService : AudioServiceInterface {
 
         if (shouldRecord) {
             ExternalMedia.saveDir?.takeIf { it -> it.canWrite() }?.let { it ->
-                val dateString = SimpleDateFormat("yyyy-MM-dd_HH_mm_ss").format(Date())
+                val dateString = SimpleDateFormat("yyyy-MM-dd").format(Date())
+                val directory = File(it, dateString)
+                if (!directory.isDirectory) {
+                    directory.mkdir()
+                }
+                val dateTimeString = SimpleDateFormat("yyyy-MM-dd_HH_mm_ss").format(Date())
                 val id = Regex("^mfsz/(\\d+)_[f|m].wav$").find(Settings.sampleAudioFileName!!)?.groups?.last()?.value
                 val sex = Settings.sex!!.first().toLowerCase()
-                val newFile = File(it, String.format("%s-%s-%s.wav", dateString, id, sex))
+                val newFile = File(directory, String.format("%s-%s-%s.wav", dateTimeString, id, sex))
                 val format = TarsosDSPAudioFormat(AUDIO_FILE_SAMPLING_RATE.toFloat(), 16, 1, true, false)
                 val writeProcessor: AudioProcessor = WriterProcessor(format, RandomAccessFile(newFile, "rw"))
                 dispatcher.addAudioProcessor(writeProcessor)
