@@ -1,14 +1,12 @@
-package com.chrhsmt.sisheng.debug
+package com.chrhsmt.sisheng.persistence
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.chrhsmt.sisheng.persistence.ExternalMedia
 import java.io.*
 import java.nio.charset.Charset
-import java.util.*
 import kotlin.collections.ArrayList
 
 class SDCardManager {
@@ -22,7 +20,7 @@ class SDCardManager {
         val dir = ExternalMedia.getExternalDirectoryPath(context)
         if (ExternalMedia.isExternalStorageWritable() && dir != null && dir!!.canWrite()) {
 //            Toast.makeText(this, "SDカードへの書き込みが可能です", Toast.LENGTH_SHORT).show()
-            Log.d(SDCardManager.TAG, String.format("External media path: %s", dir.absoluteFile))
+            Log.d(TAG, String.format("External media path: %s", dir.absoluteFile))
         } else {
             Toast.makeText(context, "SDカードがマウントされていない、もしくは書き込みが不可能な状態です", Toast.LENGTH_SHORT).show()
         }

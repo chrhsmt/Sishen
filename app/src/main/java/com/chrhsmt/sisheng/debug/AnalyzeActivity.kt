@@ -9,9 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListAdapter
 import android.widget.Toast
 import com.chrhsmt.sisheng.*
-import com.chrhsmt.sisheng.exception.AudioServiceException
-import com.chrhsmt.sisheng.font.FontUtils
-import com.chrhsmt.sisheng.point.PointCalculator
+import com.chrhsmt.sisheng.persistence.SDCardManager
 import com.chrhsmt.sisheng.point.SimplePointCalculator
 import com.chrhsmt.sisheng.ui.ScreenUtils
 import dmax.dialog.SpotsDialog

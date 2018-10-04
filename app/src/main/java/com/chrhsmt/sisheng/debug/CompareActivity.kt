@@ -16,6 +16,7 @@ import com.chrhsmt.sisheng.*
 import com.chrhsmt.sisheng.exception.AudioServiceException
 import com.chrhsmt.sisheng.font.FontUtils
 import com.chrhsmt.sisheng.network.RaspberryPi
+import com.chrhsmt.sisheng.persistence.SDCardManager
 import com.chrhsmt.sisheng.point.SimplePointCalculator
 import com.chrhsmt.sisheng.ui.Chart
 import com.chrhsmt.sisheng.ui.ScreenUtils
