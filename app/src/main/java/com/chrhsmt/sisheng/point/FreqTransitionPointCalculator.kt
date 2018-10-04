@@ -3,6 +3,8 @@ package com.chrhsmt.sisheng.point
 import de.qaware.chronix.dtw.TimeWarpInfo
 
 /**
+ * 一つ前の音のデータと比較して遷移を計算する.
+ *
  * Created by chihiro on 2017/10/17.
  */
 class FreqTransitionPointCalculator : PointCalculator() {
@@ -25,7 +27,8 @@ class FreqTransitionPointCalculator : PointCalculator() {
                 score,
                 info.distance,
                 info.normalizedDistance,
-                this.getBase(info))
+                this.getBase(info),
+                analyzedFreqList)
     }
 
     private fun calcTransitions(frequencies: MutableList<Float>): List<Float> {

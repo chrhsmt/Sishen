@@ -20,7 +20,7 @@ object Settings {
     // 対数得点計算の底
     var baseLogarithmForPoint: Int = 5
     // ポイント成功閾値
-    var pointSuccessThreshold: Int = 80
+    var pointSuccessThreshold: Int = 70
     // ノイズのバッファカウントの閾値
     var freqNoizeCountThreashold: Int = 2
 
