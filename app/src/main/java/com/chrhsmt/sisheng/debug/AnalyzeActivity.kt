@@ -171,12 +171,12 @@ class AnalyzeActivity : Activity() {
             val data = this@AnalyzeActivity.service?.getTestFreq()
 
             val calculator: SimplePointCalculator = SimplePointCalculator()
+            calculator.setV1()
             val point = calculator.calc(data!!, sampleData)
             val sexBaseScore= point.score
             val sexBaseSuccess= point.success()
 
-            calculator.setCalibrationType(SimplePointCalculator.Companion.CALIBRATION_TYPE.FREQ)
-            calculator.setNoiseReducer(SimplePointCalculator.Companion.NOISE_RECUDER.V2)
+            calculator.setV2()
             val freqPoint = calculator.calc(data!!, sampleData)
             buffer.append(fileName + ", " + id + ", " + sex + ", " + sexBaseScore + ", " + sexBaseSuccess + ", " + freqPoint.score +  "\n")
 

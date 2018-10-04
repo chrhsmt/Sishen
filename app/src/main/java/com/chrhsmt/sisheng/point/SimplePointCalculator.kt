@@ -24,14 +24,24 @@ open class SimplePointCalculator : PointCalculator() {
         }
     }
 
-    var calirationType: CALIBRATION_TYPE = CALIBRATION_TYPE.SEX
-    var noizeReducer: NOISE_RECUDER = NOISE_RECUDER.V1
+    var calirationType: CALIBRATION_TYPE = CALIBRATION_TYPE.FREQ
+    var noizeReducer: NOISE_RECUDER = NOISE_RECUDER.V2
 
     fun setCalibrationType(type: CALIBRATION_TYPE) {
         this.calirationType = type
     }
     fun setNoiseReducer(type: NOISE_RECUDER) {
         this.noizeReducer = type
+    }
+
+    fun setV1() {
+        this.calirationType = CALIBRATION_TYPE.SEX
+        this.noizeReducer = NOISE_RECUDER.V1
+    }
+
+    fun setV2() {
+        this.calirationType = CALIBRATION_TYPE.FREQ
+        this.noizeReducer = NOISE_RECUDER.V2
     }
 
     override fun calc(frequencies: MutableList<Float>, testFrequencies: MutableList<Float>): Point {

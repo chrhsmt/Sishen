@@ -95,22 +95,22 @@ class CompareActivity : AppCompatActivity() {
                         val path= SDCardManager().copyAudioFile(file, this@CompareActivity)
                         this@CompareActivity.service!!.debugTestPlay(file.name, path, callback = object : Runnable {
                             override fun run() {
-                                val point = this@CompareActivity.service?.analyze()
+                                val v2Point = this@CompareActivity.service?.analyze()
+
                                 val calcurator = SimplePointCalculator()
-                                calcurator.setCalibrationType(SimplePointCalculator.Companion.CALIBRATION_TYPE.FREQ)
-                                calcurator.setNoiseReducer(SimplePointCalculator.Companion.NOISE_RECUDER.V2)
-                                val v2Point = (this@CompareActivity.service as AudioService)?.analyze(calcurator)
+                                calcurator.setV1()
+                                val v1Point = (this@CompareActivity.service as AudioService)?.analyze(calcurator)
 
                                 this@CompareActivity.runOnUiThread {
                                     (this@CompareActivity.service as? AudioService)?.addOtherChart(
-                                            point?.analyzedFreqList,
+                                            v1Point?.analyzedFreqList,
                                             "男女設定キャリブレーション",
                                             Color.rgb(10, 255, 10))
                                     (this@CompareActivity.service as? AudioService)?.addOtherChart(
                                             v2Point?.analyzedFreqList,
                                             "周波数キャリブレーション",
                                             Color.rgb(255, 10, 255))
-                                    txtScore.text = String.format("Point: %s, F-Point: %s", point?.score, v2Point?.score)
+                                    txtScore.text = String.format("Point: %s, F-Point: %s", v1Point?.score, v2Point?.score)
                                 }
                             }
                         })
@@ -147,22 +147,22 @@ class CompareActivity : AppCompatActivity() {
                             this@CompareActivity.service!!.clearFrequencies()
                             this@CompareActivity.service!!.debugTestPlay(file.name, path, playback = true, callback = object : Runnable {
                                 override fun run() {
-                                    val point = this@CompareActivity.service?.analyze()
+                                    val v2Point = this@CompareActivity.service?.analyze()
+
                                     val calcurator = SimplePointCalculator()
-                                    calcurator.setCalibrationType(SimplePointCalculator.Companion.CALIBRATION_TYPE.FREQ)
-                                    calcurator.setNoiseReducer(SimplePointCalculator.Companion.NOISE_RECUDER.V2)
-                                    val v2Point = (this@CompareActivity.service as AudioService)?.analyze(calcurator)
+                                    calcurator.setV1()
+                                    val v1Point = (this@CompareActivity.service as AudioService)?.analyze(calcurator)
 
                                     this@CompareActivity.runOnUiThread {
                                         (this@CompareActivity.service as? AudioService)?.addOtherChart(
-                                                point?.analyzedFreqList,
+                                                v1Point?.analyzedFreqList,
                                                 "男女設定キャリブレーション",
                                                 Color.rgb(10, 255, 10))
                                         (this@CompareActivity.service as? AudioService)?.addOtherChart(
                                                 v2Point?.analyzedFreqList,
                                                 "周波数キャリブレーション",
                                                 Color.rgb(255, 10, 255))
-                                        txtScore.text = String.format("Point: %s, F-Point: %s", point?.score, v2Point?.score)
+                                        txtScore.text = String.format("Point: %s, F-Point: %s", v1Point?.score, v2Point?.score)
 
                                         this@CompareActivity.nowStatus = REIBUN_STATUS.NORMAL
                                         this@CompareActivity.updateButtonStatus()
