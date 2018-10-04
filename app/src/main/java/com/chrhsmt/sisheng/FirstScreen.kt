@@ -46,17 +46,22 @@ class FirstScreen : AppCompatActivity() {
 
         // タイトルのフォントを変更する
         FontUtils.changeFont(this, textFirstScreenTitle)
-        FontUtils.changeFont(this, textFirstScreenTitle2)
+        // 2018.10.04 2018年版ではランダム機能は削除
+        //FontUtils.changeFont(this, textFirstScreenTitle2)
 
         // ボタンのフォントを変更する
         FontUtils.changeFont(this, btnNini)
-        FontUtils.changeFont(this, btnRandom)
+        // 2018.10.04 2018年版ではランダム機能は削除
+        /* FontUtils.changeFont(this, btnRandom) */
         FontUtils.changeFont(this, btnWoman)
         FontUtils.changeFont(this, btnMan)
 
+        // 2018.10.04 2018年版ではランダム機能は削除
         // 画面遷移に関わるランダム、任意ボタンを一旦無効にする
-        setRandomAndNiniButtonEnable(false)
+        // setRandomAndNiniButtonEnable(false)
 
+        // 2018.10.04 2018年版ではランダム機能は削除 --->
+        /*
         // ランダム例文に移動
         btnRandom.setOnClickListener(View.OnClickListener {
             val reibunInfo = ReibunInfo.getInstance(this)
@@ -69,7 +74,8 @@ class FirstScreen : AppCompatActivity() {
                     ReibunActivity::class.java)
             startActivity(intent)
             overridePendingTransition(0, 0);
-        })
+        }) */
+        // 2018.10.04 2018年版ではランダム機能は削除 <---
 
         // 任意例文に移動
         btnNini.setOnClickListener(View.OnClickListener {
@@ -113,20 +119,25 @@ class FirstScreen : AppCompatActivity() {
         btnMan.setBackgroundResource(shape_rounded_corners_30dp)
         btnWoman.setBackgroundResource(shape_rounded_corners_30dp_selected)
         Settings.sex = resources.getStringArray(R.array.sexes)[1]
-        setRandomAndNiniButtonEnable(true)
+        // 2018.10.04 2018年版ではランダム機能は削除
+        //setRandomAndNiniButtonEnable(true)
     }
 
     private fun selectMan() {
         btnMan.setBackgroundResource(shape_rounded_corners_30dp_selected)
         btnWoman.setBackgroundResource(shape_rounded_corners_30dp)
         Settings.sex = resources.getStringArray(R.array.sexes)[0]
-        setRandomAndNiniButtonEnable(true)
+        // 2018.10.04 2018年版ではランダム機能は削除
+        //setRandomAndNiniButtonEnable(true)
     }
 
+    // 2018.10.04 2018年版ではランダム機能は削除 --->
+    /*
     private fun setRandomAndNiniButtonEnable(enable: Boolean) {
         btnRandom.setEnabled(enable)
         btnNini.setEnabled(enable)
-    }
+    }*/
+    // 2018.10.04 2018年版ではランダム機能は削除 <---
 
     private fun setUpReadWriteExternalStorage() {
         val dir = ExternalMedia.getExternalDirectoryPath(this)
