@@ -40,6 +40,9 @@ object Settings {
     // スタッフ用スクリプト起動要否
     var PRACTICE_STAFF_SCRIPT = false
 
+    // MFSZ2018用スクリプト起動要否
+    var MFSZ_2018_SCRIPT = true
+
     // Set Default Value.
     fun setDefaultValue(context: Context, force:Boolean) {
         if (force) {

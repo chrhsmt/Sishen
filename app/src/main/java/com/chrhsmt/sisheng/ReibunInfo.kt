@@ -16,7 +16,14 @@ class ReibunInfo {
         private var instanceForTest : ReibunInfo? = null
 
         fun  getInstance(context: Context): ReibunInfo {
-            if (Settings.PRACTICE_STAFF_SCRIPT) {
+
+            if (Settings.MFSZ_2018_SCRIPT) {
+                if (instance == null)
+                    instance = ReibunInfo(context, "mfsz2018/reibun_list.xml")
+
+                return instance!!
+
+            } else if (Settings.PRACTICE_STAFF_SCRIPT) {
                 if (instanceForTest == null)
                     instanceForTest = ReibunInfo(context, "staff_script_list.xml")
 
@@ -53,13 +60,20 @@ class ReibunInfo {
     class ReibunInfoItem {
         var id : Int = -1
         var lecture : String = ""
+        var category: String = ""
         var pinyin : String = ""
         var chinese : String = ""
         var japanese : String = ""
         var english : String = ""
 
         fun getMFSZExampleAudioFileName(): String {
-            return "mfsz/" + ReibunInfo.myInstance()!!.audioFileNameList.first { asset -> asset.matches(Regex(String.format("%d_(f|m)\\.wav", this.id))) }
+            var prefix = "mfsz/"
+            var format = "%d_(f|m)\\.wav"
+            if (Settings.MFSZ_2018_SCRIPT) {
+                prefix = "mfsz2018/voices/"
+                format = Settings.sex!!.first().toUpperCase() + "%02d\\.wav"
+            }
+            return prefix + ReibunInfo.myInstance()!!.audioFileNameList.first { asset -> asset.matches(Regex(String.format(format, this.id))) }
         }
     }
 
@@ -71,7 +85,9 @@ class ReibunInfo {
         ENGLISH(4),
         NONE(5),
     }
+
     private var itemList : ArrayList<ReibunInfoItem> = ArrayList()
+
     var selectedItem : ReibunInfoItem? = null
 
     // mfsz用お手本音源ファイル名List
@@ -115,6 +131,7 @@ class ReibunInfo {
                     when (xppName){
                         "ID" -> item.id = xpp.text.toInt()
                         "LECTURE" -> item.lecture = xpp.text
+                        "CATEGORY" -> item.category = xpp.text
                         "PINYIN" -> item.pinyin = xpp.text
                         "CHINESE" -> item.chinese = xpp.text
                         "JAPANESE" -> item.japanese = xpp.text
@@ -126,7 +143,11 @@ class ReibunInfo {
         }
 
         // お手本音源ファイル名取得
-        this.audioFileNameList = context.assets.list("mfsz")
+        if (Settings.MFSZ_2018_SCRIPT) {
+            this.audioFileNameList = context.assets.list("mfsz2018/voices")
+        } else {
+            this.audioFileNameList = context.assets.list("mfsz")
+        }
     }
 
     fun getSentenceList(type : SENTENCE_TYPE, needRemoveNewLine: Boolean) : ArrayList<String> {
