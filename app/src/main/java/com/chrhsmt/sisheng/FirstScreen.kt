@@ -57,8 +57,8 @@ class FirstScreen : AppCompatActivity() {
         FontUtils.changeFont(this, btnMan)
 
         // 2018.10.04 2018年版ではランダム機能は削除
-        // 画面遷移に関わるランダム、任意ボタンを一旦無効にする
-        // setRandomAndNiniButtonEnable(false)
+        // 画面遷移に関わる任意ボタンを一旦無効にする
+        setNiniButtonEnable(false)
 
         // 2018.10.04 2018年版ではランダム機能は削除 --->
         /*
@@ -120,7 +120,7 @@ class FirstScreen : AppCompatActivity() {
         btnWoman.setBackgroundResource(shape_rounded_corners_30dp_selected)
         Settings.sex = resources.getStringArray(R.array.sexes)[1]
         // 2018.10.04 2018年版ではランダム機能は削除
-        //setRandomAndNiniButtonEnable(true)
+        setNiniButtonEnable(true)
     }
 
     private fun selectMan() {
@@ -128,15 +128,14 @@ class FirstScreen : AppCompatActivity() {
         btnWoman.setBackgroundResource(shape_rounded_corners_30dp)
         Settings.sex = resources.getStringArray(R.array.sexes)[0]
         // 2018.10.04 2018年版ではランダム機能は削除
-        //setRandomAndNiniButtonEnable(true)
+        setNiniButtonEnable(true)
     }
 
     // 2018.10.04 2018年版ではランダム機能は削除 --->
-    /*
-    private fun setRandomAndNiniButtonEnable(enable: Boolean) {
-        btnRandom.setEnabled(enable)
+    private fun setNiniButtonEnable(enable: Boolean) {
+        //btnRandom.setEnabled(enable)
         btnNini.setEnabled(enable)
-    }*/
+    }
     // 2018.10.04 2018年版ではランダム機能は削除 <---
 
     private fun setUpReadWriteExternalStorage() {
