@@ -1,6 +1,5 @@
 package com.chrhsmt.sisheng.point
 
-import android.util.Range
 import com.chrhsmt.sisheng.AudioService
 import com.chrhsmt.sisheng.Settings
 import de.qaware.chronix.distance.DistanceFunctionEnum
@@ -21,6 +20,52 @@ abstract class PointCalculator {
         val EXAMPLE_FILE_SEX_TYPE_REFEX = Regex("^.*_(f|m).wav$")
     }
     abstract fun calc(frequencies: MutableList<Float>, testFrequencies: MutableList<Float>): Point
+
+    /**
+     * お手本音声の最初の音を参考に、録音した音声をキャリブレーションして周波数を調整する.
+     */
+    fun calibrateFrequencies(analyzedFreqList: MutableList<Float>, testFreqList: MutableList<Float>) {
+
+        if (analyzedFreqList.size == 0 || testFreqList.size == 0) {
+            return
+        }
+
+        val testFirst = testFreqList.first { fl: Float -> fl > 0 }
+
+        val firstSentence = analyzedFreqList.dropWhile { fl: Float -> fl <= 0 }.takeWhile { fl: Float -> fl > 0 }.sorted()
+        val ave = firstSentence.average()
+        var medium: Float = 0f
+        if (firstSentence.size % 2 == 1) {
+            medium = firstSentence.get(firstSentence.size / 2)
+        } else {
+            medium = (firstSentence.get(firstSentence.size / 2) + firstSentence.get(firstSentence.size / 2 - 1)) / 2
+        }
+
+//        val variance = firstSentence.sumByDouble { fl -> Math.pow((fl - ave), 2.0) } / firstSentence.size
+//        val sd = Math.sqrt(variance)
+
+        val degree = testFirst - medium
+
+        if (degree > 0) {
+            // お手本のほうが周波数が高かった場合
+            analyzedFreqList.forEachIndexed { index, fl ->
+                if (fl > 0) {
+                    analyzedFreqList[index] = fl + degree
+                }
+            }
+        } else {
+            // お手本のほうが周波数が低かった場合
+            analyzedFreqList.forEachIndexed { index, fl ->
+                if (fl > 0) {
+                    analyzedFreqList[index] = fl - (degree * -1) // マイナスなので一度反転
+                    if (analyzedFreqList[index] < 0) {
+                        analyzedFreqList[index] = 0F
+                    }
+                }
+            }
+        }
+
+    }
 
     /**
      * 音声周波数の男女差を調整する
@@ -96,7 +141,7 @@ abstract class PointCalculator {
      * Removing noises.
      * @freqList List of frequency
      */
-    fun removeNoises(freqList: MutableList<Float>) {
+    open fun removeNoises(freqList: MutableList<Float>) {
 
         val noizeMaxLength = Settings.freqNoizeCountThreashold
         val freqSize = freqList.size
@@ -113,7 +158,7 @@ abstract class PointCalculator {
             }
 
             if (noizeIndexList.size > noizeMaxLength) {
-                // ノイズ判定サイズを超えたものはノイズとみなさないのでクリアー
+                // ノイズ判定サイズを超えた連続した部分のものはノイズとみなさないのでクリアー
                 noizeIndexList.clear()
             }
 

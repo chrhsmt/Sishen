@@ -1,6 +1,7 @@
 package com.chrhsmt.sisheng
 
 import android.content.Context
+import android.util.Log
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
@@ -10,6 +11,7 @@ import java.io.StringReader
  */
 class ReibunInfo {
     companion object {
+        private val TAG = "ReibunInfo"
         private var instance : ReibunInfo? = null
         private var instanceForTest : ReibunInfo? = null
 
@@ -93,21 +95,21 @@ class ReibunInfo {
             if (eventType == XmlPullParser.START_DOCUMENT) {
                 println("Start document")
             } else if (eventType == XmlPullParser.START_TAG) {
-                System.out.println("Start tag " + xpp.name)
+                Log.d(TAG,"Start tag " + xpp.name)
                 // センテンス開始処理
                 if (xpp.name == "SENTENCE") {
                     item = ReibunInfoItem()
                 }
                 xppName = xpp.name
             } else if (eventType == XmlPullParser.END_TAG) {
-                System.out.println("End tag " + xpp.name)
+                Log.d(TAG,"End tag " + xpp.name)
                 // センテンス終了処理
                 if (xpp.name == "SENTENCE" && item != null) {
                     itemList.add(item)
                 }
                 xppName = ""
             } else if (eventType == XmlPullParser.TEXT) {
-                System.out.println("Name" + xpp.name + " Text " + xpp.text)
+                Log.d(TAG,"Name" + xpp.name + " Text " + xpp.text)
                 // 各要素処理
                 if (item != null) {
                     when (xppName){
@@ -171,5 +173,9 @@ class ReibunInfo {
     }
     fun setSelectedItem(position : Int) {
         selectedItem = itemList[position]
+    }
+
+    fun getItemList(): List<ReibunInfoItem> {
+        return this.itemList
     }
 }
