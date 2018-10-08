@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.chrhsmt.sisheng.ui.DividerItemDecoration
 
 
 /**
@@ -19,10 +20,11 @@ import android.view.ViewGroup
  */
 class NiniReibunFragmentForTab : Fragment() {
 
-    fun setCategory(category : String) {
+    fun setCategory(category: String) {
         this.category = category
     }
-    private var category : String? = null
+
+    private var category: String? = null
 
     // TODO: Customize parameters
     private var columnCount = 1
@@ -50,8 +52,10 @@ class NiniReibunFragmentForTab : Fragment() {
                     else -> GridLayoutManager(context, columnCount)
                 }
 
+                addItemDecoration(DividerItemDecoration(context))
+
                 val reibunInfo = ReibunInfo.getInstance(context)
-                val ret : List<ReibunInfo.ReibunInfoItem> = reibunInfo.getItemListByCategory(category)
+                val ret: List<ReibunInfo.ReibunInfoItem> = reibunInfo.getItemListByCategory(category)
                 adapter = NiniReibunViewAdapterForTab(ret, listener)
             }
         }
