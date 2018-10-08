@@ -80,7 +80,7 @@ class FirstScreen : AppCompatActivity() {
         // 任意例文に移動
         btnNini.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@FirstScreen,
-                    NiniReibunActivity::class.java)
+                    NiniReibunActivityForTab::class.java)
             startActivity(intent)
             overridePendingTransition(0, 0);
         })

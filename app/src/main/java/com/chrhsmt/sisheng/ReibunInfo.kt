@@ -5,6 +5,7 @@ import android.util.Log
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
+import java.util.*
 
 /**
  * Created by hkimura on 2017/10/26.
@@ -150,6 +151,34 @@ class ReibunInfo {
         }
     }
 
+    fun getCategoryList() : List<String> {
+        val ret: ArrayList<String> = ArrayList()
+
+        for (item in itemList) {
+            if (!ret.contains(item.category)) {
+                ret.add(item.category)
+            }
+        }
+
+
+        return ret.sorted()
+    }
+
+    fun getItemListByCategory(category :String?) : List<ReibunInfoItem> {
+        val ret: ArrayList<ReibunInfoItem> = ArrayList()
+        if (category == null) {
+            return ret
+        }
+
+        for (item in itemList) {
+            if (category.equals(item.category)) {
+                ret.add(item)
+            }
+        }
+
+        return ret
+    }
+
     fun getSentenceList(type : SENTENCE_TYPE, needRemoveNewLine: Boolean) : ArrayList<String> {
         return getSentenceList(type, SENTENCE_TYPE.NONE, SENTENCE_TYPE.NONE, needRemoveNewLine)
     }
@@ -193,10 +222,14 @@ class ReibunInfo {
         return ret
     }
     fun setSelectedItem(position : Int) {
-        selectedItem = itemList[position]
+        this.selectedItem = itemList[position]
     }
 
     fun getItemList(): List<ReibunInfoItem> {
         return this.itemList
+    }
+
+    fun setSelectedItemByItem(item : ReibunInfoItem?) {
+        this.selectedItem = item
     }
 }
