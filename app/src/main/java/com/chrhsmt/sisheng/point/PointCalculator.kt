@@ -18,6 +18,7 @@ abstract class PointCalculator {
         val HELZT_DEGREE_OF_SEX_DEFERENCE: Int = 60
         // 例題ファイルの性別タイプ取得用の正規表現
         val EXAMPLE_FILE_SEX_TYPE_REFEX = Regex("^.*_(f|m).wav$")
+        val EXAMPLE_FILE_SEX_TYPE_REFEX_2018 = Regex("^mfsz2018/voices/(F|M).*.wav$")
     }
     abstract fun calc(frequencies: MutableList<Float>, testFrequencies: MutableList<Float>): Point
 
@@ -205,7 +206,11 @@ abstract class PointCalculator {
     }
 
     fun getExampleFileSexType() : String {
-        val result = EXAMPLE_FILE_SEX_TYPE_REFEX.find(Settings.sampleAudioFileName!!)
+        val result = if (Settings.MFSZ_2018_SCRIPT) {
+            EXAMPLE_FILE_SEX_TYPE_REFEX_2018.find(Settings.sampleAudioFileName!!)
+        } else {
+            EXAMPLE_FILE_SEX_TYPE_REFEX.find(Settings.sampleAudioFileName!!)
+        }
         return result!!.groups[1]!!.value
     }
 

@@ -286,7 +286,11 @@ class AudioService : AudioServiceInterface {
                     directory.mkdir()
                 }
                 val dateTimeString = SimpleDateFormat("yyyy-MM-dd_HH_mm_ss").format(Date())
-                val id = Regex("^mfsz/(\\d+)_[f|m].wav$").find(Settings.sampleAudioFileName!!)?.groups?.last()?.value
+                val id = if (Settings.MFSZ_2018_SCRIPT) {
+                    Regex("^mfsz2018/voices/[F|M](\\d+).wav$").find(Settings.sampleAudioFileName!!)?.groups?.last()?.value
+                } else {
+                    Regex("^mfsz/(\\d+)_[f|m].wav$").find(Settings.sampleAudioFileName!!)?.groups?.last()?.value
+                }
                 val sex = Settings.sex!!.first().toLowerCase()
                 val newFile = File(directory, String.format("%s-%s-%s.wav", dateTimeString, id, sex))
                 val format = TarsosDSPAudioFormat(AUDIO_FILE_SAMPLING_RATE.toFloat(), 16, 1, true, false)

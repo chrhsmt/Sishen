@@ -1,6 +1,7 @@
 package com.chrhsmt.sisheng
 
 import android.Manifest.permission.RECORD_AUDIO
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -18,6 +19,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import be.tarsos.dsp.pitch.PitchProcessor
+import com.chrhsmt.sisheng.debug.AnalyzeActivity
 import com.chrhsmt.sisheng.exception.AudioServiceException
 import com.chrhsmt.sisheng.network.RaspberryPi
 import com.chrhsmt.sisheng.point.FreqTransitionPointCalculator
@@ -25,6 +27,7 @@ import com.chrhsmt.sisheng.point.NMultiplyLogarithmPointCalculator
 import com.chrhsmt.sisheng.ui.Chart
 import com.github.mikephil.charting.charts.LineChart
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_nini_reibun.*
 import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.Call
 import okhttp3.Callback
@@ -361,6 +364,15 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        // タイトル長押下された場合は、解析画面に遷移する。
+        // TODO: 普通に画面上のボタンにしたい。。
+        if (Settings.DEBUG_MODE) {
+            toolbar.setOnLongClickListener(View.OnLongClickListener {
+                val intent = Intent(this@MainActivity, AnalyzeActivity::class.java)
+                startActivity(intent)
+                true
+            })
+        }
     }
 
     private fun setRecordedSampleSpinner() {

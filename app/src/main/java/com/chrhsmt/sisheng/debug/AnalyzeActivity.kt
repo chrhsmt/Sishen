@@ -21,11 +21,12 @@ class AnalyzeActivity : Activity() {
 
     companion object {
         val TAG = "AnalyzeActivity"
+        val FILENAME_REGEX = ".*-(.*)-(.*)\\.wav"
     }
 
     private var service: AudioService? = null
     private var files: List<File>? = null
-    private var datas: List<AnalyzedRecordedData>? = null
+//    private var datas: List<AnalyzedRecordedData>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,39 @@ class AnalyzeActivity : Activity() {
 
         val cardManager: SDCardManager = SDCardManager()
         cardManager.setUpReadWriteExternalStorage(this)
+
+
+        this.files = cardManager.getDirectories()
+
+        val fileNames = this.files?.map { data -> data.name }
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fileNames)
+        listFiles.adapter = adapter as ListAdapter
+
+        listFiles.setOnItemClickListener { parent, view, position, id ->
+            // TODO: 親ディレクトリに戻る処理をちゃんと書くべき
+            if (this.files!!.size <= position) {
+                this.files = cardManager.getDirectories()
+                val fileNames = this.files?.map { data -> data.name }
+                val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fileNames)
+                listFiles.adapter = adapter as ListAdapter
+                listFiles.refreshDrawableState()
+                return@setOnItemClickListener
+            }
+
+            val dir = this.files?.get(position)
+            if (dir?.isDirectory!!) {
+                this.files = dir.listFiles().toList()
+                val fileNames = this.files?.map { file -> file.name }?.toMutableList()
+                fileNames?.add("<< return")
+                val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fileNames)
+                listFiles.adapter = adapter
+                listFiles.refreshDrawableState()
+            } else {
+                this.goCompareActivity(position)
+            }
+        }
+
+        /* 2017年のファイルデバッグ用
         this.files = cardManager.getFileList()
         val lines = cardManager.readCsv(this@AnalyzeActivity, "result.csv")
 
@@ -75,6 +109,7 @@ class AnalyzeActivity : Activity() {
             startActivity(intent)
             overridePendingTransition(0, 0);
         }
+        */
 
         // タイトル長押下された場合は、デバッグ画面に遷移する。
         if (Settings.DEBUG_MODE) {
@@ -117,7 +152,7 @@ class AnalyzeActivity : Activity() {
                     val fileName = file.name
 
                     // ファイル名から条件取得
-                    ".*-(.*)-(.*)\\.wav".toRegex().find(fileName)?.groups?.let { it ->
+                    FILENAME_REGEX.toRegex().find(fileName)?.groups?.let { it ->
                         val id = it.get(1)?.value
                         val sex = it.get(2)?.value
                         if (id != null && !"null".equals(id)) {
@@ -160,6 +195,27 @@ class AnalyzeActivity : Activity() {
                 }
             }).start()
         })
+    }
+
+    private fun goCompareActivity(position: Int) {
+
+        // 暫定的に
+        Settings.MFSZ_2018_SCRIPT = true
+        val file = this.files?.get(position)!!
+        var itemPosition = 0
+        FILENAME_REGEX.toRegex().find(file.name)?.groups?.let { it ->
+            itemPosition = it.get(1)!!.value.toInt().minus(1)
+            Settings.sex = it.get(2)!!.value
+        }
+
+        val reibunInfo = ReibunInfo.getInstance(this)
+        reibunInfo.setSelectedItem(itemPosition)
+        AnalyzedRecordedData.setSelected(AnalyzedRecordedData(file, null))
+
+        val intent = Intent(this@AnalyzeActivity, CompareActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(0, 0);
+
     }
 
     private fun extractLastYearData(file: File, buffer: StringBuilder, sampleData: MutableList<Float>, id: String, sex: String, fileName: String) {

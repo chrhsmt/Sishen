@@ -60,6 +60,14 @@ class SDCardManager {
         return ret
     }
 
+    fun getDirectories(): List<File> {
+        var ret = ArrayList<File>()
+        ExternalMedia.saveDir?.takeIf { it -> it.canRead() }?.let { it ->
+            it.listFiles { file -> file.isDirectory && file.list().isNotEmpty() }.forEach { file -> ret.add(file) }
+        }
+        return ret
+    }
+
     @SuppressLint("WrongConstant")
     fun copyAudioFile(file: File, activity: Activity): String {
         // ファイル移動

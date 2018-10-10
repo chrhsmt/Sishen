@@ -95,23 +95,27 @@ class CompareActivity : AppCompatActivity() {
                         val path= SDCardManager().copyAudioFile(file, this@CompareActivity)
                         this@CompareActivity.service!!.debugTestPlay(file.name, path, callback = object : Runnable {
                             override fun run() {
-                                val v2Point = this@CompareActivity.service?.analyze()
+                                try {
+                                    val v2Point = this@CompareActivity.service?.analyze()
+                                    val calcurator = SimplePointCalculator()
+                                    calcurator.setV1()
+                                    val v1Point = (this@CompareActivity.service as AudioService)?.analyze(calcurator)
 
-                                val calcurator = SimplePointCalculator()
-                                calcurator.setV1()
-                                val v1Point = (this@CompareActivity.service as AudioService)?.analyze(calcurator)
-
-                                this@CompareActivity.runOnUiThread {
-                                    (this@CompareActivity.service as? AudioService)?.addOtherChart(
-                                            v1Point?.analyzedFreqList,
-                                            "男女設定キャリブレーション",
-                                            Color.rgb(10, 255, 10))
-                                    (this@CompareActivity.service as? AudioService)?.addOtherChart(
-                                            v2Point?.analyzedFreqList,
-                                            "周波数キャリブレーション",
-                                            Color.rgb(255, 10, 255))
-                                    txtScore.text = String.format("Point: %s, F-Point: %s", v1Point?.score, v2Point?.score)
+                                    this@CompareActivity.runOnUiThread {
+                                        (this@CompareActivity.service as? AudioService)?.addOtherChart(
+                                                v1Point?.analyzedFreqList,
+                                                "男女設定キャリブレーション",
+                                                Color.rgb(10, 255, 10))
+                                        (this@CompareActivity.service as? AudioService)?.addOtherChart(
+                                                v2Point?.analyzedFreqList,
+                                                "周波数キャリブレーション",
+                                                Color.rgb(255, 10, 255))
+                                        txtScore.text = String.format("Point: %s, F-Point: %s", v1Point?.score, v2Point?.score)
+                                    }
+                                } catch (e: AudioServiceException) {
+                                    txtDebugError.visibility = View.VISIBLE
                                 }
+
                             }
                         })
                     }
@@ -147,27 +151,33 @@ class CompareActivity : AppCompatActivity() {
                             this@CompareActivity.service!!.clearFrequencies()
                             this@CompareActivity.service!!.debugTestPlay(file.name, path, playback = true, callback = object : Runnable {
                                 override fun run() {
-                                    val v2Point = this@CompareActivity.service?.analyze()
 
-                                    val calcurator = SimplePointCalculator()
-                                    calcurator.setV1()
-                                    val v1Point = (this@CompareActivity.service as AudioService)?.analyze(calcurator)
+                                    try {
+                                        val v2Point = this@CompareActivity.service?.analyze()
 
-                                    this@CompareActivity.runOnUiThread {
-                                        (this@CompareActivity.service as? AudioService)?.addOtherChart(
-                                                v1Point?.analyzedFreqList,
-                                                "男女設定キャリブレーション",
-                                                Color.rgb(10, 255, 10))
-                                        (this@CompareActivity.service as? AudioService)?.addOtherChart(
-                                                v2Point?.analyzedFreqList,
-                                                "周波数キャリブレーション",
-                                                Color.rgb(255, 10, 255))
-                                        txtScore.text = String.format("Point: %s, F-Point: %s", v1Point?.score, v2Point?.score)
+                                        val calcurator = SimplePointCalculator()
+                                        calcurator.setV1()
+                                        val v1Point = (this@CompareActivity.service as AudioService)?.analyze(calcurator)
 
-                                        this@CompareActivity.nowStatus = REIBUN_STATUS.NORMAL
-                                        this@CompareActivity.updateButtonStatus()
-                                        dialog.dismiss()
+                                        this@CompareActivity.runOnUiThread {
+                                            (this@CompareActivity.service as? AudioService)?.addOtherChart(
+                                                    v1Point?.analyzedFreqList,
+                                                    "男女設定キャリブレーション",
+                                                    Color.rgb(10, 255, 10))
+                                            (this@CompareActivity.service as? AudioService)?.addOtherChart(
+                                                    v2Point?.analyzedFreqList,
+                                                    "周波数キャリブレーション",
+                                                    Color.rgb(255, 10, 255))
+                                            txtScore.text = String.format("Point: %s, F-Point: %s", v1Point?.score, v2Point?.score)
+
+                                            this@CompareActivity.nowStatus = REIBUN_STATUS.NORMAL
+                                            this@CompareActivity.updateButtonStatus()
+                                            dialog.dismiss()
+                                        }
+                                    } catch (e: AudioServiceException) {
+                                        txtDebugError.visibility = View.VISIBLE
                                     }
+
                                 }
                             })
                         }
