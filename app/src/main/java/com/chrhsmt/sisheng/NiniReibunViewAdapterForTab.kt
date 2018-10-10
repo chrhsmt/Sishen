@@ -1,20 +1,13 @@
 package com.chrhsmt.sisheng
 
-import android.content.Context
+
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
-
 import com.chrhsmt.sisheng.NiniReibunFragmentForTab.OnListFragmentInteractionListener
-
 import kotlinx.android.synthetic.main.fragment_tab_nini_reibun_item.view.*
-import android.content.res.TypedArray
-import android.graphics.Canvas
-import android.graphics.Rect
-import android.graphics.drawable.Drawable
 
 
 /**
@@ -47,7 +40,7 @@ class NiniReibunViewAdapterForTab(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mIdView.text = Integer.toString(item.id)
-        holder.mContentView.text = ReibunInfo.replaceNewLine(item.chinese +"\n" + item.pinyin)
+        holder.mContentView.text = ReibunInfo.replaceNewLine(item.chinese + "\n" + item.english)
 
         with(holder.mView) {
             tag = item
