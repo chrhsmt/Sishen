@@ -210,7 +210,10 @@ class AnalyzeActivity : Activity() {
 
         val reibunInfo = ReibunInfo.getInstance(this)
         reibunInfo.setSelectedItem(itemPosition)
-        AnalyzedRecordedData.setSelected(AnalyzedRecordedData(file, null))
+        var data = AnalyzedRecordedData(file, null)
+        data.sex = Settings.sex
+        data.id = itemPosition + 1
+        AnalyzedRecordedData.setSelected(data)
 
         val intent = Intent(this@AnalyzeActivity, CompareActivity::class.java)
         startActivity(intent)

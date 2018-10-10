@@ -110,6 +110,11 @@
                     android:layout_height="match_parent"
                     android:layout_weight="17" />
 
+                <Button
+                    android:id="@+id/txtDebugSexButton"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:text="性別入れ替え"/>
             </LinearLayout>
 
             <Space

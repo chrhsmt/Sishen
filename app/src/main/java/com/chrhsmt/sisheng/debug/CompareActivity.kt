@@ -61,6 +61,8 @@ class CompareActivity : AppCompatActivity() {
         txtDebugPinyin.text = ReibunInfo.replaceNewLine(reibunInfo.selectedItem!!.pinyin)
         txtDebugChinese.text = ReibunInfo.replaceNewLine(reibunInfo.selectedItem!!.chinese)
 
+        txtDebugReibun.text = "file name: " + AnalyzedRecordedData.getSelected()!!.file.name + " sex: " + Settings.sex
+
         // 音声再生、録画の準備
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), PERMISSION_REQUEST_CODE)
@@ -196,6 +198,19 @@ class CompareActivity : AppCompatActivity() {
                     updateButtonStatus()
                 }
             }).start()
+        })
+
+        txtDebugSexButton.setOnClickListener({ v ->
+            Settings.sex = if (Settings.sex == "f") {
+                "m"
+            } else {
+                "f"
+            }
+            val intent = Intent(this@CompareActivity, CompareActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0);
+            finish()
+
         })
 
         // タイトル長押下された場合は、デバッグ画面に遷移する。
