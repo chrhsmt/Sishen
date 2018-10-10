@@ -89,21 +89,8 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="30dp"
             android:layout_weight="7" />
-
-        <com.chrhsmt.sisheng.ui.AutoResizeTextView
-            android:id="@+id/textFirstScreenTitle2"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="15"
-            android:text="@string/screen1_4"
-            android:gravity="center_vertical"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textSize="40sp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp" />
 
         <LinearLayout
 
@@ -116,18 +103,18 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="20"
+                android:layout_weight="35"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 
             <com.chrhsmt.sisheng.ui.AutoResizeButton
-                android:id="@+id/btnRandom"
+                android:id="@+id/btnNini"
                 android:layout_width="0dp"
-                android:layout_weight="25"
+                android:layout_weight="30"
                 android:layout_height="match_parent"
                 android:background="@drawable/shape_rounded_corners_30dp"
                 android:textStyle="bold"
-                android:text="@string/screen1_5"
+                android:text="@string/screen1_7"
                 android:textSize="40sp"
                 android:textAlignment="center"
                 android:gravity="center_vertical"
@@ -137,19 +124,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="10" />
-
-            <com.chrhsmt.sisheng.ui.AutoResizeButton
-                android:id="@+id/btnNini"
-                android:layout_width="0dp"
-                android:layout_weight="25"
-                android:layout_height="match_parent"
-                android:background="@drawable/shape_rounded_corners_30dp"
-                android:textStyle="bold"
-                android:text="@string/screen1_6"
-                android:textSize="40sp"
-                android:textAlignment="center"
-                android:gravity="center_vertical"
+                android:layout_weight="35"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 
