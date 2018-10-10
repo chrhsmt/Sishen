@@ -43,7 +43,7 @@ class NiniReibunViewAdapterForTab(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mIdView.text = Integer.toString(item.id)
-        var htmlStr: String = ReibunInfo.replaceNewLine(item.chinese + "\n" + item.english)
+        var htmlStr: String = ReibunInfo.replaceNewLineWithBrTag(item.chinese + "\\n" + item.english)
         htmlStr = htmlStr.replace(item.strong_word, "<font color=\"red\">" + item.strong_word + "</font>")
         holder.mContentView.text = fromHtml(htmlStr)
 

@@ -56,6 +56,9 @@ class ReibunInfo {
         fun replaceNewLine(str: String) : String {
             return str.replace("\\n", "\n")
         }
+        fun replaceNewLineWithBrTag(str: String) : String {
+            return str.replace("\\n", "<br>")
+        }
     }
 
     class ReibunInfoItem {
