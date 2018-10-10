@@ -1,20 +1,16 @@
 package com.chrhsmt.sisheng
 
-import android.content.Context
+
+import android.os.Build
 import android.support.v7.widget.RecyclerView
+import android.text.Html
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
-
 import com.chrhsmt.sisheng.NiniReibunFragmentForTab.OnListFragmentInteractionListener
-
 import kotlinx.android.synthetic.main.fragment_tab_nini_reibun_item.view.*
-import android.content.res.TypedArray
-import android.graphics.Canvas
-import android.graphics.Rect
-import android.graphics.drawable.Drawable
 
 
 /**
@@ -47,11 +43,21 @@ class NiniReibunViewAdapterForTab(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mIdView.text = Integer.toString(item.id)
-        holder.mContentView.text = ReibunInfo.replaceNewLine(item.chinese +"\n" + item.pinyin)
+        var htmlStr: String = ReibunInfo.replaceNewLineWithBrTag(item.chinese + "\\n" + item.english)
+        htmlStr = htmlStr.replace(item.strong_word, "<font color=\"red\">" + item.strong_word + "</font>")
+        holder.mContentView.text = fromHtml(htmlStr)
 
         with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)
+        }
+    }
+
+    fun fromHtml(source: String): Spanned {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            Html.fromHtml(source)
         }
     }
 
