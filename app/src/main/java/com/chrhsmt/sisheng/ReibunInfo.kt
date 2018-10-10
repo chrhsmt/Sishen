@@ -66,6 +66,7 @@ class ReibunInfo {
         var chinese : String = ""
         var japanese : String = ""
         var english : String = ""
+        var strong_word : String = ""
 
         fun getMFSZExampleAudioFileName(): String {
             var prefix = "mfsz/"
@@ -84,7 +85,8 @@ class ReibunInfo {
         CHINESE(2),
         JAPANESE(3),
         ENGLISH(4),
-        NONE(5),
+        STRONG_WORD(5),
+        NONE(6),
     }
 
     private var itemList : ArrayList<ReibunInfoItem> = ArrayList()
@@ -137,6 +139,7 @@ class ReibunInfo {
                         "CHINESE" -> item.chinese = xpp.text
                         "JAPANESE" -> item.japanese = xpp.text
                         "ENGLISH" -> item.english = xpp.text
+                        "STRONG_WORD" -> item.strong_word = xpp.text
                     }
                 }
             }
@@ -196,6 +199,7 @@ class ReibunInfo {
                 SENTENCE_TYPE.CHINESE -> str = item.chinese
                 SENTENCE_TYPE.JAPANESE -> str = item.japanese
                 SENTENCE_TYPE.ENGLISH -> str = item.english
+                SENTENCE_TYPE.STRONG_WORD -> str = item.strong_word
             }
             when (type2) {
                 SENTENCE_TYPE.LECTURE -> str = str + "\n" + item.lecture
@@ -203,6 +207,7 @@ class ReibunInfo {
                 SENTENCE_TYPE.CHINESE -> str = str + "\n" + item.chinese
                 SENTENCE_TYPE.JAPANESE -> str = str + "\n" + item.japanese
                 SENTENCE_TYPE.ENGLISH -> str = str + "\n" + item.english
+                SENTENCE_TYPE.STRONG_WORD -> str = str + "\n" + item.strong_word
             }
             when (type3) {
                 SENTENCE_TYPE.LECTURE -> str = str + "\n" + item.lecture
@@ -210,6 +215,7 @@ class ReibunInfo {
                 SENTENCE_TYPE.CHINESE -> str = str + "\n" + item.chinese
                 SENTENCE_TYPE.JAPANESE -> str = str + "\n" + item.japanese
                 SENTENCE_TYPE.ENGLISH -> str = str + "\n" + item.english
+                SENTENCE_TYPE.STRONG_WORD -> str = str + "\n" + item.strong_word
             }
             ret.add(str)
         }
