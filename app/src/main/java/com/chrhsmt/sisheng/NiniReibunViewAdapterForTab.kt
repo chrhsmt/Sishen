@@ -1,7 +1,10 @@
 package com.chrhsmt.sisheng
 
 
+import android.os.Build
 import android.support.v7.widget.RecyclerView
+import android.text.Html
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,11 +43,21 @@ class NiniReibunViewAdapterForTab(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mIdView.text = Integer.toString(item.id)
-        holder.mContentView.text = ReibunInfo.replaceNewLine(item.chinese + "\n" + item.english)
+        var htmlStr: String = ReibunInfo.replaceNewLine(item.chinese + "\n" + item.english)
+        htmlStr = htmlStr.replace(item.strong_word, "<font color=\"red\">" + item.strong_word + "</font>")
+        holder.mContentView.text = fromHtml(htmlStr)
 
         with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)
+        }
+    }
+
+    fun fromHtml(source: String): Spanned {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            Html.fromHtml(source)
         }
     }
 
