@@ -316,7 +316,9 @@ class AudioService : AudioServiceInterface {
     }
 
     private fun stopRecord() {
-        this.audioDispatcher?.stop()
+        if (this.audioDispatcher != null && !this.audioDispatcher!!.isStopped) {
+            this.audioDispatcher?.stop()
+        }
         this.analyzeThread?.interrupt()
         this.isRunning = false
         this@AudioService.activity.runOnUiThread {

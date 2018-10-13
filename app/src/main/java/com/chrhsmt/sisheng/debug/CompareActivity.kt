@@ -115,7 +115,9 @@ class CompareActivity : AppCompatActivity() {
                                         txtScore.text = String.format("Point: %s, F-Point: %s", v1Point?.score, v2Point?.score)
                                     }
                                 } catch (e: AudioServiceException) {
-                                    txtDebugError.visibility = View.VISIBLE
+                                    this@CompareActivity.runOnUiThread {
+                                        txtDebugError.visibility = View.VISIBLE
+                                    }
                                 }
 
                             }
